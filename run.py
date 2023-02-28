@@ -56,14 +56,15 @@ def main_menu():
     while option_selected not in ("1", "2"):
         print(Fore.YELLOW + "Please Choose between the 2 options (eg. 1 or 2):")
 
+def update_num_players():
+    global num_players
+    num_players = mm.get_num_players()
+
 def main():
     """
     Run all program functions
     """
-    global num_players
-    num_players = mm.get_num_players()
-
-    
+    update_num_players()
 
 if __name__ == "__main__":
     main()
