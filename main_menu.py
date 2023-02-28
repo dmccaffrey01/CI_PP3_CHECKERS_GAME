@@ -3,6 +3,7 @@ from colorama import Fore, Back, Style
 import os
 from run import welcome, cls, new_line, update_num_players
 import time
+from email_validator import validate_email, EmailNotValidError
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -64,7 +65,7 @@ def log_in_players(num):
         new_line()
         p1_name = ask_player_name("1")
         new_line()
-        p1_email = ask_player_email(p1_name)
+        p1_email = ask_player_email(p1_name, p1_registered)
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
@@ -72,6 +73,11 @@ def log_in_players(num):
         update_num_players()
 
 def ask_registered(num):
+    """
+    Ask the user if the player has been registered
+    Returns true if they have
+    Returns false if they have not
+    """
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Has player {num} played before and have an existing account?")
     options = "1) Yes\n2) No\n"
@@ -88,17 +94,27 @@ def ask_registered(num):
         option_selected = input(options)
 
 def validate_registered_input(option):
+    """ 
+    Checks if the input was 1,y,yes and returns 1
+    if 2,n,no and returns 2
+    if r it raise exception and returns to number of players
+    """
     if option == "1" or option.lower() == "y" or option.lower() == "yes":
         return 1
     elif option == "2" or option.lower() == "n" or option.lower() == "no":
         return 2
-    elif option == "3" or option.lower() == "r" or option.lower() == "return":
+    elif option.lower() == "r" or option.lower() == "return":
         return_to_num_players()
         return 3
     else:
         return False 
 
 def ask_player_name(num):
+    """
+    Asks the user for their name
+    Returns to number of players if input is r
+    Returns name 
+    """
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter name of player {num}:") 
     name = input()
@@ -107,9 +123,17 @@ def ask_player_name(num):
     return name
 
 def return_to_num_players():
+    """ 
+    Raises an exception
+    """
     raise Exception("Return to number of players")
 
-def ask_player_email(name):
+def ask_player_email(name, registered):
+    """
+    Asks the user for their email
+    Returns to number of players if r is pressed
+    Checks if email is valid 
+    """
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter email of {name}:") 
     while True:
@@ -117,6 +141,21 @@ def ask_player_email(name):
         if email == "r":
             return_to_num_players()
             break
+        if validate_user_email(email):
+            break
+    return email
+            
 
+def validate_user_email(email):
+    """
+    Check if email is valid
+    Must be in form name@email.com
+    """
+    try:
+        validate_email(email)
+        return True
+    except EmailNotValidError as e:
+        print(Fore.RED + "\n" + str(e))
+        print(Fore.RED + "Please try again.\n")
         
     
