@@ -63,6 +63,8 @@ def log_in_players(num):
         p1_registered = ask_registered("1")
         new_line()
         p1_name = ask_player_name("1")
+        new_line()
+        p1_email = ask_player_email(p1_name)
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
@@ -70,8 +72,9 @@ def log_in_players(num):
         update_num_players()
 
 def ask_registered(num):
+    print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Has player {num} played before and have an existing account?")
-    options = "1) Yes\n2) No\n3) Return\n"
+    options = "1) Yes\n2) No\n"
     option_selected = input(options)
     while True:
         if validate_registered_input(option_selected):
@@ -81,9 +84,8 @@ def ask_registered(num):
                 return False
             break
         welcome()
-        print(Fore.YELLOW + "Please input (1, y, yes) or (2, n, no) or (3, r, return) for have you an existing account:")
+        print(Fore.YELLOW + "Please input (1, y, yes) or (2, n, no) for have you an existing account or (r to return):")
         option_selected = input(options)
-        new_line()
 
 def validate_registered_input(option):
     if option == "1" or option.lower() == "y" or option.lower() == "yes":
@@ -91,14 +93,30 @@ def validate_registered_input(option):
     elif option == "2" or option.lower() == "n" or option.lower() == "no":
         return 2
     elif option == "3" or option.lower() == "r" or option.lower() == "return":
-        raise Exception("Return to number of players")
+        return_to_num_players()
         return 3
     else:
         return False 
 
 def ask_player_name(num):
-    print(Fore.YELLOW + f"Enter name of player {num}:")
-    print(Fore.YELLOW + "Enter r to return") 
+    print(Fore.YELLOW + "Enter r to return")
+    print(Fore.YELLOW + f"Enter name of player {num}:") 
     name = input()
     if name == "r":
-        raise Exception("Return to number of players")
+        return_to_num_players()
+    return name
+
+def return_to_num_players():
+    raise Exception("Return to number of players")
+
+def ask_player_email(name):
+    print(Fore.YELLOW + "Enter r to return")
+    print(Fore.YELLOW + f"Enter email of {name}:") 
+    while True:
+        email = input()
+        if email == "r":
+            return_to_num_players()
+            break
+
+        
+    
