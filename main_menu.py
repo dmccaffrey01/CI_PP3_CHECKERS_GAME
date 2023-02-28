@@ -61,6 +61,8 @@ def log_in_players(num):
     welcome()
     try:
         p1_registered = ask_registered("1")
+        new_line()
+        p1_name = ask_player_name("1")
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
@@ -86,7 +88,7 @@ def ask_registered(num):
 def validate_registered_input(option):
     if option == "1" or option.lower() == "y" or option.lower() == "yes":
         return 1
-    if option == "2" or option.lower() == "n" or option.lower() == "no":
+    elif option == "2" or option.lower() == "n" or option.lower() == "no":
         return 2
     elif option == "3" or option.lower() == "r" or option.lower() == "return":
         raise Exception("Return to number of players")
@@ -95,5 +97,8 @@ def validate_registered_input(option):
         return False 
 
 def ask_player_name(num):
-    print(Fore.YELLOW + f"Enter name of player {num}:") 
-    return input()
+    print(Fore.YELLOW + f"Enter name of player {num}:")
+    print(Fore.YELLOW + "Enter r to return") 
+    name = input()
+    if name == "r":
+        raise Exception("Return to number of players")
