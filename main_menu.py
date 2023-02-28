@@ -1,7 +1,11 @@
 import colorama
 from colorama import Fore, Back, Style
 import os
-from run import welcome, cls, new_line, update_num_players
+from run import welcome, cls, new_line, update_num_players, num_players
+
+#Initialize colorama
+colorama.init(autoreset=True)
+
 
 def get_num_players():
     """
@@ -36,14 +40,27 @@ def validate_num_players(option):
     else:
         return False
 
-def log_in_players(num_players):
+class Player:
+    def __init__(self, name, email, registered):
+        self.name = name
+        self.email = email
+        self.registered = registered
+
+
+def log_in_players():
     """
-    Asks the user if they have played before
+    Asks the user for their name and if they have played before
     If they haven't then the program will register them
     If they have they will proceed to main menu
     """
+    ask_players_names(num_players)
+    ask_existing_account(num_players)
+
+
+
+def ask_existing_account():
     welcome()
-    print(Fore.YELLOW + "Have you played before and have an existing account?")
+    print(Fore.YELLOW + "Has player 1 played before and have an existing account?")
     options = "1) Yes\n2) No\n3) Return\n"
     option_selected = input(options)
     while True:
@@ -54,11 +71,19 @@ def log_in_players(num_players):
         option_selected = input(options)
         new_line()
 
+def update_existing_account_status(bool):
+    global existing_account_status
+    existing_account_status = bool
+
 def validate_existing_account_input(option):
-    if option == "1" or option.lower() == "y" or option.lower() == "yes"\
-    or option == "2" or option.lower() == "n" or option.lower() == "no":
+    if option == "1" or option.lower() == "y" or option.lower() == "yes":
+        update_existing_account_status(True)
+        return True
+    if option == "2" or option.lower() == "n" or option.lower() == "no":
+        update_existing_account_status(False)
         return True
     elif option == "3" or option.lower() == "r" or option.lower() == "return":
         update_num_players()
+        return True
     else:
         return False 
