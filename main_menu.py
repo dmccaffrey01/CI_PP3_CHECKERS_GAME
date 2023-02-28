@@ -1,7 +1,7 @@
 import colorama
 from colorama import Fore, Back, Style
 import os
-from run import welcome, cls, new_line, update_num_players, num_players
+from run import welcome, cls, new_line, update_num_players
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -22,7 +22,7 @@ def get_num_players():
             return validate_num_players(option_selected)
             break
         welcome()
-        print(Fore.YELLOW + "Please input 1 or 2:")
+        print(Fore.YELLOW + "Please input (1, one) or (2, two):")
         option_selected = input(options)
         new_line()
            
@@ -41,25 +41,31 @@ def validate_num_players(option):
         return False
 
 class Player:
+    """
+    Create an instance of a player
+    """
     def __init__(self, name, email, registered):
         self.name = name
         self.email = email
         self.registered = registered
 
 
-def log_in_players():
+def log_in_players(num):
     """
     Asks the user for their name and if they have played before
     If they haven't then the program will register them
     If they have they will proceed to main menu
+    Create a player instance of player class for each player
     """
-    ask_players_names(num_players)
-    ask_existing_account(num_players)
+    welcome()
+    print(ask_player_name("1"))
+    
 
-
+def ask_player_name(num):
+    print(Fore.YELLOW + f"Enter name of player {num}:") 
+    return input()
 
 def ask_existing_account():
-    welcome()
     print(Fore.YELLOW + "Has player 1 played before and have an existing account?")
     options = "1) Yes\n2) No\n3) Return\n"
     option_selected = input(options)
