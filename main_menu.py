@@ -2,6 +2,7 @@ import colorama
 from colorama import Fore, Back, Style
 import os
 from run import welcome, cls, new_line, update_num_players
+import time
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -58,38 +59,41 @@ def log_in_players(num):
     Create a player instance of player class for each player
     """
     welcome()
-    print(ask_player_name("1"))
-    
+    try:
+        p1_registered = ask_registered("1")
+    except:
+        welcome()
+        print(Fore.YELLOW + "Returning to number of players...")
+        time.sleep(1)
+        update_num_players()
 
-def ask_player_name(num):
-    print(Fore.YELLOW + f"Enter name of player {num}:") 
-    return input()
-
-def ask_existing_account():
-    print(Fore.YELLOW + "Has player 1 played before and have an existing account?")
+def ask_registered(num):
+    print(Fore.YELLOW + f"Has player {num} played before and have an existing account?")
     options = "1) Yes\n2) No\n3) Return\n"
     option_selected = input(options)
     while True:
-        if validate_existing_account_input(option_selected):
+        if validate_registered_input(option_selected):
+            if validate_registered_input(option_selected) == 1:
+                return True
+            elif validate_registered_input(option_selected) == 2:
+                return False
             break
         welcome()
         print(Fore.YELLOW + "Please input (1, y, yes) or (2, n, no) or (3, r, return) for have you an existing account:")
         option_selected = input(options)
         new_line()
 
-def update_existing_account_status(bool):
-    global existing_account_status
-    existing_account_status = bool
-
-def validate_existing_account_input(option):
+def validate_registered_input(option):
     if option == "1" or option.lower() == "y" or option.lower() == "yes":
-        update_existing_account_status(True)
-        return True
+        return 1
     if option == "2" or option.lower() == "n" or option.lower() == "no":
-        update_existing_account_status(False)
-        return True
+        return 2
     elif option == "3" or option.lower() == "r" or option.lower() == "return":
-        update_num_players()
-        return True
+        raise Exception("Return to number of players")
+        return 3
     else:
         return False 
+
+def ask_player_name(num):
+    print(Fore.YELLOW + f"Enter name of player {num}:") 
+    return input()
