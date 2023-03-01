@@ -59,9 +59,40 @@ class Player:
     """
     Create an instance of a player
     """
-    def __init__(self, name, email):
+    def __init__(self, name, email, total_games, wins, loses):
         self.name = name
         self.email = email
+        self.total_games = total_games
+        self.wins = wins
+        self.loses = loses
+
+    def register_or_login_player(self):
+        """
+        Checks if player has registered
+        If they have updates the players name
+        If they haven't it adds them to the database 
+        """
+        if check_is_email_registered(self.email):
+            self.update_database_value("name", self.name, self.email)
+
+    def update_database_value(self, col, value, email):
+        """
+        Updates the name in the database 
+        """
+        if col == "name":
+            col = 1
+        elif col == "email":
+            col = 2
+        elif col == "totat_games":
+            col = 3
+        elif col == "wins":
+            col = 4
+        elif col == "loses":
+            col = 5
+        
+        row = WORKSHEET.col_values(2).index(email) + 1
+
+        WORKSHEET.update_cell(row, col, value)
         
 
 
@@ -87,7 +118,8 @@ def log_in_players(num):
         p1_wins = get_worksheet_value(p1_email, "wins")
         p1_loses = get_worksheet_value(p1_email, "loses")
 
-        player1 = Player(p1_name, p1_email)
+        player1 = Player(p1_name, p1_email, p1_total_games, p1_wins, p1_loses)
+        player1.register_or_login_player()
 
         if num == 2:
             global player2
@@ -97,15 +129,16 @@ def log_in_players(num):
             p2_name = ask_player_name("2")
             new_line()
 
-            p2_email = validate_email_registered(ask_player_email(p1_name), p2_registered, p2_name)
+            p2_email = validate_email_registered(ask_player_email(p2_name), p2_registered, p2_name)
 
             p2_total_games = get_worksheet_value(p2_email, "total_games")
             p2_wins = get_worksheet_value(p2_email, "wins")
             p2_loses = get_worksheet_value(p2_email, "loses")
 
-            player2 = Player(p2_name, p2_email)
+            player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
     except:
         welcome()
+        print(e)
         print(Fore.YELLOW + "Returning to number of players...")
         time.sleep(1)
         update_num_players()
@@ -326,7 +359,6 @@ def get_worksheet_value(email, type):
         return 0
 
     if email in email_col:
-        return int(type_col.value[email_col.index(email)])
+        return int(type_col[email_col.index(email)])
     else:
         return 0
-
