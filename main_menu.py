@@ -83,9 +83,9 @@ def log_in_players(num):
 
         p1_email = validate_email_registered(ask_player_email(p1_name), p1_registered, p1_name)
 
-        p1_total_games = get_total_games(p1_email)
-        p1_wins = get_wins(p1_email)
-        p1_loses = get_loses(p1_email)
+        p1_total_games = get_worksheet_value(p1_email, "total_games")
+        p1_wins = get_worksheet_value(p1_email, "wins")
+        p1_loses = get_worksheet_value(p1_email, "loses")
 
         player1 = Player(p1_name, p1_email)
 
@@ -99,9 +99,9 @@ def log_in_players(num):
 
             p2_email = validate_email_registered(ask_player_email(p1_name), p2_registered, p2_name)
 
-            p2_total_games = get_total_games(p2_email)
-            p2_wins = get_wins(p2_email)
-            p2_loses = get_loses(p2_email)
+            p2_total_games = get_worksheet_value(p2_email, "total_games")
+            p2_wins = get_worksheet_value(p2_email, "wins")
+            p2_loses = get_worksheet_value(p2_email, "loses")
 
             player2 = Player(p2_name, p2_email)
     except:
@@ -309,14 +309,24 @@ def validate_incorrect_email_input(option):
     else:
         return False
 
-def get_total_games(email):
+def get_worksheet_value(email, type):
     """ 
-    Get the players total games played and return it
+    Get the players value at the type and return it
     If user has not registered return 0
     """
     email_col = WORKSHEET.col_values(2)
-    total_games_col = WORKSHEET.col_values(3)
-    if email in email_col:
-        return int(total_games_col.value[email_col.index(email)])
+    
+    if type == "total_games":
+        type_col = WORKSHEET.col_values(3)
+    elif type == "wins":
+        type_col = WORKSHEET.col_values(4)
+    elif type == "loses":
+        type_col = WORKSHEET.col_values(5)
     else:
         return 0
+
+    if email in email_col:
+        return int(type_col.value[email_col.index(email)])
+    else:
+        return 0
+
