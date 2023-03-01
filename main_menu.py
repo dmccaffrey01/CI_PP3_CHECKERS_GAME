@@ -74,11 +74,36 @@ def log_in_players(num):
     """
     welcome()
     try:
+        global player1
         p1_registered = ask_registered("1")
         new_line()
+
         p1_name = ask_player_name("1")
         new_line()
+
         p1_email = validate_email_registered(ask_player_email(p1_name), p1_registered, p1_name)
+
+        p1_total_games = get_total_games(p1_email)
+        p1_wins = get_wins(p1_email)
+        p1_loses = get_loses(p1_email)
+
+        player1 = Player(p1_name, p1_email)
+
+        if num == 2:
+            global player2
+            p2_registered = ask_registered("2")
+            new_line()
+
+            p2_name = ask_player_name("2")
+            new_line()
+
+            p2_email = validate_email_registered(ask_player_email(p1_name), p2_registered, p2_name)
+
+            p2_total_games = get_total_games(p2_email)
+            p2_wins = get_wins(p2_email)
+            p2_loses = get_loses(p2_email)
+
+            player2 = Player(p2_name, p2_email)
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
@@ -283,3 +308,15 @@ def validate_incorrect_email_input(option):
         return 3
     else:
         return False
+
+def get_total_games(email):
+    """ 
+    Get the players total games played and return it
+    If user has not registered return 0
+    """
+    email_col = WORKSHEET.col_values(2)
+    total_games_col = WORKSHEET.col_values(3)
+    if email in email_col:
+        return int(total_games_col.value[email_col.index(email)])
+    else:
+        return 0
