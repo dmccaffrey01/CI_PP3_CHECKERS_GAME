@@ -22,9 +22,6 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
 WORKSHEET = SHEET.worksheet("players")
 
-def test_worksheet():
-    print(WORKSHEET.get_all_values())
-
 def get_num_players():
     """
     Get the number of players playing the game
@@ -62,10 +59,10 @@ class Player:
     """
     Create an instance of a player
     """
-    def __init__(self, name, email, registered):
+    def __init__(self, name, email):
         self.name = name
         self.email = email
-        self.registered = registered
+        
 
 
 def log_in_players(num):
@@ -81,7 +78,7 @@ def log_in_players(num):
         new_line()
         p1_name = ask_player_name("1")
         new_line()
-        p1_email = ask_player_email(p1_name, p1_registered)
+        p1_email = validate_email_registered(ask_player_email(p1_name), p1_registered, p1_name)
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
@@ -144,7 +141,7 @@ def return_to_num_players():
     """
     raise Exception("Return to number of players")
 
-def ask_player_email(name, registered):
+def ask_player_email(name):
     """
     Asks the user for their email
     Returns to number of players if r is pressed
@@ -173,4 +170,74 @@ def validate_user_email(email):
         print(Fore.RED + "\n" + str(e))
         print(Fore.RED + "Please try again.\n")
         
-    
+def validate_email_registered(email, registered, name):
+    """
+    Registers new players email
+    Checks if existing player email is correct
+    Registers or trys again if email is incorrect
+    Returns email
+    """
+    if not registered:
+        pass
+    else:
+        if check_is_email_registered(email):
+            return email
+        else:
+            return incorrect_email_input(name, registered)
+       
+def check_is_email_registered(email):
+    """
+    Checks if the email entered is on the data base
+    Returns true if it is and false if not
+    """
+    email_col = WORKSHEET.col_values(2)
+    if email in email_col:
+        return True
+    else:
+        return False
+
+def incorrect_email_input(name, registered):
+    """
+    Called when email entered does not match any email in database
+    Prints error message
+    Asks the user to try again or register as a new email
+    Returns a new email
+    """
+    new_line()
+    print(Fore.RED + "Email address not found on database")
+    return ask_incorrect_email_question(name, registered)
+
+def ask_incorrect_email_question(name, registered):
+    """
+    Asks user to try entering their email again
+    or to register as a new player
+    """
+    new_line()
+    print(Fore.YELLOW + "What would you like to do:")
+    options = "1) Try entering email again\n2) Register as new player\n"
+    option_selected = input(options)
+    while True:
+        if validate_incorrect_email_input(option_selected):
+            if validate_incorrect_email_input(option_selected) == 1:
+                return validate_email_registered(ask_player_email(name), registered, name)
+            elif validate_registered_input(option_selected) == 2:
+                pass
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or register or (r to return):")
+        option_selected = input(options)
+
+def validate_incorrect_email_input(option):
+    """ 
+    Checks if the input is 1 or 2 or r
+    Returns correct number for each case
+    """
+    if option == "1":
+        return 1
+    elif option == "2":
+        return 2
+    elif option.lower() == "r":
+        return_to_num_players()
+        return 3
+    else:
+        return False

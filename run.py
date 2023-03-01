@@ -64,8 +64,8 @@ def main():
     """
     Run all program functions
     """
-    #update_num_players()
-    mm.test_worksheet()
+    update_num_players()
+    
 
 if __name__ == "__main__":
     main()
