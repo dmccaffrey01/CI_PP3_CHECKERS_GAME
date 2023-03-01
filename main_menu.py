@@ -145,7 +145,6 @@ def ask_player_email(name, registered):
             break
     return email
             
-
 def validate_user_email(email):
     """
     Check if email is valid
