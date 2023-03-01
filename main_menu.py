@@ -222,7 +222,7 @@ def validate_user_name(name):
         elif not name.isalpha():
             new_line()
             print(Fore.RED + "Player name must only contain a-z or A-Z.\n")
-            print(Fore.RED + "Please try again.\n")
+            print(Fore.RED + "Please try again.")
             new_line()
                   
         else:
