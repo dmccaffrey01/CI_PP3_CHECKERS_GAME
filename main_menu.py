@@ -178,12 +178,21 @@ def validate_email_registered(email, registered, name):
     Returns email
     """
     if not registered:
-        pass
+        if check_is_email_registered(email):
+            return incorrect_email_input(name, registered)
+        else:
+            new_line()
+            print(Fore.BLUE + "Registering...")
+            new_line()
+            return email
     else:
         if check_is_email_registered(email):
+            new_line()
+            print(Fore.BLUE + "Logging in...")
+            new_line()
             return email
         else:
-            return incorrect_email_input(name, registered)
+            return incorrect_email_input(name, registered, email)
        
 def check_is_email_registered(email):
     """
@@ -196,7 +205,7 @@ def check_is_email_registered(email):
     else:
         return False
 
-def incorrect_email_input(name, registered):
+def incorrect_email_input(name, registered, email):
     """
     Called when email entered does not match any email in database
     Prints error message
@@ -204,10 +213,14 @@ def incorrect_email_input(name, registered):
     Returns a new email
     """
     new_line()
-    print(Fore.RED + "Email address not found on database")
-    return ask_incorrect_email_question(name, registered)
+    if registered:
+        print(Fore.RED + "Email address not found on database")
+        return ask_incorrect_email_question1(name, registered)
+    else:
+        print(Fore.RED + "Email address found on database")
+        return ask_incorrect_email_question2(name, registered, email)
 
-def ask_incorrect_email_question(name, registered):
+def ask_incorrect_email_question1(name, registered):
     """
     Asks user to try entering their email again
     or to register as a new player
@@ -221,10 +234,37 @@ def ask_incorrect_email_question(name, registered):
             if validate_incorrect_email_input(option_selected) == 1:
                 return validate_email_registered(ask_player_email(name), registered, name)
             elif validate_registered_input(option_selected) == 2:
-                pass
+                print(Fore.BLUE + "Creating a new user")
+                return validate_email_registered(ask_player_email(name), registered, name)
             break
         new_line()
         print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or register or (r to return):")
+        option_selected = input(options)
+
+def ask_incorrect_email_question2(name, registered, email):
+    """
+    Asks user to try entering their email again
+    or to sign in as a that player
+    """
+    new_line()
+    print(Fore.YELLOW + "What would you like to do:")
+    options = "1) Try entering email again\n2) Sign in as that player\n"
+    option_selected = input(options)
+    while True:
+        if validate_incorrect_email_input(option_selected):
+            if validate_incorrect_email_input(option_selected) == 1:
+                new_line()
+                print(Fore.BLUE + "Try again")
+                new_line()
+                return validate_email_registered(ask_player_email(name), registered, name)
+            elif validate_registered_input(option_selected) == 2:
+                new_line()
+                print(Fore.BLUE + "Logging in")
+                new_line()
+                return email
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or sign in or (r to return):")
         option_selected = input(options)
 
 def validate_incorrect_email_input(option):
