@@ -4,10 +4,26 @@ import os
 from run import welcome, cls, new_line, update_num_players
 import time
 from email_validator import validate_email, EmailNotValidError
+import gspread
+from google.oauth2.service_account import Credentials
 
 #Initialize colorama
 colorama.init(autoreset=True)
 
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+CREDS = Credentials.from_service_account_file("creds.json")
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
+WORKSHEET = SHEET.worksheet("players")
+
+def test_worksheet():
+    print(WORKSHEET.get_all_values())
 
 def get_num_players():
     """
