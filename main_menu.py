@@ -179,7 +179,7 @@ def validate_email_registered(email, registered, name):
     """
     if not registered:
         if check_is_email_registered(email):
-            return incorrect_email_input(name, registered)
+            return incorrect_email_input(name, registered, email)
         else:
             new_line()
             print(Fore.BLUE + "Registering...")
@@ -234,8 +234,10 @@ def ask_incorrect_email_question1(name, registered):
             if validate_incorrect_email_input(option_selected) == 1:
                 return validate_email_registered(ask_player_email(name), registered, name)
             elif validate_registered_input(option_selected) == 2:
+                new_line()
                 print(Fore.BLUE + "Creating a new user")
-                return validate_email_registered(ask_player_email(name), registered, name)
+                new_line()
+                return validate_email_registered(ask_player_email(name), False, name)
             break
         new_line()
         print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or register or (r to return):")
