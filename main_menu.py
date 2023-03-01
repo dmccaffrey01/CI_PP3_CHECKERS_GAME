@@ -74,6 +74,8 @@ class Player:
         """
         if check_is_email_registered(self.email):
             self.update_database_value("name", self.name, self.email)
+        else:
+            self.add_player_to_database(self.name, self.email, self.total_games, self.wins, self.loses)
 
     def update_database_value(self, col, value, email):
         """
@@ -93,6 +95,13 @@ class Player:
         row = WORKSHEET.col_values(2).index(email) + 1
 
         WORKSHEET.update_cell(row, col, value)
+
+    def add_player_to_database(self, name, email, totat_games, wins, loses):
+        """
+        Add player to the database
+        """
+        row = [name, email, totat_games, wins, loses]
+        WORKSHEET.append_row(row)
         
 
 
@@ -136,6 +145,7 @@ def log_in_players(num):
             p2_loses = get_worksheet_value(p2_email, "loses")
 
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
+            player2.register_or_login_player()
     except:
         welcome()
         print(e)
