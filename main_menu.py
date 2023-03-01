@@ -198,10 +198,37 @@ def ask_player_name(num):
     """
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter name of player {num}:") 
-    name = input()
-    if name == "r":
-        return_to_num_players()
+    while True:
+        name = input()
+        if name == "r":
+            return_to_num_players()
+            break
+        if validate_user_name(name):
+            break
     return name
+
+def validate_user_name(name):
+    """
+    Check if name is valid
+    Must be between 2 and 12 letters long and only using a-z A-Z
+    """
+    try:
+        if len(name) < 2 or len(name) > 12:
+            new_line()
+            print(Fore.RED + "Player name must be between 2 - 12 characters long.")
+            print(Fore.RED + "Please try again.\n")
+            new_line()
+
+        elif not name.isalpha():
+            new_line()
+            print(Fore.RED + "Player name must only contain a-z or A-Z.\n")
+            print(Fore.RED + "Please try again.\n")
+            new_line()
+                  
+        else:
+            return True
+    except TypeError:
+        return False
 
 def return_to_num_players():
     """ 
@@ -235,8 +262,10 @@ def validate_user_email(email):
         validate_email(email)
         return True
     except EmailNotValidError as e:
+        new_line()
         print(Fore.RED + "\n" + str(e))
         print(Fore.RED + "Please try again.\n")
+        new_line()
         
 def validate_email_registered(email, registered, name):
     """
