@@ -20,6 +20,9 @@ class MockWorksheet():
     def update_cell(self, row, cell, value):
         return True
 
+    def append_row(self, row):
+        return True
+
 mock_worksheet = MockWorksheet(1)
 
 class TestNumPlayers(unittest.TestCase):
@@ -55,6 +58,7 @@ class TestPlayer(unittest.TestCase):
     """
     def setUp(self):
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
+        self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
 
     def test_name(self):
         self.assertEqual(self.player1.name, "John")
@@ -83,13 +87,25 @@ class TestPlayer(unittest.TestCase):
     
     @patch("main_menu.WORKSHEET", mock_worksheet)
     def test_update_database_value(self):
-    
         self.assertEqual(self.player1.update_database_value("name", "john", self.player1.email), [1, 1])
         self.assertEqual(self.player1.update_database_value("email", "john", self.player1.email), [1, 2])
         self.assertEqual(self.player1.update_database_value("total_games", "john", self.player1.email), [1, 3])
         self.assertEqual(self.player1.update_database_value("wins", "john", self.player1.email), [1, 4])
         self.assertEqual(self.player1.update_database_value("loses", "john", self.player1.email), [1, 5])
 
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_add_player_to_database(self):
+        self.assertEqual(self.player1.add_player_to_database(self.player1.name, self.player1.email, self.player1.total_games, self.player1.wins, self.player1.loses), ["John", "john@gmail.com", 10, 4, 6])
 
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_check_is_email_registered(self):
+        self.assertEqual(mm.check_is_email_registered(self.player1.email), True)
+        self.assertEqual(mm.check_is_email_registered("pat@gmail.com"), False)
+
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_regisiter_or_login_player(self):
+        self.assertEqual(self.player1.register_or_login_player(), [self.player1.name, self.player1.email])
+        self.assertEqual(self.player2.register_or_login_player(), [self.player2.name, self.player2.email, self.player2.total_games, self.player2.wins, self.player2.loses])
+        
 if __name__ == "__main__":
     unittest.main()
