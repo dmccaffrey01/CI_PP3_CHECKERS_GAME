@@ -249,7 +249,7 @@ def ask_player_email(name):
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter email of {name}:") 
     while True:
-        email = input()
+        email = input("Email:")
         if email == "r":
             return_to_num_players()
             break

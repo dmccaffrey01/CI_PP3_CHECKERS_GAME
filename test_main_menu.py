@@ -11,11 +11,9 @@ class MockWorksheet():
     """
     mock_player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
 
-    def __init__(self, value):
-        self.value = value
-
     def col_values(self, value):
-        return [self.mock_player1.email]
+        cols = [["empty col"], [self.mock_player1.name], [self.mock_player1.email], [self.mock_player1.total_games], [self.mock_player1.wins], [self.mock_player1.loses]]
+        return cols[value]
 
     def update_cell(self, row, cell, value):
         return True
@@ -23,7 +21,10 @@ class MockWorksheet():
     def append_row(self, row):
         return True
 
-mock_worksheet = MockWorksheet(1)
+mock_worksheet = MockWorksheet()
+
+def mock_validate_email(email):
+    return True
 
 class TestNumPlayers(unittest.TestCase):
     """ 
@@ -109,6 +110,10 @@ class TestLogInPlayers(unittest.TestCase):
     """
     Testing of loging in players feature
     """
+    def setUp(self):
+        self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
+        self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
+
     @patch("main_menu.return_to_num_players")
     def test_validate_registered_input(self, mock_rtnp):
         mock_rtnp.return_value = True
@@ -138,10 +143,18 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_name(self):
         self.assertEqual(mm.ask_player_name("1"), "John")
 
+    @patch("main_menu.validate_email", mock_validate_email)
+    def test_validate_user_email(self):
+        self.assertEqual(mm.validate_user_email(self.player1.email), True)
 
-    sys.stdout = sys.__stdout__
+    @patch("main_menu.validate_email", mock_validate_email)
+    @patch("builtins.input", lambda _: "john@gmail.com")
+    def test_ask_player_email(self):
+        self.assertEqual(mm.ask_player_email("John"), "john@gmail.com")
+    
+    
 
-        
+    sys.stdout = sys.__stdout__    
 
 if __name__ == "__main__":
     unittest.main()
