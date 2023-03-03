@@ -74,8 +74,10 @@ class Player:
         """
         if check_is_email_registered(self.email):
             self.update_database_value("name", self.name, self.email)
+            return [self.name, self.email]
         else:
             self.add_player_to_database(self.name, self.email, self.total_games, self.wins, self.loses)
+            return [self.name, self.email, self.total_games, self.wins, self.loses]
 
     def update_database_value(self, col, value, email):
         """
@@ -85,7 +87,7 @@ class Player:
             col = 1
         elif col == "email":
             col = 2
-        elif col == "totat_games":
+        elif col == "total_games":
             col = 3
         elif col == "wins":
             col = 4
@@ -93,8 +95,10 @@ class Player:
             col = 5
         
         row = WORKSHEET.col_values(2).index(email) + 1
+        
 
         WORKSHEET.update_cell(row, col, value)
+        return [row, col]
 
     def add_player_to_database(self, name, email, totat_games, wins, loses):
         """
@@ -102,6 +106,7 @@ class Player:
         """
         row = [name, email, totat_games, wins, loses]
         WORKSHEET.append_row(row)
+        return row
         
 
 
@@ -148,7 +153,6 @@ def log_in_players(num):
             player2.register_or_login_player()
     except:
         welcome()
-        print(e)
         print(Fore.YELLOW + "Returning to number of players...")
         time.sleep(1)
         update_num_players()
