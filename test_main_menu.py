@@ -24,9 +24,15 @@ class MockWorksheet():
 mock_worksheet = MockWorksheet()
 
 def mock_validate_email(email):
+    """ 
+    Mocks the validate email to return true
+    """
     return True
 
 def mock_rtnp():
+    """ 
+    Mocks the return to num players to return true
+    """
     return True
 
 class TestNumPlayers(unittest.TestCase):
@@ -159,6 +165,8 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_incorrect_email_input("2"), 2)
         self.assertEqual(mm.validate_incorrect_email_input("r"), 3)
         self.assertEqual(mm.validate_incorrect_email_input("3"), False)
+
+    
 
     sys.stdout = sys.__stdout__    
 
