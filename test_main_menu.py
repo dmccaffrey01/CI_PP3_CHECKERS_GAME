@@ -27,7 +27,7 @@ mock_worksheet = MockWorksheet(1)
 
 class TestNumPlayers(unittest.TestCase):
     """ 
-    Verification of the number of players
+    Testing of the number of players
     input values and types
     """
     def test_validate_num_players(self):
@@ -36,25 +36,23 @@ class TestNumPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_num_players("3"), False)
 
     # Test if statement in while loop
-    @patch('builtins.input', lambda _: '1')
+    @patch("builtins.input", lambda _: "1")
     @patch("main_menu.log_in_players")
-    @patch("main_menu.validate_num_players")
-    def test_get_num_players_1(self, mock_num1, mock_log_in):
+    def test_get_num_players_1(self, mock_log_in):
         sys.stdout = io.StringIO()
-
-        mock_num1.return_value = 1
+        
         mock_log_in.return_value = True
         self.assertEqual(mm.get_num_players(), 1)
 
-        mock_num1.return_value = 2
+    @patch("builtins.input", lambda _: "2")
+    @patch("main_menu.log_in_players")
+    def test_get_num_players_2(self, mock_log_in):
         mock_log_in.return_value = True
         self.assertEqual(mm.get_num_players(), 2)
-
-        sys.stdout = sys.__stdout__
         
 class TestPlayer(unittest.TestCase):
     """ 
-    Verification of player class
+    Testing of player class
     """
     def setUp(self):
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
@@ -106,6 +104,36 @@ class TestPlayer(unittest.TestCase):
     def test_regisiter_or_login_player(self):
         self.assertEqual(self.player1.register_or_login_player(), [self.player1.name, self.player1.email])
         self.assertEqual(self.player2.register_or_login_player(), [self.player2.name, self.player2.email, self.player2.total_games, self.player2.wins, self.player2.loses])
+
+class TestLogInPlayers(unittest.TestCase):
+    """
+    Testing of loging in players feature
+    """
+    @patch("main_menu.return_to_num_players")
+    def test_validate_registered_input(self, mock_rtnp):
+        mock_rtnp.return_value = True
         
+        self.assertEqual(mm.validate_registered_input("1"), 1)
+        self.assertEqual(mm.validate_registered_input("y"), 1)
+        self.assertEqual(mm.validate_registered_input("yes"), 1)
+        self.assertEqual(mm.validate_registered_input("2"), 2)
+        self.assertEqual(mm.validate_registered_input("n"), 2)
+        self.assertEqual(mm.validate_registered_input("no"), 2)
+        self.assertEqual(mm.validate_registered_input("r"), 3)
+        self.assertEqual(mm.validate_registered_input("4"), False)
+        self.assertEqual(mm.validate_registered_input("-1"), False)
+
+    @patch("builtins.input", lambda _: "1")
+    def test_ask_registered_1(self):
+        self.assertEqual(mm.ask_registered("1"), True)
+    
+    @patch("builtins.input", lambda _: "2")
+    def test_ask_registered_2(self):
+        self.assertEqual(mm.ask_registered("1"), False)
+
+    sys.stdout = sys.__stdout__
+
+        
+
 if __name__ == "__main__":
     unittest.main()
