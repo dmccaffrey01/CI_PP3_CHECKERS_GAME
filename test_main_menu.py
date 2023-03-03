@@ -131,6 +131,14 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_registered_2(self):
         self.assertEqual(mm.ask_registered("1"), False)
 
+    def test_validate_user_name(self):
+        self.assertEqual(mm.validate_user_name("John"), True)
+
+    @patch("builtins.input", lambda _: "John")
+    def test_ask_player_name(self):
+        self.assertEqual(mm.ask_player_name("1"), "John")
+
+
     sys.stdout = sys.__stdout__
 
         

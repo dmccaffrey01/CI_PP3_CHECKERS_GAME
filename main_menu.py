@@ -100,11 +100,11 @@ class Player:
         WORKSHEET.update_cell(row, col, value)
         return [row, col]
 
-    def add_player_to_database(self, name, email, totat_games, wins, loses):
+    def add_player_to_database(self, name, email, total_games, wins, loses):
         """
         Add player to the database
         """
-        row = [name, email, totat_games, wins, loses]
+        row = [name, email, total_games, wins, loses]
         WORKSHEET.append_row(row)
         return row
         
@@ -203,7 +203,7 @@ def ask_player_name(num):
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter name of player {num}:") 
     while True:
-        name = input()
+        name = input("Your Name:")
         if name == "r":
             return_to_num_players()
             break
@@ -217,9 +217,9 @@ def validate_user_name(name):
     Must be between 2 and 12 letters long and only using a-z A-Z
     """
     try:
-        if len(name) < 2 or len(name) > 12:
+        if len(name) < 1 or len(name) > 12:
             new_line()
-            print(Fore.RED + "Player name must be between 2 - 12 characters long.")
+            print(Fore.RED + "Player name must be between 1 - 12 characters long.")
             print(Fore.RED + "Please try again.\n")
             new_line()
 
