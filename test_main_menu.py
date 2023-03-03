@@ -26,6 +26,9 @@ mock_worksheet = MockWorksheet()
 def mock_validate_email(email):
     return True
 
+def mock_rtnp():
+    return True
+
 class TestNumPlayers(unittest.TestCase):
     """ 
     Testing of the number of players
@@ -114,10 +117,8 @@ class TestLogInPlayers(unittest.TestCase):
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
 
-    @patch("main_menu.return_to_num_players")
-    def test_validate_registered_input(self, mock_rtnp):
-        mock_rtnp.return_value = True
-        
+    @patch("main_menu.return_to_num_players", mock_rtnp)
+    def test_validate_registered_input(self):
         self.assertEqual(mm.validate_registered_input("1"), 1)
         self.assertEqual(mm.validate_registered_input("y"), 1)
         self.assertEqual(mm.validate_registered_input("yes"), 1)
@@ -152,7 +153,12 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_email(self):
         self.assertEqual(mm.ask_player_email("John"), "john@gmail.com")
     
-    
+    @patch("main_menu.return_to_num_players", mock_rtnp)
+    def test_validate_incorrect_email_input(self):
+        self.assertEqual(mm.validate_incorrect_email_input("1"), 1)
+        self.assertEqual(mm.validate_incorrect_email_input("2"), 2)
+        self.assertEqual(mm.validate_incorrect_email_input("r"), 3)
+        self.assertEqual(mm.validate_incorrect_email_input("3"), False)
 
     sys.stdout = sys.__stdout__    
 
