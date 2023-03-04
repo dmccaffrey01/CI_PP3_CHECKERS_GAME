@@ -35,6 +35,48 @@ def mock_rtnp():
     """
     return True
 
+def mock_ver(func, registered, name):
+    """ 
+    Mocks the validate email registered to return email
+    """
+    return func
+
+def mock_ape(name):
+    """ 
+    Mocks the ask player email to return email
+    """
+    return "john@gmail.com"
+
+def mock_aiep1(name, registered):
+    """ 
+    Mocks the ask incorrect email question to return email
+    """
+    return "john@gmail.com"
+
+def mock_aiep2(name, registered, email):
+    """ 
+    Mocks the ask incorrect email question to return email
+    """
+    return email
+
+def mock_cier1(email):
+    """ 
+    Mocks the check is email registered to return True
+    """
+    return True
+
+def mock_cier2(email):
+    """ 
+    Mocks the check is email registered to return True
+    """
+    return False
+
+def mock_iei(name, registered, email):
+    """ 
+    Mocks the incorrect email input to return email
+    """
+    return email
+
 class TestNumPlayers(unittest.TestCase):
     """ 
     Testing of the number of players
@@ -144,11 +186,11 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.ask_registered("1"), False)
 
     def test_validate_user_name(self):
-        self.assertEqual(mm.validate_user_name("John"), True)
+        self.assertEqual(mm.validate_user_name(self.player1.name), True)
 
     @patch("builtins.input", lambda _: "John")
     def test_ask_player_name(self):
-        self.assertEqual(mm.ask_player_name("1"), "John")
+        self.assertEqual(mm.ask_player_name("1"), self.player1.name)
 
     @patch("main_menu.validate_email", mock_validate_email)
     def test_validate_user_email(self):
@@ -157,7 +199,7 @@ class TestLogInPlayers(unittest.TestCase):
     @patch("main_menu.validate_email", mock_validate_email)
     @patch("builtins.input", lambda _: "john@gmail.com")
     def test_ask_player_email(self):
-        self.assertEqual(mm.ask_player_email("John"), "john@gmail.com")
+        self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
     
     @patch("main_menu.return_to_num_players", mock_rtnp)
     def test_validate_incorrect_email_input(self):
@@ -166,7 +208,47 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_incorrect_email_input("r"), 3)
         self.assertEqual(mm.validate_incorrect_email_input("3"), False)
 
-    
+    @patch("builtins.input", lambda _: "1")
+    @patch("main_menu.validate_email_registered", mock_ver)
+    @patch("main_menu.ask_player_email", mock_ape)
+    def test_ask_incorrect_email_question1_1(self):
+        self.assertEqual(mm.ask_incorrect_email_question1(self.player1.name, True), self.player1.email)
+        
+    @patch("builtins.input", lambda _: "2")
+    @patch("main_menu.validate_email_registered", mock_ver)
+    @patch("main_menu.ask_player_email", mock_ape)
+    def test_ask_incorrect_email_question1_2(self):
+        self.assertEqual(mm.ask_incorrect_email_question1(self.player1.name, True), self.player1.email)
+
+    @patch("builtins.input", lambda _: "1")
+    @patch("main_menu.validate_email_registered", mock_ver)
+    @patch("main_menu.ask_player_email", mock_ape)
+    def test_ask_incorrect_email_question2_1(self):
+        self.assertEqual(mm.ask_incorrect_email_question2(self.player1.name, True, self.player1.email), self.player1.email)
+
+    @patch("builtins.input", lambda _: "2")
+    @patch("main_menu.validate_email_registered", mock_ver)
+    @patch("main_menu.ask_player_email", mock_ape)
+    def test_ask_incorrect_email_question2_2(self):
+        self.assertEqual(mm.ask_incorrect_email_question2(self.player1.name, True, self.player1.email), self.player1.email)
+
+    @patch("main_menu.ask_incorrect_email_question1", mock_aiep1)
+    @patch("main_menu.ask_incorrect_email_question2", mock_aiep2)
+    def test_incorrect_email_input(self):
+        self.assertEqual(mm.incorrect_email_input(self.player1.name, True, self.player1.email), self.player1.email)
+        self.assertEqual(mm.incorrect_email_input(self.player1.name, False, self.player1.email), self.player1.email)
+
+    @patch("main_menu.check_is_email_registered", mock_cier1)
+    @patch("main_menu.incorrect_email_input", mock_iei)
+    def test_validate_email_registered_1(self):
+        self.assertEqual(mm.validate_email_registered(self.player1.email, True, self.player1.name), self.player1.email)
+        self.assertEqual(mm.validate_email_registered(self.player1.email, False, self.player1.name), self.player1.email)
+
+    @patch("main_menu.check_is_email_registered", mock_cier2)
+    @patch("main_menu.incorrect_email_input", mock_iei)
+    def test_validate_email_registered_2(self):
+        self.assertEqual(mm.validate_email_registered(self.player1.email, True, self.player1.name), self.player1.email)
+        self.assertEqual(mm.validate_email_registered(self.player1.email, False, self.player1.name), self.player1.email)
 
     sys.stdout = sys.__stdout__    
 
