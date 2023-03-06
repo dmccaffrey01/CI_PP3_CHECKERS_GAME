@@ -45,7 +45,10 @@ def mock_ape(name):
     """ 
     Mocks the ask player email to return email
     """
-    return "john@gmail.com"
+    if (name == "John"):
+        return "john@gmail.com"
+    else:
+        return "pat@gmail.com"
 
 def mock_aiep1(name, registered):
     """ 
@@ -76,6 +79,44 @@ def mock_iei(name, registered, email):
     Mocks the incorrect email input to return email
     """
     return email
+
+def mock_ar(num):
+    """ 
+    Mocks the ask registered to return registered
+    """
+    if num == "1":
+        return True
+    else:
+        return False
+
+def mock_apn(num):
+    """ 
+    Mocks the ask player name to return name
+    """
+    if num == "1":
+        return "John"
+    else:
+        return "Pat"
+
+def mock_gwv(email, value):
+    """ 
+    Mocks the get worksheet value to return value
+    """
+    if value == "total_games":
+        if email == "john@gmail.com":
+            return 10
+        else:
+            return 0
+    elif value == "wins":
+        if email == "john@gmail.com":
+            return 4
+        else:
+            return 0
+    elif value == "loses":
+        if email == "john@gmail.com":
+            return 6
+        else:
+            return 0
 
 class TestNumPlayers(unittest.TestCase):
     """ 
@@ -262,6 +303,15 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.get_worksheet_value("pat@gmail.com", "total_games"), 0)
         self.assertEqual(mm.get_worksheet_value(self.player1.email, "id"), 0)
 
+    @patch("main_menu.ask_registered", mock_ar)
+    @patch("main_menu.ask_player_name", mock_apn)
+    @patch("main_menu.validate_email_registered", mock_ver)
+    @patch("main_menu.ask_player_email", mock_ape)
+    @patch("main_menu.get_worksheet_value", mock_gwv)
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_log_in_players(self):
+        self.assertEqual(mm.log_in_players(1), "Name: John Email: john@gmail.com Total Games: 10 Wins: 4 Loses: 6")
+        self.assertEqual(mm.log_in_players(2), ["Name: John Email: john@gmail.com Total Games: 10 Wins: 4 Loses: 6", "Name: Pat Email: pat@gmail.com Total Games: 0 Wins: 0 Loses: 0"])
         
     sys.stdout = sys.__stdout__    
 

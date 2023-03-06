@@ -159,6 +159,9 @@ def log_in_players(num):
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
 
+            return [player1.display_player_stats(), player2.display_player_stats()]
+
+        return player1.display_player_stats()
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
