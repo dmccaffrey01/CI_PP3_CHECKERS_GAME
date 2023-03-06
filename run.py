@@ -41,30 +41,16 @@ def welcome():
     print(" ")
     print(" ")
 
-def main_menu():
-    """
-    Display the main menu screen
-    The user can select between two options
-    To view game rules or to start the game
-    """
-    print(Fore.YELLOW + "Choose between the 2 options (eg. 1 or 2):")
-    options = "1) Game rules\n2) Play game\n"
-    option_selected = input(options)
-    new_line()
-
-    # Validate if the input is 1 or 2
-    while option_selected not in ("1", "2"):
-        print(Fore.YELLOW + "Please Choose between the 2 options (eg. 1 or 2):")
-
 def update_num_players():
     global num_players
     num_players = mm.get_num_players()
+    return num_players
 
 def main():
     """
     Run all program functions
     """
-    update_num_players()
+    mm.main_menu()
     
 
 if __name__ == "__main__":

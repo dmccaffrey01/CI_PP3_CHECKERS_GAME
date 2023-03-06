@@ -22,6 +22,42 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
 WORKSHEET = SHEET.worksheet("players")
 
+def main_menu():
+    """
+    Display the main menu screen
+    The user can select between three options
+    To start the game, to view the game rules or to view the leaderboard
+    """
+    welcome()
+    print(Fore.YELLOW + "Choose between the 3 options (eg. 1, 2 or 3):")
+    options = "1) Play game\n2) View game rules\n3) View leaderboard\n"
+    option_selected = input(options)
+    new_line()
+    while True:
+        if validate_main_menu_selection(option_selected):
+            main_menu_selection(validate_main_menu_selection(option_selected))
+            return validate_main_menu_selection(option_selected)
+            break
+        welcome()
+        print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
+        option_selected = input(options)
+        new_line()
+
+def validate_main_menu_selection(option):
+    """
+    Checks if the option is valid
+    Returns number in int if valid or else returns false 
+    """
+    if option == "1" or option.lower() == "one":
+        return 1
+    elif option == "2" or option.lower() == "two":
+        return 2
+    elif option == "3" or option.lower() == "three":
+        return 3
+    else:
+        return False
+
+
 def get_num_players():
     """
     Get the number of players playing the game
