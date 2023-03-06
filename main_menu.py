@@ -7,6 +7,7 @@ from email_validator import validate_email, EmailNotValidError
 import gspread
 from google.oauth2.service_account import Credentials
 import checkers
+import checkers_engine
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -218,10 +219,10 @@ def log_in_players(num):
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
             
-            checkers.start_game(player1, player2)
+            start_checkers_game(player1, player2)
             return [player1.display_player_stats(), player2.display_player_stats()]
 
-        checkers.start_game(player1)
+        start_checkers_game(player1)
         return player1.display_player_stats()
     except:
         welcome()
@@ -477,3 +478,10 @@ def get_worksheet_value(email, type):
         return int(type_col[email_col.index(email)])
     else:
         return 0
+
+
+def start_checkers_game(player1):
+    """ 
+    Starts the checkers game
+    """
+    checkers.start_game()

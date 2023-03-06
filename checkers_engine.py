@@ -1,7 +1,6 @@
 """ 
 This file is responsible for storing all the information about the current state of the chess game.
 It will also be responsible for determining the valid moves at the current state.
-It will also keep a move log
 """
 
 class GameState():
@@ -15,11 +14,14 @@ class GameState():
         # Character _ represents an empty space that can be moved into
         self.board = [
             ["x", "w", "x", "w", "x", "w", "x", "w"],
-            ["w", "x", "w", "x", "w", "_", "w", "x"],
+            ["w", "x", "w", "x", "w", "x", "w", "x"],
             ["x", "w", "x", "w", "x", "w", "x", "w"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["b", "x", "b", "x", "b", "_", "b", "x"]
+            ["b", "x", "b", "x", "b", "x", "b", "x"],
             ["x", "b", "x", "b", "x", "b", "x", "b"],
-            ["b", "x", "b", "x", "b", "_", "b", "x"]
+            ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
+
+
+        

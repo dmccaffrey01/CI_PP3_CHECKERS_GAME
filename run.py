@@ -50,7 +50,8 @@ def main():
     """
     Run all program functions
     """
-    mm.main_menu_screen()
+    # mm.main_menu_screen()
+    mm.start_checkers_game("test")
     
 
 if __name__ == "__main__":
