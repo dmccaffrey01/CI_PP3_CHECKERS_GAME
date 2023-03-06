@@ -145,7 +145,7 @@ class TestPlayer(unittest.TestCase):
 
     @patch("main_menu.WORKSHEET", mock_worksheet)
     def test_add_player_to_database(self):
-        self.assertEqual(self.player1.add_player_to_database(self.player1.name, self.player1.email, self.player1.total_games, self.player1.wins, self.player1.loses), ["John", "john@gmail.com", 10, 4, 6])
+        self.assertEqual(self.player1.add_player_to_database(), ["John", "john@gmail.com", 10, 4, 6])
 
     @patch("main_menu.WORKSHEET", mock_worksheet)
     def test_check_is_email_registered(self):
@@ -156,6 +156,9 @@ class TestPlayer(unittest.TestCase):
     def test_regisiter_or_login_player(self):
         self.assertEqual(self.player1.register_or_login_player(), [self.player1.name, self.player1.email])
         self.assertEqual(self.player2.register_or_login_player(), [self.player2.name, self.player2.email, self.player2.total_games, self.player2.wins, self.player2.loses])
+
+    def test_display_player_stats(self):
+        self.assertEqual(self.player1.display_player_stats(), "Name: John Email: john@gmail.com Total Games: 10 Wins: 4 Loses: 6")
 
 
 class TestLogInPlayers(unittest.TestCase):

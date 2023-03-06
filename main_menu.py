@@ -76,7 +76,7 @@ class Player:
             self.update_database_value("name", self.name, self.email)
             return [self.name, self.email]
         else:
-            self.add_player_to_database(self.name, self.email, self.total_games, self.wins, self.loses)
+            self.add_player_to_database()
             return [self.name, self.email, self.total_games, self.wins, self.loses]
 
     def update_database_value(self, col, value, email):
@@ -100,13 +100,20 @@ class Player:
         WORKSHEET.update_cell(row, col, value)
         return [row, col]
 
-    def add_player_to_database(self, name, email, total_games, wins, loses):
+    def add_player_to_database(self):
         """
         Add player to the database
         """
-        row = [name, email, total_games, wins, loses]
+        row = [self.name, self.email, self.total_games, self.wins, self.loses]
         WORKSHEET.append_row(row)
         return row
+
+    def display_player_stats(self):
+        """
+        Displayer the players stats 
+        """
+        text = f"Name: {self.name} Email: {self.email} Total Games: {str(self.total_games)} Wins: {str(self.wins)} Loses: {str(self.loses)}"
+        return text
         
 
 
@@ -151,6 +158,7 @@ def log_in_players(num):
 
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
+
     except:
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
