@@ -118,6 +118,47 @@ def mock_gwv(email, value):
         else:
             return 0
 
+def mock_log_in(func):
+    """ 
+    Mocks the log in players to return true
+    """
+    return True
+
+def mock_mms(func):
+    """ 
+    Mocks the main menu selection to return true
+    """
+    return True
+
+class TestMainMenu(unittest.TestCase):
+    """ 
+    Testing of the main menu and the selection of options
+    """
+    def test_validate_main_menu_selection(self):
+        self.assertEqual(mm.validate_main_menu_selection("1"), 1)
+        self.assertEqual(mm.validate_main_menu_selection("one"), 1)
+        self.assertEqual(mm.validate_main_menu_selection("2"), 2)
+        self.assertEqual(mm.validate_main_menu_selection("two"), 2)
+        self.assertEqual(mm.validate_main_menu_selection("3"), 3)
+        self.assertEqual(mm.validate_main_menu_selection("three"), 3)
+        self.assertEqual(mm.validate_main_menu_selection("-1"), False)
+        self.assertEqual(mm.validate_main_menu_selection("4"), False)
+
+    @patch("main_menu.main_menu_selection", mock_mms)
+    @patch("builtins.input", lambda _: "1")
+    def test_main_menu_screen_1(self):
+        self.assertEqual(mm.main_menu_screen(), 1)
+
+    @patch("main_menu.main_menu_selection", mock_mms)
+    @patch("builtins.input", lambda _: "2")
+    def test_main_menu_screen_2(self):
+        self.assertEqual(mm.main_menu_screen(), 2)
+
+    @patch("main_menu.main_menu_selection", mock_mms)
+    @patch("builtins.input", lambda _: "3")
+    def test_main_menu_screen_3(self):
+        self.assertEqual(mm.main_menu_screen(), 3)
+
 class TestNumPlayers(unittest.TestCase):
     """ 
     Testing of the number of players
@@ -130,17 +171,15 @@ class TestNumPlayers(unittest.TestCase):
 
     # Test if statement in while loop
     @patch("builtins.input", lambda _: "1")
-    @patch("main_menu.log_in_players")
-    def test_get_num_players_1(self, mock_log_in):
+    @patch("main_menu.log_in_players", mock_log_in)
+    def test_get_num_players_1(self):
         sys.stdout = io.StringIO()
         
-        mock_log_in.return_value = True
         self.assertEqual(mm.get_num_players(), 1)
 
     @patch("builtins.input", lambda _: "2")
-    @patch("main_menu.log_in_players")
-    def test_get_num_players_2(self, mock_log_in):
-        mock_log_in.return_value = True
+    @patch("main_menu.log_in_players", mock_log_in)
+    def test_get_num_players_2(self):
         self.assertEqual(mm.get_num_players(), 2)
         
 class TestPlayer(unittest.TestCase):

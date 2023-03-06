@@ -50,7 +50,7 @@ def main():
     """
     Run all program functions
     """
-    mm.main_menu()
+    mm.main_menu_screen()
     
 
 if __name__ == "__main__":

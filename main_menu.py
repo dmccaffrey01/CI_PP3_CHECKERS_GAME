@@ -22,7 +22,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
 WORKSHEET = SHEET.worksheet("players")
 
-def main_menu():
+def main_menu_screen():
     """
     Display the main menu screen
     The user can select between three options
@@ -57,6 +57,11 @@ def validate_main_menu_selection(option):
     else:
         return False
 
+def main_menu_selection(option):
+    """ 
+    Choose the path of the option selected
+    """
+    return True
 
 def get_num_players():
     """
