@@ -61,7 +61,14 @@ def main_menu_selection(option):
     """ 
     Choose the path of the option selected
     """
-    return True
+    if option == 1:
+        update_num_players()
+    elif option == 2:
+        pass
+    elif option == 3:
+        pass
+
+    return option
 
 def get_num_players():
     """
@@ -241,7 +248,7 @@ def validate_registered_input(option):
     elif option == "2" or option.lower() == "n" or option.lower() == "no":
         return 2
     elif option.lower() == "r" or option.lower() == "return":
-        return_to_num_players()
+        return_to_main_menu()
         return 3
     else:
         return False 
@@ -257,7 +264,7 @@ def ask_player_name(num):
     while True:
         name = input("Your Name:")
         if name == "r":
-            return_to_num_players()
+            return_to_main_menu()
             break
         if validate_user_name(name):
             break
@@ -286,11 +293,11 @@ def validate_user_name(name):
     except TypeError:
         return False
 
-def return_to_num_players():
+def return_to_main_menu():
     """ 
     Raises an exception
     """
-    raise Exception("Return to number of players")
+    raise Exception("Return to main menu")
 
 def ask_player_email(name):
     """
@@ -303,7 +310,7 @@ def ask_player_email(name):
     while True:
         email = input("Email:")
         if email == "r":
-            return_to_num_players()
+            return_to_main_menu()
             break
         if validate_user_email(email):
             break
@@ -432,7 +439,7 @@ def validate_incorrect_email_input(option):
     elif option == "2":
         return 2
     elif option.lower() == "r":
-        return_to_num_players()
+        return_to_main_menu()
         return 3
     else:
         return False
