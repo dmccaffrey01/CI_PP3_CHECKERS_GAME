@@ -13,6 +13,10 @@ def start_game():
 
     display_board(game_state)
 
+    movable_pieces = game_state.get_movable_pieces()
+
+    print(movable_pieces)
+
 
 def display_board(game_state):
     """ 

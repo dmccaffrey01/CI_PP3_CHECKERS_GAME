@@ -23,5 +23,34 @@ class GameState():
             ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
+    def get_movable_pieces(self):
+        """
+        Finds out the movable pieces on the board
+        Returns pieces in a list 
+        """
+        movable_pieces = self.get_all_players_pieces()
+        movable_pieces = self.eliminate_immovable_pieces(movable_pieces)
+        
+        return movable_pieces
 
+
+    def get_all_players_pieces():
+        """
+        Finds all the players pieces
+        """
+        movable_pieces = []
+        i = 0
+        j = 0
+        for x in self.board:
+            for y in x:
+                if y == "b":
+                    piece = f"{i}{j}"
+                    movable_pieces.append(piece)
+
+                j += 1
+
+            i += 1
+            j = 0
+
+        return movable_pieces
         

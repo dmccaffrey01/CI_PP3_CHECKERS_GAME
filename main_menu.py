@@ -480,7 +480,7 @@ def get_worksheet_value(email, type):
         return 0
 
 
-def start_checkers_game(player1):
+def start_checkers_game(player1, player2):
     """ 
     Starts the checkers game
     """
