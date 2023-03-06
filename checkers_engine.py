@@ -23,6 +23,9 @@ class GameState():
             ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
+        self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        self.BOARD_COLS = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
     def get_movable_pieces(self):
         """
         Finds out the movable pieces on the board
@@ -34,7 +37,7 @@ class GameState():
         return movable_pieces
 
 
-    def get_all_players_pieces():
+    def get_all_players_pieces(self):
         """
         Finds all the players pieces
         """
@@ -44,7 +47,7 @@ class GameState():
         for x in self.board:
             for y in x:
                 if y == "b":
-                    piece = f"{i}{j}"
+                    piece = self.format_piece(i, j)
                     movable_pieces.append(piece)
 
                 j += 1
@@ -53,4 +56,32 @@ class GameState():
             j = 0
 
         return movable_pieces
+
+    def eliminate_immovable_pieces(self, pieces):
+        """ 
+        Find all the movable and immovable pieces by finding available moves
+        Take out the immovable and return a list
+        """
+        movable_pieces = []
+
+        for piece in pieces:
+            if self.find_available_moves(piece):
+                movable_pieces.append(piece)
+
+    def find_available_moves(self, piece):
+        """ 
+        Finds a piecs available moves
+        Returns a list of positions where the piece can move
+        Returns an empty string if no moves available
+        """
         
+
+    def format_piece(self, r, c):
+        """ 
+        Formats a piece in the form A1
+        Where A represents the row and 1 represents the column
+        Ranges from (A to H) and (1 - 8)
+        """
+        row =  chr(65 + r)
+        col = str(c + 1)
+        return f"{row + col}"
