@@ -157,6 +157,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player1.register_or_login_player(), [self.player1.name, self.player1.email])
         self.assertEqual(self.player2.register_or_login_player(), [self.player2.name, self.player2.email, self.player2.total_games, self.player2.wins, self.player2.loses])
 
+
 class TestLogInPlayers(unittest.TestCase):
     """
     Testing of loging in players feature
@@ -250,6 +251,15 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_email_registered(self.player1.email, True, self.player1.name), self.player1.email)
         self.assertEqual(mm.validate_email_registered(self.player1.email, False, self.player1.name), self.player1.email)
 
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_get_worksheet_value(self):
+        self.assertEqual(mm.get_worksheet_value(self.player1.email, "total_games"), 10)
+        self.assertEqual(mm.get_worksheet_value(self.player1.email, "wins"), 4)
+        self.assertEqual(mm.get_worksheet_value(self.player1.email, "loses"), 6)
+        self.assertEqual(mm.get_worksheet_value("pat@gmail.com", "total_games"), 0)
+        self.assertEqual(mm.get_worksheet_value(self.player1.email, "id"), 0)
+
+        
     sys.stdout = sys.__stdout__    
 
 if __name__ == "__main__":
