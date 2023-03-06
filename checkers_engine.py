@@ -74,6 +74,7 @@ class GameState():
         Returns a list of positions where the piece can move
         Returns an empty string if no moves available
         """
+        piece_index = self.get_index_of_piece(piece)
         
 
     def format_piece(self, r, c):
@@ -85,3 +86,13 @@ class GameState():
         row =  chr(65 + r)
         col = str(c + 1)
         return f"{row + col}"
+
+    def get_index_of_piece(self, piece):
+        """ 
+        Finds the index of the piece in the board
+        Returns it as an array where row is first and col is second
+        """
+        split_row_col = list(piece)
+        row = self.BOARD_ROWS.index(split_row_col[0])
+        col = self.BOARD_COLS.index(split_row_col[1])
+        return [row, col]
