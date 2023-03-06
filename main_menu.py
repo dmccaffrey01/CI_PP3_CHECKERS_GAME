@@ -214,7 +214,7 @@ def log_in_players(num):
         welcome()
         print(Fore.YELLOW + "Returning to number of players...")
         time.sleep(1)
-        update_num_players()
+        main_menu_screen()
 
 def ask_registered(num):
     """
