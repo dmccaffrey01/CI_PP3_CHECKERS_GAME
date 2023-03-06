@@ -74,20 +74,27 @@ def get_num_players():
     """
     Get the number of players playing the game
     """
-    welcome()
-    print(Fore.YELLOW + "How many players?(1 or 2)")
-    options = "1) One\n2) Two\n"
-    option_selected = input(options)
-    new_line()
-    while True:
-        if validate_num_players(option_selected):
-            log_in_players(validate_num_players(option_selected))
-            return validate_num_players(option_selected)
-            break
+    try:
         welcome()
-        print(Fore.YELLOW + "Please input (1, one) or (2, two):")
+        print(Fore.YELLOW + "Enter r to return")
+        print(Fore.YELLOW + "How many players?(1 or 2)")
+        options = "1) One\n2) Two\n"
         option_selected = input(options)
         new_line()
+        while True:
+            if validate_num_players(option_selected):
+                log_in_players(validate_num_players(option_selected))
+                return validate_num_players(option_selected)
+                break
+            welcome()
+            print(Fore.YELLOW + "Please input (1, one) or (2, two):")
+            option_selected = input(options)
+            new_line()
+    except:
+        welcome()
+        print(Fore.YELLOW + "Returning to main menu...")
+        time.sleep(1)
+        main_menu_screen()
            
 
 def validate_num_players(option):
@@ -100,6 +107,9 @@ def validate_num_players(option):
         return 1
     elif option == "2" or option.lower() == "two":
         return 2
+    elif option == "r":
+        return_to_main_menu()
+        return 3
     else:
         return False
 
@@ -212,7 +222,7 @@ def log_in_players(num):
         return player1.display_player_stats()
     except:
         welcome()
-        print(Fore.YELLOW + "Returning to number of players...")
+        print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         main_menu_screen()
 

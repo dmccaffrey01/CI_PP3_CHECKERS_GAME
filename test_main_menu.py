@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import main_menu as mm
+import run
 import sys
 import io
 import gspread
@@ -130,11 +131,20 @@ def mock_mms(func):
     """
     return True
 
+def mock_unp():
+    """ 
+    Mocks the update num players to return true
+    """
+    return True
+
 class TestMainMenu(unittest.TestCase):
     """ 
     Testing of the main menu and the selection of options
     """
     def test_validate_main_menu_selection(self):
+        # Disable print output
+        sys.stdout = io.StringIO()
+
         self.assertEqual(mm.validate_main_menu_selection("1"), 1)
         self.assertEqual(mm.validate_main_menu_selection("one"), 1)
         self.assertEqual(mm.validate_main_menu_selection("2"), 2)
@@ -143,6 +153,12 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(mm.validate_main_menu_selection("three"), 3)
         self.assertEqual(mm.validate_main_menu_selection("-1"), False)
         self.assertEqual(mm.validate_main_menu_selection("4"), False)
+
+    @patch("main_menu.update_num_players", mock_unp)
+    def test_main_menu_selection(self):
+        self.assertEqual(mm.main_menu_selection(1), 1)
+        self.assertEqual(mm.main_menu_selection(2), 2)
+        self.assertEqual(mm.main_menu_selection(3), 3)
 
     @patch("main_menu.main_menu_selection", mock_mms)
     @patch("builtins.input", lambda _: "1")
@@ -164,17 +180,17 @@ class TestNumPlayers(unittest.TestCase):
     Testing of the number of players
     input values and types
     """
+    @patch("main_menu.return_to_main_menu", mock_rtnp)
     def test_validate_num_players(self):
         self.assertEqual(mm.validate_num_players("1"), 1)
         self.assertEqual(mm.validate_num_players("2"), 2)
+        self.assertEqual(mm.validate_num_players("r"), 3)
         self.assertEqual(mm.validate_num_players("3"), False)
 
     # Test if statement in while loop
     @patch("builtins.input", lambda _: "1")
     @patch("main_menu.log_in_players", mock_log_in)
     def test_get_num_players_1(self):
-        sys.stdout = io.StringIO()
-        
         self.assertEqual(mm.get_num_players(), 1)
 
     @patch("builtins.input", lambda _: "2")
@@ -249,7 +265,7 @@ class TestLogInPlayers(unittest.TestCase):
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
 
-    @patch("main_menu.return_to_num_players", mock_rtnp)
+    @patch("main_menu.return_to_main_menu", mock_rtnp)
     def test_validate_registered_input(self):
         self.assertEqual(mm.validate_registered_input("1"), 1)
         self.assertEqual(mm.validate_registered_input("y"), 1)
@@ -285,7 +301,7 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_email(self):
         self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
     
-    @patch("main_menu.return_to_num_players", mock_rtnp)
+    @patch("main_menu.return_to_main_menu", mock_rtnp)
     def test_validate_incorrect_email_input(self):
         self.assertEqual(mm.validate_incorrect_email_input("1"), 1)
         self.assertEqual(mm.validate_incorrect_email_input("2"), 2)
@@ -351,7 +367,8 @@ class TestLogInPlayers(unittest.TestCase):
     def test_log_in_players(self):
         self.assertEqual(mm.log_in_players(1), "Name: John Email: john@gmail.com Total Games: 10 Wins: 4 Loses: 6")
         self.assertEqual(mm.log_in_players(2), ["Name: John Email: john@gmail.com Total Games: 10 Wins: 4 Loses: 6", "Name: Pat Email: pat@gmail.com Total Games: 0 Wins: 0 Loses: 0"])
-        
+
+    # Enable print output    
     sys.stdout = sys.__stdout__    
 
 if __name__ == "__main__":
