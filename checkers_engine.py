@@ -68,14 +68,17 @@ class GameState():
             if self.find_available_moves(piece):
                 movable_pieces.append(piece)
 
+        return movable_pieces
+
     def find_available_moves(self, piece):
         """ 
-        Finds a piecs available moves
+        Finds a pieces available moves
         Returns a list of positions where the piece can move
         Returns an empty string if no moves available
         """
         piece_index = self.get_index_of_piece(piece)
-        
+        return self.get_available_moves(piece_index)
+               
 
     def format_piece(self, r, c):
         """ 
@@ -96,3 +99,15 @@ class GameState():
         row = self.BOARD_ROWS.index(split_row_col[0])
         col = self.BOARD_COLS.index(split_row_col[1])
         return [row, col]
+    
+    def check_if_piece_on_edge_of_board(self, piece_index):
+        """ 
+        Finds out if the piece is on the edge of the board
+        If it is return True, if not return False
+        """
+        if piece_index[1] == 0:
+            return "Left"
+        elif piece_index[1] == 7:
+            return "Right"
+        else:
+            return False
