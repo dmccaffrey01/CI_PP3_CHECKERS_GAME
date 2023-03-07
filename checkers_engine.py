@@ -167,4 +167,15 @@ class GameState():
                 available_moves.append(available_move)
         return available_moves
 
+    def move_piece(self, piece, new_position):
+        """ 
+        Moves the piece into the new postion on the board
+        Removes the piece from its original postion on the board
+        And places it into the empty space on the board
+        """
+        piece_index = self.get_index_of_piece(piece)
+        new_position_index = self.get_index_of_piece(new_position)
+
+        self.board[piece_index[0]][piece_index[1]] = "_"
+        self.board[new_position_index[0]][new_position_index[1]] = "b"
     

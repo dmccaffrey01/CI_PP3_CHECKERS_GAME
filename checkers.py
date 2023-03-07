@@ -37,7 +37,9 @@ def start_game_loop(game_state):
             if selected_move != "return":
                 selecting_move = False
 
-        time.sleep(2)
+        game_state.move_piece(selected_piece, selected_move)
+
+        time.sleep(1)
 
         moves += 1
 
