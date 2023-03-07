@@ -13,14 +13,14 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "w", "x", "w", "x", "w", "x", "w"],
-            ["w", "x", "w", "x", "w", "x", "w", "x"],
-            ["x", "w", "x", "w", "x", "w", "x", "w"],
+            ["x", "w", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["b", "x", "b", "x", "b", "x", "b", "x"],
-            ["x", "b", "x", "b", "x", "b", "x", "b"],
-            ["b", "x", "b", "x", "b", "x", "b", "x"]
+            ["x", "_", "x", "_", "x", "w", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "w", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "w", "x", "_", "x", "_"],
+            ["b", "x", "b", "x", "_", "x", "_", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -29,6 +29,8 @@ class GameState():
         self.moves = 0
 
         self.color_go = "black"
+
+        self.available_jumps = []
 
     def get_movable_pieces(self, color):
         """
@@ -82,11 +84,23 @@ class GameState():
         Finds a pieces available moves
         Checks if move is blocked or empty
         Formats the move into piece
+        Finds a pieces available jumps
+        Checks if jump is valid
+        Formats jumps into piece
+        Adds jumps to moves
         Returns a list of positions where the piece can move
         Returns an empty string if no moves available
         """
         piece_index = self.get_index_of_piece(piece)
         available_moves = self.format_available_moves(self.get_available_moves(piece_index, color))
+        self.get_available_jumps(piece_index, color)
+        available_jumps = self.format_available_jumps()
+        for jump, i in zip(available_jumps, range(len(available_jumps)-1)):
+            available_moves.insert(i, jump)
+
+        # Set available jumps to empty set
+        self.available_jumps = []
+        
         return available_moves
                
     def format_piece(self, r, c):
@@ -112,19 +126,19 @@ class GameState():
     def get_available_moves(self, piece_index, color):
         """ 
         Checks if the piece is on the edge
-        Checks the pieces diagnols if it is empty
+        Checks the pieces diaganols if it is empty
         Returns the diaganols indexs in a list if it is empty
         """
         if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
-            diagnol_right = self.get_diaganol(piece_index, "Right", color)
-            return ["blocked", self.check_if_diaganol_empty(diagnol_right)]
+            diaganol_right = self.get_diaganol(piece_index, "Right", color)
+            return ["blocked", self.check_if_diaganol_empty(diaganol_right)]
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
-            diagnol_left = self.get_diaganol(piece_index, "Left", color)
-            return [self.check_if_diaganol_empty(diagnol_left), "blocked"]
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            return [self.check_if_diaganol_empty(diaganol_left), "blocked"]
         else:
-            diagnol_left = self.get_diaganol(piece_index, "Left", color)
-            diagnol_right = self.get_diaganol(piece_index, "Right", color)
-            return [self.check_if_diaganol_empty(diagnol_left), self.check_if_diaganol_empty(diagnol_right)]
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            diaganol_right = self.get_diaganol(piece_index, "Right", color)
+            return [self.check_if_diaganol_empty(diaganol_left), self.check_if_diaganol_empty(diaganol_right)]
 
     def check_if_piece_on_edge_of_board(self, piece_index):
         """ 
@@ -178,6 +192,67 @@ class GameState():
                 available_moves.append(available_move)
         return available_moves
 
+    def get_available_jumps(self, piece_index, color):
+        """
+        Checks if the piece is on the edge
+        Checks the pieces diaganols if it is has a piece of the opposite color
+        Checks if you can jump that piece
+        Returns the positions indexs if it can jump
+        """
+        if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
+            diaganol_right = self.get_diaganol(piece_index, "Right", color)
+            return self.check_jump(diaganol_right, "Right", color) 
+        elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            return self.check_jump(diaganol_left, "Left", color)
+        else:
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            diaganol_right = self.get_diaganol(piece_index, "Right", color)
+            return [self.check_jump(diaganol_left, "Left", color), self.check_jump(diaganol_right, "Right", color)]
+
+    def check_jump(self, diaganol, left_or_right, color):
+        """
+        Checks if the diaganol contains the opposite color piece
+        If it does it checks the next right diaganol to see if it is empty
+        If it is empty, returns the position as it can jump
+        Also calls the get available jumps again to see if it can double jump
+        If there is a piece in the way it returns blocked 
+        """
+        if self.check_if_diaganol_contains_opposite_color_piece(diaganol, color):
+                new_diaganol = self.get_diaganol(diaganol, left_or_right, color)
+                if self.check_if_diaganol_empty(new_diaganol):
+                    self.available_jumps.append(new_diaganol)
+                    return self.get_available_jumps(new_diaganol, color)
+                else:
+                    return "blocked"
+        else: 
+            return "blocked"
+
+    def check_if_diaganol_contains_opposite_color_piece(self, diaganol, color):
+        """ 
+        Checks if the diaganol is an opposite color piece on the board
+        Returns True if there is an opposite color piece
+        or returns False if space is empty or filled with same color piece
+        """
+        if self.board[diaganol[0]][diaganol[1]] == "w" and color == "black":
+            return True
+        elif self.board[diaganol[0]][diaganol[1]] == "b" and color == "white":
+            return True
+        else: 
+            return False
+
+    def format_available_jumps(self):
+        """
+        Formats the available moves
+        Returns a list where blocked is replaced by empty
+        And eligable jumps are formatted correctly
+        """
+        available_jumps = []
+        for jump in self.available_jumps:
+            j = self.format_piece(jump[0], jump[1])
+            available_jumps.append(j)
+        return available_jumps
+        
     def move_piece(self, piece, new_position, color):
         """ 
         Moves the piece into the new postion on the board
