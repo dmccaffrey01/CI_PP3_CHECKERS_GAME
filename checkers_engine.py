@@ -72,7 +72,7 @@ class GameState():
         movable_pieces = []
 
         for piece in pieces:
-            if self.find_available_moves(piece):
+            if self.find_available_moves(piece, color):
                 movable_pieces.append(piece)
 
         return movable_pieces
@@ -146,7 +146,7 @@ class GameState():
         if color == "black":
             row = piece_index[0] - 1
         elif color == "white":
-            row = piece_index_index[0] + 1
+            row = piece_index[0] + 1
 
         if diaganol == "Left":
             col = piece_index[1] - 1
@@ -178,7 +178,7 @@ class GameState():
                 available_moves.append(available_move)
         return available_moves
 
-    def move_piece(self, piece, new_position):
+    def move_piece(self, piece, new_position, color):
         """ 
         Moves the piece into the new postion on the board
         Removes the piece from its original postion on the board
@@ -188,7 +188,7 @@ class GameState():
         new_position_index = self.get_index_of_piece(new_position)
 
         self.board[piece_index[0]][piece_index[1]] = "_"
-        self.board[new_position_index[0]][new_position_index[1]] = "b"
+        self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
     def change_color_go(self):
         """ 
@@ -199,9 +199,4 @@ class GameState():
         elif self.color_go == "white":
             self.color_go = "black"
     
-    def get_color_go(self):
-        """ 
-        Returns the color of whosever go it is
-        """
-        return self.color_go
     
