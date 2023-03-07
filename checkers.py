@@ -7,6 +7,7 @@ import checkers_engine as check_eng
 from run import cls, new_line
 import colorama
 from colorama import Fore, Back, Style
+import time
 
 def start_game():
     """ 
@@ -23,31 +24,20 @@ def start_game_loop(game_state):
     When player has picked a piece
     Asks player to pick a move from available moves
     Moves that piece the player picked
-    Moves on the other players go
+    Moves on to the other players go
     """
     moves = 0
     while moves < 3:
-        display_board(game_state)
+        selecting_move = True
+        while selecting_move:
+            selected_piece = select_piece(game_state)
+            
+            selected_move = select_move(game_state, selected_piece)
 
-        new_line()
+            if selected_move != "return":
+                selecting_move = False
 
-        print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2))")
-
-        movable_pieces = game_state.get_movable_pieces()
-        
-        pieces = ""
-        for piece, i in zip(movable_pieces, range(1, len(movable_pieces) + 1)):
-            text = f"{i}) {piece}\n"
-            pieces += text
-        piece_selected = input(pieces)
-        new_line()
-        while True:
-            if validate_selected_piece(piece_selected, movable_pieces):
-                break
-            display_board(game_state)
-            print(Fore.YELLOW + f"Please input (1 - {len(movable_pieces)})")
-            piece_selected = input(pieces)
-            new_line()
+        time.sleep(2)
 
         moves += 1
 
@@ -65,20 +55,84 @@ def display_board(game_state):
     
     print("  " + board_cols)
 
-def validate_selected_piece(option, pieces):
+def select_piece(game_state):
+    """
+    Asks player to pick a piece to move from movable pieces
+    Validates the option selected
+    """
+    display_board(game_state)
+
+    new_line()
+
+    print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2))")
+
+    movable_pieces = game_state.get_movable_pieces()
+
+    options = ""
+    for piece, i in zip(movable_pieces, range(1, len(movable_pieces) + 1)):
+        text = f"{i}) {piece}\n"
+        options += text
+    option_selected = input(options)
+    new_line()
+    while True:
+        if validate_selected_option(option_selected, "movable_pieces", movable_pieces):
+            return movable_pieces[validate_selected_option(option_selected, "movable_pieces", movable_pieces) - 1]
+            break
+        display_board(game_state)
+        new_line() 
+        print(Fore.YELLOW + f"Please input (1 - {len(movable_pieces)})")
+        option_selected = input(options)
+          
+
+def validate_selected_option(option, type, list):
     """ 
     Checks if the option selected is a valid option
     Returns number of selected option if valid
     Or returns false if not valid
     """
     try:
+        if option == "r" and type == "available_moves":
+            return "return"
         option_selected = int(option)
-        if option_selected >= 1 and option_selected <= len(pieces):
+        if option_selected >= 1 and option_selected <= len(list):
             return option_selected
         else:
             raise ValueError()
     except:
         return False
+
+def select_move(game_state, piece):
+    """
+    Asks player to pick a board position for the selected piece to move to from available moves
+    Validates the option selected
+    """
+    display_board(game_state)
+
+    new_line()
+
+    print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2))")
+    print(Fore.YELLOW + "(Enter r to return to selecting a piece)")
+
+    available_moves = game_state.find_available_moves(piece)
+
+    options = ""
+    for move, i in zip(available_moves, range(1, len(available_moves) + 1)):
+        text = f"{i}) {move}\n"
+        options += text
+    option_selected = input(options)
+    new_line()
+    while True:
+        if validate_selected_option(option_selected, "available_moves", available_moves) == "return":
+            return "return"
+            break
+        elif validate_selected_option(option_selected, "available_moves", available_moves):
+            return available_moves[validate_selected_option(option_selected, "available_moves", available_moves) - 1]
+            break
+        display_board(game_state)
+        new_line()
+        print(Fore.YELLOW + f"Please input (1 - {len(available_moves)})")
+        option_selected = input(options)
+        
 
 
 

@@ -166,3 +166,5 @@ class GameState():
                 available_move = self.format_piece(move[0], move[1])
                 available_moves.append(available_move)
         return available_moves
+
+    
