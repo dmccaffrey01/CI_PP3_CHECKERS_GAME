@@ -73,13 +73,15 @@ class GameState():
     def find_available_moves(self, piece):
         """ 
         Finds a pieces available moves
+        Checks if move is blocked or empty
+        Formats the move into piece
         Returns a list of positions where the piece can move
         Returns an empty string if no moves available
         """
         piece_index = self.get_index_of_piece(piece)
-        return self.get_available_moves(piece_index)
+        available_moves = self.format_available_moves(self.get_available_moves(piece_index))
+        return available_moves
                
-
     def format_piece(self, r, c):
         """ 
         Formats a piece in the form A1
@@ -100,6 +102,23 @@ class GameState():
         col = self.BOARD_COLS.index(split_row_col[1])
         return [row, col]
     
+    def get_available_moves(self, piece_index):
+        """ 
+        Checks if the piece is on the edge
+        Checks the pieces diagnols if it is empty
+        Returns the diaganols indexs in a list if it is empty
+        """
+        if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
+            diagnol_right = self.get_diaganol(piece_index, "Right")
+            return ["blocked", self.check_if_diaganol_empty(diagnol_right)]
+        elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
+            diagnol_left = self.get_diaganol(piece_index, "Left")
+            return [self.check_if_diaganol_empty(diagnol_left), "blocked"]
+        else:
+            diagnol_left = self.get_diaganol(piece_index, "Left")
+            diagnol_right = self.get_diaganol(piece_index, "Right")
+            return [self.check_if_diaganol_empty(diagnol_left), self.check_if_diaganol_empty(diagnol_right)]
+
     def check_if_piece_on_edge_of_board(self, piece_index):
         """ 
         Finds out if the piece is on the edge of the board
@@ -111,3 +130,39 @@ class GameState():
             return "Right"
         else:
             return False
+
+    def get_diaganol(self, piece_index, diaganol):
+        """ 
+        Gets the index of the diaganol position either to the right or left
+        Returns index in a list where row is first col is second
+        """
+        row = piece_index[0] - 1
+        if diaganol == "Left":
+            col = piece_index[1] - 1
+        elif diaganol == "Right":
+            col = piece_index[1] + 1
+        return [row, col]
+
+    def check_if_diaganol_empty(self, diaganol):
+        """ 
+        Checks if the diaganol is an empty space on the board
+        Returns the diaganol if it space is empty
+        or returns blocked if space is taken
+        """
+        if self.board[diaganol[0]][diaganol[1]] == "_":
+            return diaganol
+        else: 
+            return "blocked"
+
+    def format_available_moves(self, moves):
+        """ 
+        Formats the available moves
+        Returns a list where blocked is replaced by empty
+        And eligable moves are formatted correctly
+        """
+        available_moves = []
+        for move in moves:
+            if move != "blocked":
+                available_move = self.format_piece(move[0], move[1])
+                available_moves.append(available_move)
+        return available_moves

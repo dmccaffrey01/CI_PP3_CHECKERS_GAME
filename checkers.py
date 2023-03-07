@@ -23,7 +23,10 @@ def display_board(game_state):
     Prints the board state to the console
     """
     board_state = game_state.board
-
-    for x in board_state:
+    board_rows = game_state.BOARD_ROWS
+    board_cols = " ".join(game_state.BOARD_COLS)
+    for x, r in zip(board_state, board_rows):
         row = " ".join(x)
-        print(row)
+        print(r + " " + row)
+    
+    print("  " + board_cols)
