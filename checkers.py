@@ -27,7 +27,7 @@ def start_game_loop(game_state):
     Moves on to the other players go
     """
     moves = 0
-    while moves < 3:
+    while moves < 8:
         selecting_move = True
         while selecting_move:
             selected_piece = select_piece(game_state)

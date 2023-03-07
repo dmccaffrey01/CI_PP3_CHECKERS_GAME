@@ -26,38 +26,45 @@ class GameState():
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
         self.BOARD_COLS = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
-    def get_movable_pieces(self):
+        self.moves = 0
+
+        self.color_go = "black"
+
+    def get_movable_pieces(self, color):
         """
         Finds out the movable pieces on the board
         Returns pieces in a list 
         """
-        movable_pieces = self.get_all_players_pieces()
-        movable_pieces = self.eliminate_immovable_pieces(movable_pieces)
+        movable_pieces = self.get_all_players_pieces(color)
+        movable_pieces = self.eliminate_immovable_pieces(movable_pieces, color)
         
         return movable_pieces
 
 
-    def get_all_players_pieces(self):
+    def get_all_players_pieces(self, color):
         """
         Finds all the players pieces
         """
-        movable_pieces = []
+        pieces = []
         i = 0
         j = 0
         for x in self.board:
             for y in x:
-                if y == "b":
+                if y == "b" and color == "black":
                     piece = self.format_piece(i, j)
-                    movable_pieces.append(piece)
+                    pieces.append(piece)
+                elif y == "w" and color == "white":
+                    piece = self.format_piece(i, j)
+                    pieces.append(piece)
 
                 j += 1
 
             i += 1
             j = 0
 
-        return movable_pieces
+        return pieces
 
-    def eliminate_immovable_pieces(self, pieces):
+    def eliminate_immovable_pieces(self, pieces, color):
         """ 
         Find all the movable and immovable pieces by finding available moves
         Take out the immovable and return a list
@@ -70,7 +77,7 @@ class GameState():
 
         return movable_pieces
 
-    def find_available_moves(self, piece):
+    def find_available_moves(self, piece, color):
         """ 
         Finds a pieces available moves
         Checks if move is blocked or empty
@@ -79,7 +86,7 @@ class GameState():
         Returns an empty string if no moves available
         """
         piece_index = self.get_index_of_piece(piece)
-        available_moves = self.format_available_moves(self.get_available_moves(piece_index))
+        available_moves = self.format_available_moves(self.get_available_moves(piece_index, color))
         return available_moves
                
     def format_piece(self, r, c):
@@ -102,21 +109,21 @@ class GameState():
         col = self.BOARD_COLS.index(split_row_col[1])
         return [row, col]
     
-    def get_available_moves(self, piece_index):
+    def get_available_moves(self, piece_index, color):
         """ 
         Checks if the piece is on the edge
         Checks the pieces diagnols if it is empty
         Returns the diaganols indexs in a list if it is empty
         """
         if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
-            diagnol_right = self.get_diaganol(piece_index, "Right")
+            diagnol_right = self.get_diaganol(piece_index, "Right", color)
             return ["blocked", self.check_if_diaganol_empty(diagnol_right)]
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
-            diagnol_left = self.get_diaganol(piece_index, "Left")
+            diagnol_left = self.get_diaganol(piece_index, "Left", color)
             return [self.check_if_diaganol_empty(diagnol_left), "blocked"]
         else:
-            diagnol_left = self.get_diaganol(piece_index, "Left")
-            diagnol_right = self.get_diaganol(piece_index, "Right")
+            diagnol_left = self.get_diaganol(piece_index, "Left", color)
+            diagnol_right = self.get_diaganol(piece_index, "Right", color)
             return [self.check_if_diaganol_empty(diagnol_left), self.check_if_diaganol_empty(diagnol_right)]
 
     def check_if_piece_on_edge_of_board(self, piece_index):
@@ -131,12 +138,16 @@ class GameState():
         else:
             return False
 
-    def get_diaganol(self, piece_index, diaganol):
+    def get_diaganol(self, piece_index, diaganol, color):
         """ 
         Gets the index of the diaganol position either to the right or left
         Returns index in a list where row is first col is second
         """
-        row = piece_index[0] - 1
+        if color == "black":
+            row = piece_index[0] - 1
+        elif color == "white":
+            row = piece_index_index[0] + 1
+
         if diaganol == "Left":
             col = piece_index[1] - 1
         elif diaganol == "Right":
@@ -178,4 +189,19 @@ class GameState():
 
         self.board[piece_index[0]][piece_index[1]] = "_"
         self.board[new_position_index[0]][new_position_index[1]] = "b"
+
+    def change_color_go(self):
+        """ 
+        Changes the color to whosever go it is
+        """
+        if self.color_go == "black":
+            self.color_go = "white"
+        elif self.color_go == "white":
+            self.color_go = "black"
+    
+    def get_color_go(self):
+        """ 
+        Returns the color of whosever go it is
+        """
+        return self.color_go
     
