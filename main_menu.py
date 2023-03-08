@@ -4,14 +4,14 @@ import os
 from run import welcome, cls, new_line, update_num_players
 import time
 from email_validator import validate_email, EmailNotValidError
-import gspread
-from google.oauth2.service_account import Credentials
+#import gspread
+#from google.oauth2.service_account import Credentials
 import checkers
 import checkers_engine
 
 #Initialize colorama
 colorama.init(autoreset=True)
-
+"""
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -23,7 +23,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
 WORKSHEET = SHEET.worksheet("players")
-
+"""
 def main_menu_screen():
     """
     Display the main menu screen

@@ -32,7 +32,6 @@ class GameState():
         self.jumped_pieces_log = []
         self.jump_count = 0
         self.available_jumps = []
-
     def get_movable_pieces(self, color):
         """
         Finds out the movable pieces on the board
@@ -98,12 +97,12 @@ class GameState():
         available_jumps = self.format_available_jumps()
         for jump, i in zip(available_jumps, range(len(available_jumps))):
             available_moves.insert(i, jump)
-
+        
         # Set variables to default
         self.available_jumps = []
-        print(self.available_jumps_log)
+      
         self.available_jumps_log = []
-
+       
         return available_moves
                
     def format_piece(self, r, c):
@@ -214,10 +213,9 @@ class GameState():
         else:
             diaganol_left = self.get_diaganol(piece_index, "Left", color)
             self.check_jump(diaganol_left, "Left", color)
-            
-
             diaganol_right = self.get_diaganol(piece_index, "Right", color)
             self.check_jump(diaganol_right, "Right", color)
+            
             
         return self.available_jumps
 
@@ -235,8 +233,7 @@ class GameState():
                     self.available_jumps.append(new_diaganol)
                     self.jump_count += 1
                     self.jumped_pieces_log.append(self.format_piece(diaganol[0], diaganol[1]))
-                    self.available_jumps_log.append(self.jumped_pieces_log)
-                    
+                    self.available_jumps_log.append(self.jumped_pieces_log[:])
                     self.get_available_jumps(new_diaganol, color)
                     self.delete_last_log()
                     return "success"
@@ -290,10 +287,9 @@ class GameState():
         self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
         if move[1] == "jump":
-            jumped_pieces = move[2]
-            
-            #for piece in jumped_pieces:
-                #self.remove_piece_from_board(piece)
+            jumped_pieces = move[2][option-1]
+            for piece in jumped_pieces:
+                self.remove_piece_from_board(piece)
 
     def remove_piece_from_board(self, piece):
         """ 
@@ -307,9 +303,7 @@ class GameState():
         Removes the last jumped pieces log
         Change jump count by 1
         """
-        if self.jump_count == 0:
-                self.jumped_pieces_log = []    
-        else:
+        if self.jump_count != 0:
             self.jump_count -= 1
             del self.jumped_pieces_log[self.jump_count]
             
