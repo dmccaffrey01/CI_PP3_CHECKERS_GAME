@@ -27,7 +27,7 @@ def start_game_loop(game_state):
     Moves on to the other players go
     """
     moves = 0
-    while moves < 2:
+    while moves < 12:
         color = game_state.color_go
         
         selecting_move = True
@@ -40,13 +40,13 @@ def start_game_loop(game_state):
                 selecting_move = False
 
         game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
-        """ 
+        
         display_board(game_state)
 
         time.sleep(1)
 
         game_state.change_color_go()
-        """
+        
         moves += 1
 
 def display_board(game_state):

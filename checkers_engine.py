@@ -13,14 +13,14 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
+            ["x", "w", "x", "w", "x", "w", "x", "w"],
+            ["w", "x", "w", "x", "w", "x", "w", "x"],
+            ["x", "w", "x", "w", "x", "w", "x", "w"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "w", "x", "w", "x", "w", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "w", "x", "w", "x", "w", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "w", "x", "w", "x", "_"],
-            ["_", "x", "_", "x", "b", "x", "_", "x"]
+            ["b", "x", "b", "x", "b", "x", "b", "x"],
+            ["x", "b", "x", "b", "x", "b", "x", "b"],
+            ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -145,7 +145,7 @@ class GameState():
     def check_if_piece_on_edge_of_board(self, piece_index):
         """ 
         Finds out if the piece is on the edge of the board
-        If it is return True, if not return False
+        If it is return Left or Right, if not return False
         """
         if piece_index[1] == 0:
             return "Left"
@@ -153,6 +153,19 @@ class GameState():
             return "Right"
         else:
             return False
+
+    def check_if_piece_on_kings_edge(self, piece_index):
+        """ 
+        Finds out if the piece is on the top or bottom edge of the board
+        If it is return top or bottom otherwise return false
+        """
+        if piece_index[0] == 0:
+            return "Top"
+        elif piece_index[0] == 7:
+            return "Bottom"
+        else: 
+            return False
+
 
     def get_diaganol(self, piece_index, diaganol, color):
         """ 
@@ -212,11 +225,12 @@ class GameState():
             self.check_jump(diaganol_left, "Left", color)
         else:
             diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            self.check_jump(diaganol_left, "Left", color)
+            if self.check_if_piece_on_edge_of_board(diaganol_left) != "Left":
+                self.check_jump(diaganol_left, "Left", color)
             diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            self.check_jump(diaganol_right, "Right", color)
-            
-            
+            if self.check_if_piece_on_edge_of_board(diaganol_right) != "Right":
+                self.check_jump(diaganol_right, "Right", color)
+
         return self.available_jumps
 
     def check_jump(self, diaganol, left_or_right, color):
@@ -227,9 +241,11 @@ class GameState():
         Also calls the get available jumps again to see if it can double jump
         If there is a piece in the way it returns blocked 
         """
+        
         if self.check_if_diaganol_contains_opposite_color_piece(diaganol, color):
+            if not self.check_if_piece_on_edge_of_board(diaganol):     
                 new_diaganol = self.get_diaganol(diaganol, left_or_right, color)
-                if self.check_if_diaganol_empty(new_diaganol):
+                if self.check_if_diaganol_empty(new_diaganol) != "blocked":
                     self.available_jumps.append(new_diaganol)
                     self.jump_count += 1
                     self.jumped_pieces_log.append(self.format_piece(diaganol[0], diaganol[1]))
@@ -239,6 +255,8 @@ class GameState():
                     return "success"
                 else:
                     return "blocked"
+            else:
+                return "blocked"
         else: 
             return "blocked"
 
