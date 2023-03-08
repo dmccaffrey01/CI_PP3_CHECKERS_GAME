@@ -13,23 +13,24 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "w", "x", "_", "x", "_", "x", "_"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "w", "x", "_"],
+            ["x", "w", "x", "w", "x", "w", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "w", "x", "_"],
+            ["x", "w", "x", "w", "x", "w", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "w", "x", "_", "x", "_"],
-            ["b", "x", "b", "x", "_", "x", "_", "x"]
+            ["x", "_", "x", "w", "x", "w", "x", "_"],
+            ["_", "x", "_", "x", "b", "x", "_", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
         self.BOARD_COLS = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
-        self.moves = 0
-
         self.color_go = "black"
 
+        self.available_jumps_log = []
+        self.jumped_pieces_log = []
+        self.jump_count = 0
         self.available_jumps = []
 
     def get_movable_pieces(self, color):
@@ -95,12 +96,14 @@ class GameState():
         available_moves = self.format_available_moves(self.get_available_moves(piece_index, color))
         self.get_available_jumps(piece_index, color)
         available_jumps = self.format_available_jumps()
-        for jump, i in zip(available_jumps, range(len(available_jumps)-1)):
+        for jump, i in zip(available_jumps, range(len(available_jumps))):
             available_moves.insert(i, jump)
 
-        # Set available jumps to empty set
+        # Set variables to default
         self.available_jumps = []
-        
+        print(self.available_jumps_log)
+        self.available_jumps_log = []
+
         return available_moves
                
     def format_piece(self, r, c):
@@ -188,8 +191,11 @@ class GameState():
         available_moves = []
         for move in moves:
             if move != "blocked":
+                m = []
                 available_move = self.format_piece(move[0], move[1])
-                available_moves.append(available_move)
+                m.append(available_move)
+                m.append("move")
+                available_moves.append(m)
         return available_moves
 
     def get_available_jumps(self, piece_index, color):
@@ -201,14 +207,19 @@ class GameState():
         """
         if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
             diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            return self.check_jump(diaganol_right, "Right", color) 
+            self.check_jump(diaganol_right, "Right", color) 
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
             diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            return self.check_jump(diaganol_left, "Left", color)
+            self.check_jump(diaganol_left, "Left", color)
         else:
             diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            self.check_jump(diaganol_left, "Left", color)
+            
+
             diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            return [self.check_jump(diaganol_left, "Left", color), self.check_jump(diaganol_right, "Right", color)]
+            self.check_jump(diaganol_right, "Right", color)
+            
+        return self.available_jumps
 
     def check_jump(self, diaganol, left_or_right, color):
         """
@@ -222,7 +233,13 @@ class GameState():
                 new_diaganol = self.get_diaganol(diaganol, left_or_right, color)
                 if self.check_if_diaganol_empty(new_diaganol):
                     self.available_jumps.append(new_diaganol)
-                    return self.get_available_jumps(new_diaganol, color)
+                    self.jump_count += 1
+                    self.jumped_pieces_log.append(self.format_piece(diaganol[0], diaganol[1]))
+                    self.available_jumps_log.append(self.jumped_pieces_log)
+                    
+                    self.get_available_jumps(new_diaganol, color)
+                    self.delete_last_log()
+                    return "success"
                 else:
                     return "blocked"
         else: 
@@ -248,22 +265,54 @@ class GameState():
         And eligable jumps are formatted correctly
         """
         available_jumps = []
+        
         for jump in self.available_jumps:
-            j = self.format_piece(jump[0], jump[1])
+            j = []
+            available_jump = self.format_piece(jump[0], jump[1])
+            j.append(available_jump)
+            j.append("jump")
+            available_jumps_log = self.available_jumps_log
+            j.append(available_jumps_log)
             available_jumps.append(j)
         return available_jumps
         
-    def move_piece(self, piece, new_position, color):
+    def move_piece(self, piece, move, option, color):
         """ 
         Moves the piece into the new postion on the board
         Removes the piece from its original postion on the board
         And places it into the empty space on the board
+        Checks if move was a jump or not and removes pieces that were jumped
         """
         piece_index = self.get_index_of_piece(piece)
-        new_position_index = self.get_index_of_piece(new_position)
+        new_position_index = self.get_index_of_piece(move[0])
 
         self.board[piece_index[0]][piece_index[1]] = "_"
         self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
+
+        if move[1] == "jump":
+            jumped_pieces = move[2]
+            
+            #for piece in jumped_pieces:
+                #self.remove_piece_from_board(piece)
+
+    def remove_piece_from_board(self, piece):
+        """ 
+        Removes the inputted piece from the board state
+        """
+        piece_index = self.get_index_of_piece(piece)
+        self.board[piece_index[0]][piece_index[1]] = "_"
+
+    def delete_last_log(self):
+        """ 
+        Removes the last jumped pieces log
+        Change jump count by 1
+        """
+        if self.jump_count == 0:
+                self.jumped_pieces_log = []    
+        else:
+            self.jump_count -= 1
+            del self.jumped_pieces_log[self.jump_count]
+            
 
     def change_color_go(self):
         """ 
