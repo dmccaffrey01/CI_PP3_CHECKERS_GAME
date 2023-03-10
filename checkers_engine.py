@@ -13,14 +13,14 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "w", "x", "w", "x", "w", "x", "w"],
-            ["w", "x", "w", "x", "w", "x", "w", "x"],
-            ["x", "w", "x", "w", "x", "w", "x", "w"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["b", "x", "b", "x", "b", "x", "b", "x"],
-            ["x", "b", "x", "b", "x", "b", "x", "b"],
-            ["b", "x", "b", "x", "b", "x", "b", "x"]
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -111,7 +111,7 @@ class GameState():
         Where A represents the row and 1 represents the column
         Ranges from (A to H) and (1 - 8)
         """
-        row =  chr(65 + r)
+        row = chr(65 + r)
         col = str(c + 1)
         return f"{row + col}"
 
@@ -243,7 +243,7 @@ class GameState():
         """
         
         if self.check_if_diaganol_contains_opposite_color_piece(diaganol, color):
-            if not self.check_if_piece_on_edge_of_board(diaganol):     
+            if not self.check_if_piece_on_edge_of_board(diaganol) and not self.check_if_piece_on_kings_edge(diaganol):     
                 new_diaganol = self.get_diaganol(diaganol, left_or_right, color)
                 if self.check_if_diaganol_empty(new_diaganol) != "blocked":
                     self.available_jumps.append(new_diaganol)
@@ -304,10 +304,50 @@ class GameState():
         self.board[piece_index[0]][piece_index[1]] = "_"
         self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
+        self.check_if_piece_needs_kinged(piece, color)
+
+        return new_position_index    
+
+    def check_if_move_was_jump(self, piece, move, option, color):
+        """
+        Checks if the move was a jump
+        Removes the pieces that was jumped over 
+        """
         if move[1] == "jump":
             jumped_pieces = move[2][option-1]
             for piece in jumped_pieces:
                 self.remove_piece_from_board(piece)
+        
+        return jumped_pieces
+
+    
+    def check_if_piece_needs_kinged(self, piece, color):
+        """
+        Checks if the piece moved needs to be kinged
+        Kings the piece if it in correct position 
+        """ 
+        piece_index = self.get_index_of_piece(piece) 
+        if self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black":
+            self.king_piece(piece_index, color)
+            return "Kinged"
+        elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white":
+            self.king_piece(piece_index, color)
+            return "Kinged"
+        else:
+            return "Not kinged"
+
+    def king_piece(self, piece_index, color):
+        """
+        Kings the piece
+        If color is black change piece from b to B
+        If color is white change piece from w to W 
+        """
+        if color == "black" and self.check_if_piece_is_kinged(piece_index, color):
+            self.board[piece_index[0]][piece_index[1]] = "B"
+        elif color == "white" and self.check_if_piece_is_kinged(piece_index, color):
+            self.board[piece_index[0]][piece_index[1]] = "W"
+
+        return self.board[piece_index[0]][piece_index[1]]
 
     def remove_piece_from_board(self, piece):
         """ 

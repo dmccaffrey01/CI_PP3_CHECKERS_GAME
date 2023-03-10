@@ -27,7 +27,7 @@ def start_game_loop(game_state):
     Moves on to the other players go
     """
     moves = 0
-    while moves < 12:
+    while moves < 2:
         color = game_state.color_go
         
         selecting_move = True
