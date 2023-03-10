@@ -15,8 +15,8 @@ class GameState():
         self.board = [
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "W", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "B", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
@@ -52,10 +52,10 @@ class GameState():
         j = 0
         for x in self.board:
             for y in x:
-                if y == "b" and color == "black":
+                if (y == "b" or y == "B") and color == "black":
                     piece = self.format_piece(i, j)
                     pieces.append(piece)
-                elif y == "w" and color == "white":
+                elif (y == "w" or y == "W") and color == "white":
                     piece = self.format_piece(i, j)
                     pieces.append(piece)
 
@@ -132,15 +132,37 @@ class GameState():
         Returns the diaganols indexs in a list if it is empty
         """
         if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
-            diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            return ["blocked", self.check_if_diaganol_empty(diaganol_right)]
+            diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
+            if self.check_if_piece_is_kinged(piece_index, color):
+                diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
+                if color == "white":
+                    return ["blocked", self.check_if_diaganol_empty(diaganol_right_king), "blocked", self.check_if_diaganol_empty(diaganol_right_normal)]
+                else:
+                    return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", self.check_if_diaganol_empty(diaganol_right_king)]
+            else:
+                return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal)]
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
-            diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            return [self.check_if_diaganol_empty(diaganol_left), "blocked"]
+            diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
+            if self.check_if_piece_is_kinged(piece_index, color):
+                diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
+                if color == "white":
+                    return [self.check_if_diaganol_empty(diaganol_left_king), "blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked"]
+                else:
+                    return ["blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked", self.check_if_diaganol_empty(diaganol_left_king)]
+            else:
+                return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked"]
         else:
-            diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            return [self.check_if_diaganol_empty(diaganol_left), self.check_if_diaganol_empty(diaganol_right)]
+            diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
+            diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
+            if self.check_if_piece_is_kinged(piece_index, color):
+                diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
+                diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
+                if color == "white":
+                    return [self.check_if_diaganol_empty(diaganol_left_king), self.check_if_diaganol_empty(diaganol_right_king), self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal)]
+                else: 
+                    return [self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal), self.check_if_diaganol_empty(diaganol_left_king), self.check_if_diaganol_empty(diaganol_right_king)]
+            else:
+                return [self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal)]
 
     def check_if_piece_on_edge_of_board(self, piece_index):
         """ 
@@ -166,20 +188,25 @@ class GameState():
         else: 
             return False
 
-
     def get_diaganol(self, piece_index, diaganol, color):
         """ 
         Gets the index of the diaganol position either to the right or left
         Returns index in a list where row is first col is second
         """
         if color == "black":
-            row = piece_index[0] - 1
+            if diaganol == "Right-King" or diaganol == "Left-King":
+                row = piece_index[0] + 1
+            else:
+                row = piece_index[0] - 1
         elif color == "white":
-            row = piece_index[0] + 1
+            if diaganol == "Right-King" or diaganol == "Left-King":
+               row = piece_index[0] - 1
+            else: 
+                row = piece_index[0] + 1
 
-        if diaganol == "Left":
+        if diaganol == "Left" or diaganol == "Left-King":
             col = piece_index[1] - 1
-        elif diaganol == "Right":
+        elif diaganol == "Right" or diaganol == "Right-King":
             col = piece_index[1] + 1
         return [row, col]
 
@@ -217,19 +244,20 @@ class GameState():
         Checks if you can jump that piece
         Returns the positions indexs if it can jump
         """
-        if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
-            diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            self.check_jump(diaganol_right, "Right", color) 
-        elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
-            diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            self.check_jump(diaganol_left, "Left", color)
-        else:
-            diaganol_left = self.get_diaganol(piece_index, "Left", color)
-            if self.check_if_piece_on_edge_of_board(diaganol_left) != "Left":
+        if not self.check_if_piece_on_kings_edge(piece_index):
+            if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
+                diaganol_right = self.get_diaganol(piece_index, "Right", color)
+                self.check_jump(diaganol_right, "Right", color) 
+            elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
+                diaganol_left = self.get_diaganol(piece_index, "Left", color)
                 self.check_jump(diaganol_left, "Left", color)
-            diaganol_right = self.get_diaganol(piece_index, "Right", color)
-            if self.check_if_piece_on_edge_of_board(diaganol_right) != "Right":
-                self.check_jump(diaganol_right, "Right", color)
+            else:
+                diaganol_left = self.get_diaganol(piece_index, "Left", color)
+                if self.check_if_piece_on_edge_of_board(diaganol_left) != "Left":
+                    self.check_jump(diaganol_left, "Left", color)
+                diaganol_right = self.get_diaganol(piece_index, "Right", color)
+                if self.check_if_piece_on_edge_of_board(diaganol_right) != "Right":
+                    self.check_jump(diaganol_right, "Right", color)
 
         return self.available_jumps
 
@@ -304,29 +332,30 @@ class GameState():
         self.board[piece_index[0]][piece_index[1]] = "_"
         self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
-        self.check_if_piece_needs_kinged(piece, color)
+        self.check_if_move_was_jump(move, option, color)
+
+        self.check_if_piece_needs_kinged(new_position_index, color)
 
         return new_position_index    
 
-    def check_if_move_was_jump(self, piece, move, option, color):
+    def check_if_move_was_jump(self, move, option, color):
         """
         Checks if the move was a jump
         Removes the pieces that was jumped over 
         """
         if move[1] == "jump":
-            jumped_pieces = move[2][option-1]
+            jumped_pieces = move[2][option - 1]
             for piece in jumped_pieces:
                 self.remove_piece_from_board(piece)
+            return jumped_pieces
+        else:
+            return "move"
         
-        return jumped_pieces
-
-    
-    def check_if_piece_needs_kinged(self, piece, color):
+    def check_if_piece_needs_kinged(self, piece_index, color):
         """
         Checks if the piece moved needs to be kinged
         Kings the piece if it in correct position 
         """ 
-        piece_index = self.get_index_of_piece(piece) 
         if self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black":
             self.king_piece(piece_index, color)
             return "Kinged"
@@ -342,12 +371,24 @@ class GameState():
         If color is black change piece from b to B
         If color is white change piece from w to W 
         """
-        if color == "black" and self.check_if_piece_is_kinged(piece_index, color):
+        if color == "black" and not self.check_if_piece_is_kinged(piece_index, color):
             self.board[piece_index[0]][piece_index[1]] = "B"
-        elif color == "white" and self.check_if_piece_is_kinged(piece_index, color):
+        elif color == "white" and not self.check_if_piece_is_kinged(piece_index, color):
             self.board[piece_index[0]][piece_index[1]] = "W"
 
         return self.board[piece_index[0]][piece_index[1]]
+
+    def check_if_piece_is_kinged(self, piece_index, color):
+        """
+        Checks if the piece is a king or not
+        Returns true if it is and false if not 
+        """
+        if color == "black" and self.board[piece_index[0]][piece_index[1]] == "B":
+            return True
+        elif color == "white" and self.board[piece_index[0]][piece_index[1]] == "W":
+            return True
+        else:
+            return False
 
     def remove_piece_from_board(self, piece):
         """ 
