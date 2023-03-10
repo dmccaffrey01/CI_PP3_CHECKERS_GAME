@@ -329,14 +329,23 @@ class GameState():
         piece_index = self.get_index_of_piece(piece)
         new_position_index = self.get_index_of_piece(move[0])
 
+        self.move_board_icon(piece_index, new_position_index, color)
         self.board[piece_index[0]][piece_index[1]] = "_"
-        self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
-
+        
         self.check_if_move_was_jump(move, option, color)
 
         self.check_if_piece_needs_kinged(new_position_index, color)
 
         return new_position_index    
+
+    def move_board_icon(self, old_position_index, new_position_index, color):
+        """
+        Move the icon on the board to its new position 
+        """
+        if self.check_if_piece_is_kinged(old_position_index, color):
+            self.board[new_position_index[0]][new_position_index[1]] = "B" if color == "black" else "W"
+        else:
+            self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
     def check_if_move_was_jump(self, move, option, color):
         """
