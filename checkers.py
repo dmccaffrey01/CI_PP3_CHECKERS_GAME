@@ -8,6 +8,7 @@ from run import cls, new_line
 import colorama
 from colorama import Fore, Back, Style
 import time
+import smart_move_finder as smf
 
 def start_game():
     """ 
@@ -15,9 +16,13 @@ def start_game():
     """
     game_state = check_eng.GameState()
 
-    start_game_loop(game_state)
+    player_one = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
 
-def start_game_loop(game_state):
+    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
+
+    start_game_loop(game_state, player_one, player_two)
+
+def start_game_loop(game_state, p1, p2):
     """ 
     Starts the basic game loop
     Asks player to pick a piece to move from movable pieces
@@ -27,23 +32,32 @@ def start_game_loop(game_state):
     Moves on to the other players go
     """
     moves = 0
-    while moves < 2:
+    while moves < 100:
         color = game_state.color_go
+        human_turn = (color == "black" and not p1) or (color == "white" and not p2)
+
+        movable_pieces = game_state.get_movable_pieces(color)
         
         selecting_move = True
-        while selecting_move:
-            selected_piece = select_piece(game_state, color)
+        while selecting_move and human_turn:
+            selected_piece = select_piece(game_state, movable_pieces, color)
             
             selected_move = select_move(game_state, selected_piece, color)
 
             if selected_move != "return":
+                game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
                 selecting_move = False
 
-        game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
+        if not human_turn:
+            available_moves = game_state.find_all_available_moves(color)
+
+            ai_move = smf.find_random_move(available_moves)
+
+            game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
         
         display_board(game_state)
-
-        time.sleep(1)
+        
+        #time.sleep(2)
 
         game_state.change_color_go()
         
@@ -63,7 +77,7 @@ def display_board(game_state):
     
     print("  " + board_cols)
 
-def select_piece(game_state, color):
+def select_piece(game_state, movable_pieces, color):
     """
     Asks player to pick a piece to move from movable pieces
     Validates the option selected
@@ -73,8 +87,6 @@ def select_piece(game_state, color):
     new_line()
 
     print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2)...)")
-
-    movable_pieces = game_state.get_movable_pieces(color)
 
     options = ""
     for piece, i in zip(movable_pieces, range(1, len(movable_pieces) + 1)):
@@ -158,6 +170,22 @@ def format_available_moves(moves):
     
     return formatted_moves
                     
+def ai_select_piece(game_state, movable_pieces, color):
+    """
+    AI selects a piece to move from movable pieces 
+    """
+    ai_piece = smf.find_random_piece(movable_pieces)
+    return ai_piece
+
+def ai_select_move(game_state, piece, color):
+    """ 
+    AI selects a move from available moves
+    """
+    available_moves = game_state.find_available_moves(piece, color)
+    ai_move = smf.find_random_move(available_moves)
+    move = [ai_move, available_moves.index(ai_move) + 1]
+    return move
+
 
 
 
