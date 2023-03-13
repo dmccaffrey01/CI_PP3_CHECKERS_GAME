@@ -135,20 +135,16 @@ class GameState():
             diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
             if self.check_if_piece_is_kinged(piece_index, color):
                 diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
-                if color == "white":
-                    return ["blocked", self.check_if_diaganol_empty(diaganol_right_king), "blocked", self.check_if_diaganol_empty(diaganol_right_normal)]
-                else:
-                    return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", self.check_if_diaganol_empty(diaganol_right_king)]
+
+                return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", self.check_if_diaganol_empty(diaganol_right_king)]
             else:
                 return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal)]
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
             diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
             if self.check_if_piece_is_kinged(piece_index, color):
                 diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
-                if color == "white":
-                    return [self.check_if_diaganol_empty(diaganol_left_king), "blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked"]
-                else:
-                    return ["blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked", self.check_if_diaganol_empty(diaganol_left_king)]
+                
+                return ["blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked", self.check_if_diaganol_empty(diaganol_left_king)]
             else:
                 return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked"]
         else:
@@ -157,10 +153,8 @@ class GameState():
             if self.check_if_piece_is_kinged(piece_index, color):
                 diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
                 diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
-                if color == "white":
-                    return [self.check_if_diaganol_empty(diaganol_left_king), self.check_if_diaganol_empty(diaganol_right_king), self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal)]
-                else: 
-                    return [self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal), self.check_if_diaganol_empty(diaganol_left_king), self.check_if_diaganol_empty(diaganol_right_king)]
+                
+                return [self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal), self.check_if_diaganol_empty(diaganol_left_king), self.check_if_diaganol_empty(diaganol_right_king)]
             else:
                 return [self.check_if_diaganol_empty(diaganol_left_normal), self.check_if_diaganol_empty(diaganol_right_normal)]
 
@@ -244,22 +238,89 @@ class GameState():
         Checks if you can jump that piece
         Returns the positions indexs if it can jump
         """
-        if not self.check_if_piece_on_kings_edge(piece_index):
-            if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
-                diaganol_right = self.get_diaganol(piece_index, "Right", color)
-                self.check_jump(diaganol_right, "Right", color) 
-            elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
-                diaganol_left = self.get_diaganol(piece_index, "Left", color)
-                self.check_jump(diaganol_left, "Left", color)
+        if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
+            if self.check_if_piece_is_kinged(piece_index, color):
+                if self.check_if_piece_on_kings_edge(piece_index):
+                    if self.check_if_piece_on_kings_edge(piece_index) == "Top":
+                        if color == "black":
+                            self.get_jump(piece_index, "Right-King", color)
+                        elif color == "white":
+                            self.get_jump(piece_index, "Right", color)
+                    elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom":
+                        if color == "white":
+                            self.get_jump(piece_index, "Right-King", color)
+                        elif color == "black":
+                            self.get_jump(piece_index, "Right", color)
+                else:
+                    self.get_jump(piece_index, "Right", color)
+                    self.get_jump(piece_index, "Right-King", color)
             else:
-                diaganol_left = self.get_diaganol(piece_index, "Left", color)
-                if self.check_if_piece_on_edge_of_board(diaganol_left) != "Left":
-                    self.check_jump(diaganol_left, "Left", color)
-                diaganol_right = self.get_diaganol(piece_index, "Right", color)
-                if self.check_if_piece_on_edge_of_board(diaganol_right) != "Right":
-                    self.check_jump(diaganol_right, "Right", color)
+                self.get_jump(piece_index, "Right", color)
+
+        elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            self.check_jump(diaganol_left, "Left", color)
+
+        else:
+            diaganol_left = self.get_diaganol(piece_index, "Left", color)
+            if self.check_if_piece_on_edge_of_board(diaganol_left) != "Left":
+                self.check_jump(diaganol_left, "Left", color)
+
+            diaganol_right = self.get_diaganol(piece_index, "Right", color)
+            if self.check_if_piece_on_edge_of_board(diaganol_right) != "Right":
+                self.check_jump(diaganol_right, "Right", color)
+            
 
         return self.available_jumps
+
+    def check_kings_jumps(self, piece_index, left_or_right, color):
+        """
+        Checks if piece is kinged
+        Checks if piece on kings edge
+        Gets the appropriate jumps depending on checks 
+        """
+        directions = self.get_direction(left_or_right)
+        direction_normal = directions[0]
+        direction_king = directions[1]
+
+        if self.check_if_piece_is_kinged(piece_index, color):
+                if self.check_if_piece_on_kings_edge(piece_index):
+                    if self.check_if_piece_on_kings_edge(piece_index) == "Top":
+                        if color == "black":
+                            self.get_jump(piece_index, direction_king, color)
+                        elif color == "white":
+                            self.get_jump(piece_index, direction_normal, color)
+                    elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom":
+                        if color == "white":
+                            self.get_jump(piece_index, direction_king, color)
+                        elif color == "black":
+                            self.get_jump(piece_index, direction_normal, color)
+                else:
+                    self.get_jump(piece_index, direction_normal, color)
+                    self.get_jump(piece_index, direction_king, color)
+            else:
+                self.get_jump(piece_index, direction_normal, color)
+
+    def get_direction(self, left_or_right):
+        """
+        Returns Left and Left-King in list if left_or_right is Left
+        Returns Right and Right-King in list if left_or_right is Right 
+        """
+        if left_or_right == "Left":
+            n = "Left"
+            k = "Left-King"
+        elif left_or_right == "Right":
+            l = "Right"
+            k = "Right-King"
+
+        return [l, k]
+
+    def get_jump(self, piece_index, left_or_right, color):
+        """ 
+        Gets the diaganol and checks the jump
+        """
+        diaganol = self.get_diaganol(piece_index, left_or_right, color)
+        self.check_jump(diaganol, left_or_right, color)
 
     def check_jump(self, diaganol, left_or_right, color):
         """
