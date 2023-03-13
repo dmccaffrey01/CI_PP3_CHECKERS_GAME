@@ -13,14 +13,14 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "_", "x", "w", "x", "_", "x", "_"],
-            ["_", "x", "b", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "w", "x", "w"],
+            ["_", "x", "_", "x", "b", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "w", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "b", "x", "_"],
+            ["_", "x", "w", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "b", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"]
+            ["_", "x", "_", "x", "_", "x", "b", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -33,6 +33,7 @@ class GameState():
         self.jumped_pieces_log = []
         self.jump_count = 0
         self.available_jumps = []
+        self.move_log = []
 
     def find_all_available_moves(self, color):
         """
@@ -348,7 +349,7 @@ class GameState():
                 self.get_jump(piece_index, direction_normal, color)
                 self.get_jump(piece_index, direction_king, color)
         else:
-            if not self.check_if_piece_on_kings_edge(piece_index):
+            if (not self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white") or (not self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black"):
                 self.get_jump(piece_index, direction_normal, color)
 
         return self.available_jumps
@@ -450,9 +451,11 @@ class GameState():
         self.move_board_icon(piece_index, new_position_index, color)
         self.board[piece_index[0]][piece_index[1]] = "_"
         
-        self.check_if_move_was_jump(move, option, color)
+        removed_pieces = self.check_if_move_was_jump(move, option, color)
 
         self.check_if_piece_needs_kinged(new_position_index, color)
+
+        self.add_move_to_log(piece, move, option, removed_pieces, color)
 
         return new_position_index    
 
@@ -472,9 +475,16 @@ class GameState():
         """
         if move[1] == "jump":
             jumped_pieces = move[2][option - 1]
+            pieces = []
             for piece in jumped_pieces:
+                p = []
+                piece_index = self.get_index_of_piece(piece)
+                p.append(piece)
+                p.append(self.board[piece_index[0]][piece_index[1]])
+                pieces.append(p)
                 self.remove_piece_from_board(piece)
-            return jumped_pieces
+                
+            return pieces
         else:
             return "move"
         
@@ -533,6 +543,45 @@ class GameState():
             self.jump_count -= 1
             del self.jumped_pieces_log[self.jump_count]
             
+    def add_move_to_log(self, piece, move, option, removed_pieces, color):
+        """ 
+        Appends the move to the log
+        Formats it in list, [piece, move, option, removed_pieces, color]
+        """
+        played_move = [piece, move, option, removed_pieces, color]
+        self.move_log.append(played_move)
+        return played_move
+
+    def undo_move(self):
+        """
+        Undo's the last move in the log
+        Removes from log and changes board back to before move 
+        """
+        last_move = self.move_log.pop()
+        piece = last_move[1][0]
+        move = last_move[0]
+        option = last_move[2]
+        color = last_move[4]
+        jumped_pieces = last_move[3]
+        type = last_move[1][1]
+
+        piece_index = self.get_index_of_piece(piece)
+        new_position_index = self.get_index_of_piece(move)
+
+        self.move_board_icon(piece_index, new_position_index, color)
+        self.board[piece_index[0]][piece_index[1]] = "_"
+
+        if type == "jump":
+            self.restore_jumped_pieces(jumped_pieces)
+
+    def restore_jumped_pieces(self, jumped_pieces):
+        """
+        Replaces the empty space with the jumped piece 
+        """
+        for piece in jumped_pieces:
+            p = piece[0]
+            piece_index = self.get_index_of_piece(p)
+            self.board[piece_index[0]][piece_index[1]] = piece[1]
 
     def change_color_go(self):
         """ 

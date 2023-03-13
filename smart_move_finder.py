@@ -13,17 +13,26 @@ def find_best_move(game_state, all_available_moves):
     Find the best move based on score of pieces 
     """
     turn_multiplier = 1 if game_state.color_go == "black" else -1
-    max_score = -60
-    best_move = None
+    opponent_min_max_score = 60
+    best_player_move = None
 
     for player_move in all_available_moves:
-        game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
-        score = turn_multiplier * score_the_pieces_on_board(game_state.board)
-        if score > max_score:
-            score = max_score
-            best_move = player_move
+        game_state.move_piece(player_move[0], player_move[1], player_move[2], player_move[3])
+        opponents_moves = game_state.find_all_available_moves("black")
+        opponent_max_score = -60
+        for opponents_move in opponents_moves:
+            game_state.move_piece(opponents_move[0], opponents_move[1], opponents_move[2], opponents_move[3])
 
-    return best_move
+            score = -turn_multiplier * score_the_pieces_on_board(game_state.board)
+            if score > opponent_max_score:
+                opponent_max_score = score
+            game_state.undo_move()
+        if opponent_min_max_score > opponent_max_score:
+            opponent_min_max_score = opponent_max_score
+            best_player_move = player_move
+        game_state.undo_move()
+
+    return best_player_move
 
 def score_the_pieces_on_board(board):
     """

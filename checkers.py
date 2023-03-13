@@ -16,7 +16,7 @@ def start_game():
     """
     game_state = check_eng.GameState()
 
-    player_one = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
+    player_one = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
 
     player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
 
@@ -32,36 +32,40 @@ def start_game_loop(game_state, p1, p2):
     Moves on to the other players go
     """
     moves = 0
-    while moves < 100:
+    game_over = False
+    while not game_over:
         color = game_state.color_go
         human_turn = (color == "black" and not p1) or (color == "white" and not p2)
 
         movable_pieces = game_state.get_movable_pieces(color)
-        
-        selecting_move = True
-        while selecting_move and human_turn:
-            selected_piece = select_piece(game_state, movable_pieces, color)
+        if not movable_pieces:
+            game_over = True
+            print("Total Moves: " + str(moves))
+        else:
+            selecting_move = True 
+            while selecting_move and human_turn:
+                selected_piece = select_piece(game_state, movable_pieces, color)
+                
+                selected_move = select_move(game_state, selected_piece, color)
+
+                if selected_move != "return":
+                    game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
+                    selecting_move = False
+
+            if not human_turn:
+                available_moves = game_state.find_all_available_moves(color)
+
+                ai_move = smf.find_best_move(game_state, available_moves)
+
+                game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
-            selected_move = select_move(game_state, selected_piece, color)
+            display_board(game_state)
+            
+            #time.sleep(2)
 
-            if selected_move != "return":
-                game_state.move_piece(selected_piece, selected_move[0], selected_move[1], color)
-                selecting_move = False
-
-        if not human_turn:
-            available_moves = game_state.find_all_available_moves(color)
-
-            ai_move = smf.find_random_move(available_moves)
-
-            game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
-        
-        display_board(game_state)
-        
-        #time.sleep(2)
-
-        game_state.change_color_go()
-        
-        moves += 1
+            game_state.change_color_go()
+            
+            moves += 1
 
 def display_board(game_state):
     """ 
