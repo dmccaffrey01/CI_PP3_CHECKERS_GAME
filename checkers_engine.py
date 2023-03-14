@@ -23,8 +23,8 @@ class GameState():
             ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
-        self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        self.BOARD_COLS = ["1", "2", "3", "4", "5", "6", "7", "8"]
+        self.BOARD_ROWS = ["8", "7", "6", "5", "4", "3", "2", "1"]
+        self.BOARD_COLS = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
         self.color_go = "black"
         self.black_to_move = True
@@ -84,7 +84,6 @@ class GameState():
                 elif (y == "w" or y == "W") and color == "white":
                     piece = self.format_piece(i, j)
                     pieces.append(piece)
-
                 j += 1
 
             i += 1
@@ -134,13 +133,34 @@ class GameState():
                
     def format_piece(self, r, c):
         """ 
-        Formats a piece in the form A1
-        Where A represents the row and 1 represents the column
+        Formats a piece in the form 1A
+        Where A represents the col and 1 represents the row
         Ranges from (A to H) and (1 - 8)
         """
-        row = chr(65 + r)
-        col = str(c + 1)
+        row = self.format_row(r)
+        col = chr(65 + c)
         return f"{row + col}"
+
+    def format_row(self, r):
+        """
+        Formats row 
+        """
+        if r == 0:
+            return "8"
+        elif r == 1:
+            return "7"
+        elif r == 2:
+            return "6"
+        elif r == 3:
+            return "5"
+        elif r == 4:
+            return "4"
+        elif r == 5:
+            return "3"
+        elif r == 6:
+            return "2"
+        else:
+            return "1"
 
     def get_index_of_piece(self, piece):
         """ 

@@ -16,9 +16,9 @@ def start_game():
     """
     game_state = check_eng.GameState()
 
-    player_one = 3 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    player_one = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
-    player_two = 2 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
     start_game_loop(game_state, player_one, player_two)
 
@@ -77,9 +77,15 @@ def display_board(game_state):
     board_state = game_state.board
     board_rows = game_state.BOARD_ROWS
     board_cols = " ".join(game_state.BOARD_COLS)
+    odd_row = True
     for x, r in zip(board_state, board_rows):
-        row = " ".join(x)
-        print(r + " " + row)
+        row = x
+        if odd_row:
+            print(r + " " + Back.RED + row[0] + " " + Back.YELLOW + row[1] + " " + Back.RED + row[2] + " " + Back.YELLOW + row[3] + " " + Back.RED + row[4] + " " + Back.YELLOW + row[5] + " " + Back.RED + row[6] + " " + Back.YELLOW + row[7] + " ")
+            odd_row = False
+        else:
+            print(r + " " + Back.YELLOW + row[0] + " " + Back.RED + row[1] + " " + Back.YELLOW + row[2] + " " + Back.RED + row[3] + " " + Back.YELLOW + row[4] + " " + Back.RED + row[5] + " " + Back.YELLOW + row[6] + " " + Back.RED + row[7]+ " ")
+            odd_row = True
     
     print("  " + board_cols)
 
