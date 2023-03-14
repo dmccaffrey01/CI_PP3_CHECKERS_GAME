@@ -18,7 +18,7 @@ def start_game():
 
     player_one = 3 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
-    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    player_two = 2 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
     start_game_loop(game_state, player_one, player_two)
 
@@ -40,7 +40,8 @@ def start_game_loop(game_state, p1, p2):
         movable_pieces = game_state.get_movable_pieces(color)
         if not movable_pieces or moves >= 1000:
             game_over = True
-            winner = check_winner(game_state)
+            winner = check_winner(game_state, moves)
+            print(winner)
             print("Total Moves: " + str(moves))
         else:
             selecting_move = True 
@@ -175,6 +176,17 @@ def format_available_moves(moves):
     
     return formatted_moves
                 
+def check_winner(game_state, moves):
+    """
+    Checks who the winner is and formats a string to return 
+    """
+    if moves >= 1000:
+        message = "There is no winner, it ended in a draw"
+    elif smf.score_the_pieces_on_board(game_state.board) > 0:
+        message = "Black is the winner"
+    else:
+        message = "White is the winner"
+    return message
 
 
 

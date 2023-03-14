@@ -28,25 +28,25 @@ def find_random_move(game_state, available_moves):
     next_move = available_moves[random.randint(0, len(available_moves) -1)]
     return next_move
 
-def find_move_nega_max(game_state, available_moves, depth, turn_multiplier, color):
-    """ 
-    Find a move based on min max algorithm
-    """
-    global next_move, search_depth
-    if depth == 0:
-        return turn_multiplier * score_the_pieces_on_board(game_state.board)
+#def find_move_nega_max(game_state, available_moves, depth, turn_multiplier, color):
+    #""" 
+    #Find a move based on min max algorithm
+    #"""
+    #global next_move, search_depth
+    #if depth == 0:
+        #return turn_multiplier * score_the_pieces_on_board(game_state.board)
 
-    max_score = -60 # Worst possible score
-    for move in available_moves:
-        game_state.move_piece(move[0], move[1], move[2], move[3])
-        next_moves = game_state.find_all_available_moves(color)
-        score = -find_move_nega_max(game_state, next_moves, depth - 1, -turn_multiplier, get_opposite_color(color))
-        if score > max_score:
-            max_score = score
-            if depth == search_depth:
-                next_move = move
-        game_state.undo_move()
-    return max_score 
+    #max_score = -60 # Worst possible score
+    #for move in available_moves:
+        #game_state.move_piece(move[0], move[1], move[2], move[3])
+        #next_moves = game_state.find_all_available_moves(get_opposite_color(color))
+        #score = -find_move_nega_max(game_state, next_moves, depth - 1, -turn_multiplier, get_opposite_color(color))
+        #if score > max_score:
+            #max_score = score
+            #if depth == search_depth:
+                #next_move = move
+        #game_state.undo_move()
+    #return max_score 
 
 def find_move_nega_max_alpha_beta(game_state, available_moves, depth, alpha, beta, turn_multiplier, color):
     """ 
@@ -61,7 +61,7 @@ def find_move_nega_max_alpha_beta(game_state, available_moves, depth, alpha, bet
     for move in available_moves:
         game_state.move_piece(move[0], move[1], move[2], move[3])
         next_moves = game_state.find_all_available_moves(get_opposite_color(color))
-        score = -find_move_nega_max_alpha_beta(game_state, next_moves, depth - 1, -turn_multiplier, -beta, -alpha, get_opposite_color(color))
+        score = -find_move_nega_max_alpha_beta(game_state, next_moves, depth - 1, -beta, -alpha, -turn_multiplier, get_opposite_color(color))
         if score > max_score:
             max_score = score
             if depth == search_depth:
@@ -78,7 +78,7 @@ def set_search_depth(ai_difficulty):
     Set the search depth depending on the AI difficulty 
     """
     if ai_difficulty == 2:
-        search_depth = 1
+        search_depth = 2
     elif ai_difficulty == 3:
         search_depth = 4
     else:
