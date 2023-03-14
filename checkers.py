@@ -16,9 +16,9 @@ def start_game():
     """
     game_state = check_eng.GameState()
 
-    player_one = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
+    player_one = 3 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
-    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3
+    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
     start_game_loop(game_state, player_one, player_two)
 
@@ -36,10 +36,11 @@ def start_game_loop(game_state, p1, p2):
     while not game_over:
         color = game_state.color_go
         human_turn = (color == "black" and not p1) or (color == "white" and not p2)
-
+        
         movable_pieces = game_state.get_movable_pieces(color)
-        if not movable_pieces:
+        if not movable_pieces or moves >= 1000:
             game_over = True
+            winner = check_winner(game_state)
             print("Total Moves: " + str(moves))
         else:
             selecting_move = True 
@@ -55,14 +56,14 @@ def start_game_loop(game_state, p1, p2):
             if not human_turn:
                 available_moves = game_state.find_all_available_moves(color)
 
-                ai_move = smf.find_best_move_min_max(game_state, available_moves)
+                ai_move = smf.find_best_move(game_state, available_moves, p1 if game_state.color_go == "black" else p2)
 
                 game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
             display_board(game_state)
             
             #time.sleep(2)
-
+            
             game_state.change_color_go()
             
             moves += 1
@@ -173,22 +174,7 @@ def format_available_moves(moves):
         formatted_moves.append(formatted_move)
     
     return formatted_moves
-                    
-def ai_select_piece(game_state, movable_pieces, color):
-    """
-    AI selects a piece to move from movable pieces 
-    """
-    ai_piece = smf.find_random_piece(movable_pieces)
-    return ai_piece
-
-def ai_select_move(game_state, piece, color):
-    """ 
-    AI selects a move from available moves
-    """
-    available_moves = game_state.find_available_moves(piece, color)
-    ai_move = smf.find_random_move(available_moves)
-    move = [ai_move, available_moves.index(ai_move) + 1]
-    return move
+                
 
 
 

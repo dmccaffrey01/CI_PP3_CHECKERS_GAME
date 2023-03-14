@@ -13,14 +13,14 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
+            ["x", "w", "x", "w", "x", "w", "x", "w"],
+            ["w", "x", "w", "x", "w", "x", "w", "x"],
+            ["x", "w", "x", "w", "x", "w", "x", "w"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "B", "x", "_", "x"],
-            ["x", "w", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"]
+            ["b", "x", "b", "x", "b", "x", "b", "x"],
+            ["x", "b", "x", "b", "x", "b", "x", "b"],
+            ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -494,10 +494,10 @@ class GameState():
         Checks if the piece moved needs to be kinged
         Kings the piece if it in correct position 
         """ 
-        if (self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black") and not self.check_if_piece_is_kinged(piece_index, color):
+        if (self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black") and (not self.check_if_piece_is_kinged(piece_index, color)):
             self.king_piece(piece_index, color)
             return "Kinged"
-        elif (self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white") and not self.check_if_piece_is_kinged(piece_index, color):
+        elif (self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white") and (not self.check_if_piece_is_kinged(piece_index, color)):
             self.king_piece(piece_index, color)
             return "Kinged"
         else:
@@ -544,12 +544,12 @@ class GameState():
             self.jump_count -= 1
             del self.jumped_pieces_log[self.jump_count]
             
-    def add_move_to_log(self, piece, move, option, removed_pieces, color):
+    def add_move_to_log(self, piece, move, option, removed_pieces, kinged, color):
         """ 
         Appends the move to the log
         Formats it in list, [piece, move, option, removed_pieces, color]
         """
-        played_move = [piece, move, option, removed_pieces, color]
+        played_move = [piece, move, option, removed_pieces, kinged, color]
         self.move_log.append(played_move)
         return played_move
 

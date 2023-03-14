@@ -1,82 +1,100 @@
 import random
 
 PIECE_SCORES = {"b": 3, "w": -3, "B": 5, "W": -5}
-DEPTH = 2
 
-def find_random_move(available_moves):
-    """
-    Picks and returns a random move
-    """
-    return available_moves[random.randint(0, len(available_moves) - 1)]
-
-def find_best_move(game_state, all_available_moves):
-    """
-    Find the best move based on score of pieces 
-    """
-    turn_multiplier = 1 if game_state.color_go == "black" else -1
-    opponent_min_max_score = 60
-    best_player_move = None
-
-    for player_move in all_available_moves:
-        game_state.move_piece(player_move[0], player_move[1], player_move[2], player_move[3])
-        opponents_moves = game_state.find_all_available_moves("black")
-        opponent_max_score = -60
-        for opponents_move in opponents_moves:
-            game_state.move_piece(opponents_move[0], opponents_move[1], opponents_move[2], opponents_move[3])
-            
-            score = -turn_multiplier * score_the_pieces_on_board(game_state.board)
-            if score > opponent_max_score:
-                opponent_max_score = score
-            game_state.undo_move()
-        if opponent_max_score < opponent_min_max_score:
-            opponent_min_max_score = opponent_max_score
-            best_player_move = player_move
-        game_state.undo_move()
-
-    return best_player_move
-
-def find_best_move_min_max(game_state, available_moves):
+def find_best_move(game_state, available_moves, ai_difficulty):
     """
     Helper method that returns the next move
     Calls intial find move min max and returns next move
     """
-    global next_move
+    global next_move, search_depth
     next_move = None
-    find_move_min_max(game_state, available_moves, DEPTH, game_state.black_to_move, game_state.color_go)
+    random.shuffle(available_moves)
+    search_depth = set_search_depth(ai_difficulty)
+    #find_move_nega_max(game_state, available_moves, search_depth, 1 if game_state.black_to_move else -1, game_state.color_go)
+    if ai_difficulty == 1:
+        find_random_move(game_state, available_moves)
+    else:
+        find_move_nega_max_alpha_beta(game_state, available_moves, search_depth, -60, 60, 1 if game_state.black_to_move else -1, game_state.color_go)
+        if next_move == None:
+            find_random_move(game_state, available_moves)
     return next_move
 
-def find_move_min_max(game_state, available_moves, depth, black_to_move, color):
+def find_random_move(game_state, available_moves):
+    """
+    Finds a random move to make 
+    """
+    global next_move
+    next_move = available_moves[random.randint(0, len(available_moves) -1)]
+    return next_move
+
+def find_move_nega_max(game_state, available_moves, depth, turn_multiplier, color):
     """ 
     Find a move based on min max algorithm
     """
-    global next_move
+    global next_move, search_depth
     if depth == 0:
-        return score_the_pieces_on_board(game_state.board)
+        return turn_multiplier * score_the_pieces_on_board(game_state.board)
 
-    if black_to_move:
-        max_score = -60 # Worst possible score
-        for move in available_moves:
-            game_state.move_piece(move[0], move[1], move[2], move[3])
-            next_moves = game_state.find_all_available_moves(color)
-            score = find_move_min_max(game_state, next_moves, depth - 1, False, "white")
-            if score > max_score:
-                max_score = score
-                if depth == DEPTH:
-                    next_move = move
-            game_state.undo_move()
-        return max_score
+    max_score = -60 # Worst possible score
+    for move in available_moves:
+        game_state.move_piece(move[0], move[1], move[2], move[3])
+        next_moves = game_state.find_all_available_moves(color)
+        score = -find_move_nega_max(game_state, next_moves, depth - 1, -turn_multiplier, get_opposite_color(color))
+        if score > max_score:
+            max_score = score
+            if depth == search_depth:
+                next_move = move
+        game_state.undo_move()
+    return max_score 
+
+def find_move_nega_max_alpha_beta(game_state, available_moves, depth, alpha, beta, turn_multiplier, color):
+    """ 
+    Find a move based on min max algorithm also using alpha beta pruning
+    To help runtime and efficiency
+    """
+    global next_move, search_depth
+    if depth == 0:
+        return turn_multiplier * score_the_pieces_on_board(game_state.board)
+
+    max_score = -60 # Worst possible score
+    for move in available_moves:
+        game_state.move_piece(move[0], move[1], move[2], move[3])
+        next_moves = game_state.find_all_available_moves(get_opposite_color(color))
+        score = -find_move_nega_max_alpha_beta(game_state, next_moves, depth - 1, -turn_multiplier, -beta, -alpha, get_opposite_color(color))
+        if score > max_score:
+            max_score = score
+            if depth == search_depth:
+                next_move = move
+        game_state.undo_move()
+        if max_score > alpha: #pruning happens
+            alpha = max_score
+        if alpha >= beta:
+            break
+    return max_score 
+
+def set_search_depth(ai_difficulty):
+    """
+    Set the search depth depending on the AI difficulty 
+    """
+    if ai_difficulty == 2:
+        search_depth = 1
+    elif ai_difficulty == 3:
+        search_depth = 4
     else:
-        min_score = 60 # Best possible score
-        for move in available_moves:
-            game_state.move_piece(move[0], move[1], move[2], move[3])
-            next_moves = game_state.find_all_available_moves(color)
-            score = find_move_min_max(game_state, next_moves, depth - 1, True, "black")
-            if score < min_score:
-                min_score = score
-                if depth == DEPTH:
-                    next_move = move
-            game_state.undo_move()
-        return min_score
+        search_depth = 2
+    
+    return search_depth
+    
+
+def get_opposite_color(color):
+    """ 
+    Returns opposite color
+    """
+    if color == "white":
+        return "black"
+    elif color == "black":
+        return "white"
 
 def score_the_pieces_on_board(board):
     """
