@@ -494,10 +494,10 @@ class GameState():
         Checks if the piece moved needs to be kinged
         Kings the piece if it in correct position 
         """ 
-        if self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black":
+        if (self.check_if_piece_on_kings_edge(piece_index) == "Top" and color == "black") and not self.check_if_piece_is_kinged(piece_index, color):
             self.king_piece(piece_index, color)
             return "Kinged"
-        elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white":
+        elif (self.check_if_piece_on_kings_edge(piece_index) == "Bottom" and color == "white") and not self.check_if_piece_is_kinged(piece_index, color):
             self.king_piece(piece_index, color)
             return "Kinged"
         else:
@@ -562,18 +562,33 @@ class GameState():
         piece = last_move[1][0]
         move = last_move[0]
         option = last_move[2]
-        color = last_move[4]
+        color = last_move[5]
         jumped_pieces = last_move[3]
         type = last_move[1][1]
+        kinged = last_move[4]
 
         piece_index = self.get_index_of_piece(piece)
         new_position_index = self.get_index_of_piece(move)
+        self.undo_king_piece(piece_index, kinged)
 
         self.move_board_icon(piece_index, new_position_index, color)
         self.board[piece_index[0]][piece_index[1]] = "_"
 
         if type == "jump":
             self.restore_jumped_pieces(jumped_pieces)
+
+    def undo_king_piece(self, piece_index, kinged):
+        """
+        Undo king piece if the move lead to the piece getting kinged 
+        """
+        if kinged == "Kinged":
+            if self.board[piece_index[0]][piece_index[1]] == "B":
+                self.board[piece_index[0]][piece_index[1]] = "b"
+            elif self.board[piece_index[0]][piece_index[1]] == "W":
+                self.board[piece_index[0]][piece_index[1]] = "w"
+            return "Unkinged"
+        else:
+            return "Not kinged"
 
     def restore_jumped_pieces(self, jumped_pieces):
         """
