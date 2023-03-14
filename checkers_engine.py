@@ -13,20 +13,21 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
-            ["x", "_", "x", "_", "x", "w", "x", "w"],
-            ["_", "x", "_", "x", "b", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "w", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "b", "x", "_"],
-            ["_", "x", "w", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "b", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "b", "x"]
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "B", "x", "_", "x"],
+            ["x", "w", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"]
         ]
 
         self.BOARD_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"]
         self.BOARD_COLS = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
         self.color_go = "black"
+        self.black_to_move = True
 
         self.original_piece_index = []
         self.available_jumps_log = []
@@ -453,10 +454,10 @@ class GameState():
         
         removed_pieces = self.check_if_move_was_jump(move, option, color)
 
-        self.check_if_piece_needs_kinged(new_position_index, color)
+        kinged = self.check_if_piece_needs_kinged(new_position_index, color)
 
-        self.add_move_to_log(piece, move, option, removed_pieces, color)
-
+        self.add_move_to_log(piece, move, option, removed_pieces, kinged, color)
+        
         return new_position_index    
 
     def move_board_icon(self, old_position_index, new_position_index, color):
@@ -589,7 +590,11 @@ class GameState():
         """
         if self.color_go == "black":
             self.color_go = "white"
+            self.black_to_move = False
+            return "white"
         elif self.color_go == "white":
             self.color_go = "black"
+            self.black_to_move = True
+            return "black"
     
     

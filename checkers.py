@@ -55,7 +55,7 @@ def start_game_loop(game_state, p1, p2):
             if not human_turn:
                 available_moves = game_state.find_all_available_moves(color)
 
-                ai_move = smf.find_best_move(game_state, available_moves)
+                ai_move = smf.find_best_move_min_max(game_state, available_moves)
 
                 game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
