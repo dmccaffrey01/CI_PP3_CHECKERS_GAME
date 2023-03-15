@@ -31,8 +31,8 @@ def main_menu_screen():
     To start the game, to view the game rules or to view the leaderboard
     """
     welcome()
-    print(Fore.YELLOW + "Choose between the 3 options (eg. 1, 2 or 3):")
-    options = "1) Play game\n2) View game rules\n3) View leaderboard\n"
+    print(Fore.YELLOW + "Choose between the 4 options (eg. 1, 2, 3 or 4):")
+    options = "1) Play game\n2) View game rules\n3) View leaderboard\n4) Exit Game\n"
     option_selected = input(options)
     new_line()
     while True:
@@ -41,7 +41,7 @@ def main_menu_screen():
             return validate_main_menu_selection(option_selected)
             break
         welcome()
-        print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
+        print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four):")
         option_selected = input(options)
         new_line()
 
@@ -56,6 +56,8 @@ def validate_main_menu_selection(option):
         return 2
     elif option == "3" or option.lower() == "three":
         return 3
+    elif option == "4" or option.lower() == "four":
+        return 3
     else:
         return False
 
@@ -68,7 +70,9 @@ def main_menu_selection(option):
     elif option == 2:
         pass
     elif option == 3:
-        pass
+        go_to_leaderboard()
+    elif option == 4:
+        exit_game()
 
     return option
 
@@ -241,10 +245,10 @@ def log_in_players(num):
             start_checkers_game(player1, player2, num)
             return [player1.display_player_stats(), player2.display_player_stats()]  
     except Exception as e:
-        #welcome()
-        #print(Fore.YELLOW + "Returning to main menu...")
-        #time.sleep(1)
-        #main_menu_screen()
+        welcome()
+        print(Fore.YELLOW + "Returning to main menu...")
+        time.sleep(1)
+        main_menu_screen()
         print(e)
 
 def ask_registered(num):
@@ -535,6 +539,47 @@ def start_checkers_game(player1, player2, num):
     Starts the checkers game
     """
     checkers.start_game(player1, player2, num)
+
+def go_to_leaderboard():
+    """
+    Display leader board
+    Ask user to rank players by name, total games, wins and loses 
+    """
+    cls()
+    display_leaderboard_heading()
+
+def display_leaderboard_heading():
+    """
+    Displays the leaderboard heading 
+    """
+    for i in range(5):
+        print(" ")
+    
+    print(top_bottom_of_leaderboard())
+    print(empty_leaderboard_line())
+    print(leaderboard_headings())
+    print(empty_leaderboard_line())
+    print(top_bottom_of_leaderboard())
+
+
+def top_bottom_of_leaderboard():
+    """ 
+    Returns f string
+    """
+    return f"{' ' * 19 + Fore.YELLOW + '=' * 87}"
+
+def empty_leaderboard_line():
+    """ 
+    Returns f string
+    """
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+
+def leaderboard_headings():
+    """ 
+    Returns f string
+    """
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+    
 
 def exit_game():
     """ 

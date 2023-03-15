@@ -9,7 +9,7 @@ import colorama
 from colorama import Fore, Back, Style
 import time
 import smart_move_finder as smf
-from main_menu import return_to_main_menu, exit_game
+import main_menu as mm
 import sys
 
 def start_game(player1, player2, num):
@@ -426,8 +426,8 @@ def after_game_selection(num, player1, player2):
     if num == 1:
         start_game(player1, player2, num)
     elif num == 2:
-        return_to_main_menu()
+        mm.return_to_main_menu()
     elif num == 3:
         pass
     else:
-        exit_game()
+        mm.exit_game()
