@@ -15,11 +15,11 @@ class GameState():
         self.board = [
             ["x", "w", "x", "w", "x", "w", "x", "w"],
             ["w", "x", "w", "x", "w", "x", "w", "x"],
-            ["x", "w", "x", "W", "x", "w", "x", "w"],
+            ["x", "w", "x", "w", "x", "w", "x", "w"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["b", "x", "b", "x", "b", "x", "b", "x"],
-            ["x", "b", "x", "B", "x", "b", "x", "b"],
+            ["x", "b", "x", "b", "x", "b", "x", "b"],
             ["b", "x", "b", "x", "b", "x", "b", "x"]
         ]
 
@@ -55,7 +55,7 @@ class GameState():
                 available_move.append(color)
                 all_available_moves.append(available_move)
                 available_move = [] 
-        
+
         return all_available_moves      
 
     def get_movable_pieces(self, color):

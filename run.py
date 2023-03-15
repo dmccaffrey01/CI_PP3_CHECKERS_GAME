@@ -19,7 +19,8 @@ def new_line():
     Print '-' lines to separate messages
     """
     print(" ")
-    print("- "*30)
+    print(Fore.YELLOW + "-" * 80)
+    print(Fore.YELLOW + "-" * 80)
     print(" ")
 
 def welcome():
@@ -50,8 +51,8 @@ def main():
     """
     Run all program functions
     """
-    # mm.main_menu_screen()
-    mm.start_checkers_game("test", "test")
+    mm.main_menu_screen()
+    #mm.start_checkers_game("test", "test")
     
 
 if __name__ == "__main__":

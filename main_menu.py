@@ -4,14 +4,14 @@ import os
 from run import welcome, cls, new_line, update_num_players
 import time
 from email_validator import validate_email, EmailNotValidError
-#import gspread
-#from google.oauth2.service_account import Credentials
+import gspread
+from google.oauth2.service_account import Credentials
 import checkers
 import checkers_engine
 
 #Initialize colorama
 colorama.init(autoreset=True)
-"""
+
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -23,7 +23,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open("CI_PP3_CHECKERS_GAME_DATABASE")
 WORKSHEET = SHEET.worksheet("players")
-"""
+
 def main_menu_screen():
     """
     Display the main menu screen
@@ -79,17 +79,21 @@ def get_num_players():
     try:
         welcome()
         print(Fore.YELLOW + "Enter r to return")
-        print(Fore.YELLOW + "How many players?(1 or 2)")
-        options = "1) One\n2) Two\n"
+        print(Fore.YELLOW + "How many players?(1 or 2 or 0)")
+        options = "1) One\n2) Two\n3) None (CPU vs CPU)\n"
         option_selected = input(options)
         new_line()
         while True:
-            if validate_num_players(option_selected):
-                log_in_players(validate_num_players(option_selected))
-                return validate_num_players(option_selected)
+            num = validate_num_players(option_selected)
+            if num:
+                if num == 3:
+                    start_cpu_game(0)
+                else:
+                    log_in_players(num)
+                return num
                 break
             welcome()
-            print(Fore.YELLOW + "Please input (1, one) or (2, two):")
+            print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
             option_selected = input(options)
             new_line()
     except:
@@ -109,9 +113,11 @@ def validate_num_players(option):
         return 1
     elif option == "2" or option.lower() == "two":
         return 2
+    elif option == "3" or option.lower() == "three":
+        return 3
     elif option == "r":
         return_to_main_menu()
-        return 3
+        return 4
     else:
         return False
 
@@ -175,7 +181,14 @@ class Player:
         text = f"Name: {self.name} Email: {self.email} Total Games: {str(self.total_games)} Wins: {str(self.wins)} Loses: {str(self.loses)}"
         return text
         
-
+def start_cpu_game(num):
+    """
+    Starts a game cpu playing agains cpu if user selected 0 players 
+    """
+    cpu_difficulty_1 = ask_cpu_difficulty()
+    cpu_difficulty_2 = ask_cpu_difficulty()
+    start_checkers_game(cpu_difficulty_1, cpu_difficulty_2, num)
+    return [cpu_difficulty_1, cpu_difficulty_2]
 
 def log_in_players(num):
     """
@@ -186,21 +199,27 @@ def log_in_players(num):
     """
     welcome()
     try:
-        global player1
-        p1_registered = ask_registered("1")
-        new_line()
+        if num == 1 or num == 2:    
+            global player1
+            p1_registered = ask_registered("1")
+            new_line()
 
-        p1_name = ask_player_name("1")
-        new_line()
+            p1_name = ask_player_name("1")
+            new_line()
 
-        p1_email = validate_email_registered(ask_player_email(p1_name), p1_registered, p1_name)
+            p1_email = validate_email_registered(ask_player_email(p1_name), p1_registered, p1_name)
 
-        p1_total_games = get_worksheet_value(p1_email, "total_games")
-        p1_wins = get_worksheet_value(p1_email, "wins")
-        p1_loses = get_worksheet_value(p1_email, "loses")
+            p1_total_games = get_worksheet_value(p1_email, "total_games")
+            p1_wins = get_worksheet_value(p1_email, "wins")
+            p1_loses = get_worksheet_value(p1_email, "loses")
 
-        player1 = Player(p1_name, p1_email, p1_total_games, p1_wins, p1_loses)
-        player1.register_or_login_player()
+            player1 = Player(p1_name, p1_email, p1_total_games, p1_wins, p1_loses)
+            player1.register_or_login_player()
+
+            if num == 1:
+                cpu_difficulty = ask_cpu_difficulty()
+                start_checkers_game(player1, cpu_difficulty, num)
+                return [player1.display_player_stats()]
 
         if num == 2:
             global player2
@@ -219,11 +238,8 @@ def log_in_players(num):
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
             
-            start_checkers_game(player1, player2)
-            return [player1.display_player_stats(), player2.display_player_stats()]
-
-        start_checkers_game(player1)
-        return player1.display_player_stats()
+            start_checkers_game(player1, player2, num)
+            return [player1.display_player_stats(), player2.display_player_stats()]  
     except:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
@@ -276,7 +292,7 @@ def ask_player_name(num):
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter name of player {num}:") 
     while True:
-        name = input("Your Name:")
+        name = input("Your Name: ")
         if name == "r":
             return_to_main_menu()
             break
@@ -322,7 +338,7 @@ def ask_player_email(name):
     print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter email of {name}:") 
     while True:
-        email = input("Email:")
+        email = input("Email: ")
         if email == "r":
             return_to_main_menu()
             break
@@ -479,9 +495,42 @@ def get_worksheet_value(email, type):
     else:
         return 0
 
+def ask_cpu_difficulty():
+    """
+    Asks the user what level of difficulty to set the computer
+    3 options beginner, novice, expert 
+    """
+    print(Fore.YELLOW + "What level of difficulty would you like the cpu to be?:")
+    options = "1) Beginner\n2) Novice\n3) Expert\n"
+    option_selected = input(options)
+    while True:
+        if validate_cpu_difficulty_input(option_selected):
+            return validate_cpu_difficulty_input(option_selected)
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
+        option_selected = input(options)
 
-def start_checkers_game(player1, player2):
+def validate_cpu_difficulty_input(option):
+    """
+    Checks if the option is valid
+    If it is a 1 or 2 it returns 1 or 2
+    and if anything else it returns an error
+    """
+    if option == "1" or option.lower() == "one":
+        return 1
+    elif option == "2" or option.lower() == "two":
+        return 2
+    elif option == "3" or option.lower() == "three":
+        return 3
+    elif option == "r":
+        return_to_main_menu()
+        return 4
+    else:
+        return False
+
+def start_checkers_game(player1, player2, num):
     """ 
     Starts the checkers game
     """
-    checkers.start_game()
+    checkers.start_game(player1, player2, num)

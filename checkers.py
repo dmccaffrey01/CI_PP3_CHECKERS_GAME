@@ -10,22 +10,29 @@ from colorama import Fore, Back, Style
 import time
 import smart_move_finder as smf
 
-def start_game():
+def start_game(player1, player2, num):
     """ 
     Start the checkers game
     """
-    
     game_state = check_eng.GameState()
-    """
-    player_one = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    
+    p1 = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    p2 = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
-    player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
+    if num == 1:
+        p1 = 0
+        p2 = player2
+    elif num == 2:
+        p1 = 0
+        p2 = 0
+    else:
+        p1 = player1
+        p2 = player2
 
-    start_game_loop(game_state, player_one, player_two)
-    """
-    display_boardn(game_state)
+    start_game_loop(game_state, p1, p2, player1, player2)
+    
 
-def start_game_loop(game_state, p1, p2):
+def start_game_loop(game_state, p1, p2, player1, player2):
     """ 
     Starts the basic game loop
     Asks player to pick a piece to move from movable pieces
@@ -43,9 +50,8 @@ def start_game_loop(game_state, p1, p2):
         movable_pieces = game_state.get_movable_pieces(color)
         if not movable_pieces or moves >= 1000:
             game_over = True
-            winner = check_winner(game_state, moves)
-            print(winner)
-            print("Total Moves: " + str(moves))
+            display_game_over(game_state, moves, p1, p2, player1, player2)
+            
         else:
             selecting_move = True 
             while selecting_move and human_turn:
@@ -61,38 +67,18 @@ def start_game_loop(game_state, p1, p2):
                 available_moves = game_state.find_all_available_moves(color)
 
                 ai_move = smf.find_best_move(game_state, available_moves, p1 if game_state.color_go == "black" else p2)
+                
+                time.sleep(2)
 
                 game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
             display_board(game_state)
-            
-            #time.sleep(2)
             
             game_state.change_color_go()
             
             moves += 1
 
 def display_board(game_state):
-    """ 
-    Prints the board state to the console
-    """
-    cls()
-    board_state = game_state.board
-    board_rows = game_state.BOARD_ROWS
-    board_cols = " ".join(game_state.BOARD_COLS)
-    odd_row = True
-    for x, r in zip(board_state, board_rows):
-        row = x
-        if odd_row:
-            print(r + " " + Back.RED + row[0] + " " + Back.YELLOW + row[1] + " " + Back.RED + row[2] + " " + Back.YELLOW + row[3] + " " + Back.RED + row[4] + " " + Back.YELLOW + row[5] + " " + Back.RED + row[6] + " " + Back.YELLOW + row[7] + " ")
-            odd_row = False
-        else:
-            print(r + " " + Back.YELLOW + row[0] + " " + Back.RED + row[1] + " " + Back.YELLOW + row[2] + " " + Back.RED + row[3] + " " + Back.YELLOW + row[4] + " " + Back.RED + row[5] + " " + Back.YELLOW + row[6] + " " + Back.RED + row[7]+ " ")
-            odd_row = True
-    
-    print("  " + board_cols)
-
-def display_boardn(game_state):
     """
     Prints out the board state 
     """
@@ -281,17 +267,28 @@ def format_available_moves(moves):
         formatted_moves.append(formatted_move)
     
     return formatted_moves
-                
+
+def display_game_over(game_state, moves, p1, p2, player1, player2):
+    """
+    Displays game over and winner
+    Updates players wins, loses and games played
+    Asks the user what to do next 
+    """
+    winner = check_winner(game_state, moves)
+    if p1 == 0:
+        player1.update_database_value(3, value, email)
+
+              
 def check_winner(game_state, moves):
     """
     Checks who the winner is and formats a string to return 
     """
     if moves >= 1000:
-        message = "There is no winner, it ended in a draw"
+        message = "Draw"
     elif smf.score_the_pieces_on_board(game_state.board) > 0:
-        message = "Black is the winner"
+        message = "Black"
     else:
-        message = "White is the winner"
+        message = "White"
     return message
 
 
