@@ -3,6 +3,7 @@ import os
 import colorama
 from colorama import Fore, Back, Style
 import main_menu as mm
+import sys
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -19,8 +20,7 @@ def new_line():
     Print '-' lines to separate messages
     """
     print(" ")
-    print(Fore.YELLOW + "-" * 80)
-    print(Fore.YELLOW + "-" * 80)
+    print(Fore.YELLOW + "=" * 80)
     print(" ")
 
 def welcome():
@@ -42,17 +42,20 @@ def welcome():
     print(" ")
     print(" ")
 
-def update_num_players():
-    global num_players
-    num_players = mm.get_num_players()
-    return num_players
-
+def typewriter(str):
+    """
+    Typewriter to print message out in unique way 
+    """
+    for c in str:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    
 def main():
     """
     Run all program functions
     """
     mm.main_menu_screen()
-    #mm.start_checkers_game("test", "test")
     
 
 if __name__ == "__main__":

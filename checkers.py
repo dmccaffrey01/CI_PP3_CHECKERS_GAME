@@ -4,7 +4,7 @@ and displaying the current game state
 """
 
 import checkers_engine as check_eng
-from run import cls, new_line
+from run import cls, new_line, typewriter
 import colorama
 from colorama import Fore, Back, Style
 import time
@@ -274,21 +274,105 @@ def display_game_over(game_state, moves, p1, p2, player1, player2):
     Updates players wins, loses and games played
     Asks the user what to do next 
     """
-    winner = check_winner(game_state, moves)
-    if p1 == 0:
-        player1.update_database_value(3, value, email)
+    winner_color = check_winner(game_state, moves, "color", p1, p2, player1, player2)
+    winner_name = check_winner(game_state, moves, "name", p1, p2, player1, player2)
 
+    stats = update_player_stats(winner_color, p1, p2, player1, player2)
+
+    cls()
+    game_over(winner_color, winner_name)
+    time.sleep(3)
+    cls()
+    display_stats(stats, moves)
+    time.sleep(3)
+    cls()
+
+def game_over(winner_color, winner_name):
+    """ 
+    Print out game over
+    """
+    wc = winner_color.upper()
+    wc = " ".join(list(wc))
+    wn = winner_name.upper()
+    wn = " ".join(list(wn))
+    for i in range(5):
+        print(" ")
+    typewriter(f"""{' ' * 24}G A M E\t\n
+    {' ' * 20}O V E R\t\n
+    {' ' * 20}T H E   W I N N E R   I S   {wc}\t\n
+    {' ' * 20}C O N G R A T U L A T I O N S    {wn}\t\n""")
+
+def display_stats(stats, moves):
+    """ 
+    Displays the stats for that game
+    """
+    for i in range(5):
+        print(" ")
+    new_line()
+    print(Fore.CYAN + f"Total Moves: " + Fore.WHITE + str(moves))
+    new_line()
+    if stats[0] != "cpu":
+        print(stats[0])
+        new_line()
+    if stats[1] != "cpu":
+        print(stats[1])
+    
+
+def update_player_stats(winner, p1, p2, player1, player2):
+    """
+    Updates the players, wins, loses and total games played 
+    """
+    stats = []
+    if p1 == 0:
+        player1.total_games += 1
+        player1.update_database_value("total_games", player1.total_games, player1.email)
+        if winner == "Black":
+            player1.wins += 1
+            player1.update_database_value("wins", player1.wins, player1.email)
+        elif winner == "White":
+            player1.loses += 1
+            player1.update_database_value("loses", player1.loses, player1.email)
+        stats.append(player1.display_player_stats())
+    else:
+        stats.append("cpu")
+    
+    if p2 == 0:
+        player2.total_games += 1
+        player2.update_database_value("total_games", player2.total_games, player2.email)
+        if winner == "White":
+            player2.wins += 1
+            player2.update_database_value("wins", player2.wins, player2.email)
+        elif winner == "Black":
+            player2.loses += 1
+            player2.update_database_value("loses", player2.loses, player2.email)
+        stats.append(player2.display_player_stats())
+    else:
+        stats.append("cpu")
+    
+    return stats
               
-def check_winner(game_state, moves):
+def check_winner(game_state, moves, type, p1, p2, player1, player2):
     """
     Checks who the winner is and formats a string to return 
     """
     if moves >= 1000:
         message = "Draw"
     elif smf.score_the_pieces_on_board(game_state.board) > 0:
-        message = "Black"
+        if type == "color":
+            message = "Black"
+        elif type == "name":
+            if p1 == 0:
+                message = player1.name
+            else:
+                message = "CPU"
     else:
-        message = "White"
+        if type == "color":
+            message = "White"
+        elif type == "name":
+            if p2 == 0:
+                message = player2.name
+            else:
+                message = "CPU"
     return message
 
 

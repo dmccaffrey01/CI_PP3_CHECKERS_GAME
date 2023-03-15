@@ -1,7 +1,7 @@
 import colorama
 from colorama import Fore, Back, Style
 import os
-from run import welcome, cls, new_line, update_num_players
+from run import welcome, cls, new_line, typewriter
 import time
 from email_validator import validate_email, EmailNotValidError
 import gspread
@@ -64,7 +64,7 @@ def main_menu_selection(option):
     Choose the path of the option selected
     """
     if option == 1:
-        update_num_players()
+        get_num_players()
     elif option == 2:
         pass
     elif option == 3:
@@ -178,7 +178,7 @@ class Player:
         """
         Displayer the players stats 
         """
-        text = f"Name: {self.name} Email: {self.email} Total Games: {str(self.total_games)} Wins: {str(self.wins)} Loses: {str(self.loses)}"
+        text = f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.loses)}"
         return text
         
 def start_cpu_game(num):
@@ -240,11 +240,12 @@ def log_in_players(num):
             
             start_checkers_game(player1, player2, num)
             return [player1.display_player_stats(), player2.display_player_stats()]  
-    except:
-        welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        main_menu_screen()
+    except Exception as e:
+        #welcome()
+        #print(Fore.YELLOW + "Returning to main menu...")
+        #time.sleep(1)
+        #main_menu_screen()
+        print(e)
 
 def ask_registered(num):
     """
