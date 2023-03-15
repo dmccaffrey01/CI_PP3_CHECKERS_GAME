@@ -284,8 +284,9 @@ def display_game_over(game_state, moves, p1, p2, player1, player2):
     time.sleep(3)
     cls()
     display_stats(stats, moves)
-    time.sleep(3)
-    cls()
+    time.sleep(2)
+    new_line()
+    ask_whats_next()
 
 def game_over(winner_color, winner_name):
     """ 
@@ -375,7 +376,42 @@ def check_winner(game_state, moves, type, p1, p2, player1, player2):
                 message = "CPU"
     return message
 
+def ask_whats_next():
+    """ 
+    Ask the user what to do next
+    Their options are play again
+    Return to main menu
+    View the leaderboards
+    Or quit the application
+    """
+    print(Fore.YELLOW + "What would you like to do:")
+    options = "1) Play Again\n2) Return to Main Menu\n3) View the Leaderboards\n4) Quit\n"
+    option_selected = input(options)
+    while True:
+        num = validate_whats_next_input(option_selected)
+        if num:
+            return num
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
+        option_selected = input(options)
 
-
-
-        
+def validate_whats_next_input(option):
+    """
+    Checks if the option is valid
+    If it is a 1, 2, 3 or 4 it returns 1, 2, 3 or 4
+    and if anything else it returns an error
+    """
+    if option == "1" or option.lower() == "one":
+        return 1
+    elif option == "2" or option.lower() == "two":
+        return 2
+    elif option == "3" or option.lower() == "three":
+        return 3
+    elif option == "4" or option.lower() == "three":
+        return 4
+    elif option == "r":
+        return_to_main_menu()
+        return 5
+    else:
+        return False
