@@ -14,13 +14,16 @@ def start_game():
     """ 
     Start the checkers game
     """
+    
     game_state = check_eng.GameState()
-
+    """
     player_one = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
     player_two = 1 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
 
     start_game_loop(game_state, player_one, player_two)
+    """
+    display_boardn(game_state)
 
 def start_game_loop(game_state, p1, p2):
     """ 
@@ -88,6 +91,103 @@ def display_board(game_state):
             odd_row = True
     
     print("  " + board_cols)
+
+def display_boardn(game_state):
+    """
+    Prints out the board state 
+    """
+    global col_index, icons
+    icons = []
+    cls()
+    board_state = game_state.board
+    rows = game_state.BOARD_ROWS
+    cols = game_state.BOARD_COLS
+    col_index = -1
+    odd_row = True
+    for r, row_index in zip(rows, range(8)):
+        for i in range(5):
+            print(format_board_line(board_state, r, i, row_index))
+            col_index = -1   
+    print(Style.DIM + Fore.BLUE + format_cols_line(cols))
+    
+def format_board_line(board_state, r, i, row_index):
+    """
+    Formats a line for a row of the board
+    Returns an f string with colors and correct pieces 
+    """
+    if int(r) % 2 == 0:
+        if i == 2:
+            return f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index)}"
+        else:
+            return f"{Style.DIM + ' ' * 10 + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index)}"
+    else:
+        if i == 2:
+            return f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square()}"
+        else:
+            return f"{Style.DIM + ' ' * 10 + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square()}"
+
+def red_square(board_state, i, row_index):
+    """
+    Returns functions for red square in f string
+    Consists of 10 letter width and 5 letter height 
+    """
+    global col_index
+    col_index += 1
+    if i == 0 or i == 4: 
+        return f"{Back.RED + ' ' * 10}" 
+    else:
+        return f"{Back.RED + ' ' * 2 + display_piece(board_state, i, row_index, col_index) + Back.RED + ' ' * 2}"
+    
+
+def yellow_square():
+    """ 
+    Returns functions for yellow square in f string
+    Consists of 10 letter width and 5 letter height
+    """
+    global col_index
+    col_index += 1
+    return f"{Back.YELLOW + ' ' * 10}"
+
+def display_piece(board_state, i, row_index, col_index):
+    """
+    Displays the piece depending on its type and what line
+    Consists of a 6 letter width and 3 letter height
+    Kings have a green dot in the middle 
+    """
+    piece_icon = get_piece_icon(board_state, row_index, col_index)
+    if piece_icon == "b":
+        return f"{Back.BLACK + ' ' * 6}"
+    elif piece_icon == "B":
+        if i == 1 or i == 3:
+            return f"{Back.BLACK + ' ' * 6}"
+        else:
+            return f"{Back.BLACK + ' ' * 2 + Back.GREEN + ' ' * 2 + Back.BLACK + ' ' * 2}"
+    elif piece_icon == "w":
+        return f"{Back.WHITE + ' ' * 6}"
+    elif piece_icon == "W":
+        if i == 1 or i == 3:
+            return f"{Back.WHITE + ' ' * 6}"
+        else:
+            return f"{Back.WHITE + ' ' * 2 + Back.GREEN + ' ' * 2 + Back.WHITE + ' ' * 2}"
+    else:
+        return f"{Back.RED + ' ' * 6}"
+
+def get_piece_icon(board_state, row_index, col_index):
+    """
+    Returns the pieces icon from the row and col indexes 
+    """
+    return board_state[row_index][col_index]
+
+def format_cols_line(cols):
+    """
+    Returns cols line formatted correctly
+    """
+    new_cols = []   
+    for col in cols:
+        new_col = f"{' ' * 5 + col + ' ' * 4}"
+        new_cols.append(new_col)
+    cols_line = f"{' ' * 10 + ''.join(new_cols)}"
+    return cols_line
 
 def select_piece(game_state, movable_pieces, color):
     """
