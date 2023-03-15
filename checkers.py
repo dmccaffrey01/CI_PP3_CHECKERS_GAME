@@ -9,6 +9,8 @@ import colorama
 from colorama import Fore, Back, Style
 import time
 import smart_move_finder as smf
+from main_menu import return_to_main_menu, exit_game
+import sys
 
 def start_game(player1, player2, num):
     """ 
@@ -390,6 +392,7 @@ def ask_whats_next():
     while True:
         num = validate_whats_next_input(option_selected)
         if num:
+            after_game_selection(num)
             return num
             break
         new_line()
@@ -415,3 +418,16 @@ def validate_whats_next_input(option):
         return 5
     else:
         return False
+
+def after_game_selection(num, player1, player2):
+    """ 
+    Decide what the game does after game has been played
+    """
+    if num == 1:
+        start_game(player1, player2, num)
+    elif num == 2:
+        return_to_main_menu()
+    elif num == 3:
+        pass
+    else:
+        exit_game()

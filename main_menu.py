@@ -535,3 +535,11 @@ def start_checkers_game(player1, player2, num):
     Starts the checkers game
     """
     checkers.start_game(player1, player2, num)
+
+def exit_game():
+    """ 
+    System exits the game
+    """
+    typewriter(f"""{' ' * 24}T h a n k   y o u   f o r   p l a y i n g\t\n
+    {' ' * 20}H a v e   a   g o o d   d a y !\t\n""")
+    sys.exit()
