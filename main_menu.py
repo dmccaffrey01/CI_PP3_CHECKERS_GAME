@@ -8,6 +8,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import checkers
 import checkers_engine
+from operator import itemgetter
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -545,7 +546,7 @@ def go_to_leaderboard():
     Ask user to rank players by name, total games, wins and loses 
     """
     try:
-        sort_type = "wins"
+        sort_type = 3
         viewing_leaderboard = True
         while viewing_leaderboard:
             cls()
@@ -555,11 +556,14 @@ def go_to_leaderboard():
             if sort_type == "return":
                 viewing_leaderboard = False
                 return_to_main_menu()
-    except:
+    except Exception as e:
+        """
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         main_menu_screen()
+        """
+        print(e)
 
 def ask_user_to_sort_ranks():
     """
@@ -580,15 +584,16 @@ def ask_user_to_sort_ranks():
 def validate_sort_ranks_input(option):
     """
     Checks if the option is valid
-    If it is a 1 or 2 it returns 1 or 2
+    Returns index of column in worksheet
+    Valid options are 1, 2, 3, 4
     and if anything else it returns an error
     """
     if option == "1" or option.lower() == "one":
-        return "wins"
+        return 3
     elif option == "2" or option.lower() == "two":
-        return "games"
+        return 2
     elif option == "3" or option.lower() == "three":
-        return "loses"
+        return 4
     elif option == "r" or option == "4":
         return "return"
     else:
@@ -624,7 +629,7 @@ def leaderboard_headings():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
     
 def display_leaderboard_ranks(sort_type):
     """
@@ -633,14 +638,74 @@ def display_leaderboard_ranks(sort_type):
     """
     leaderboard_data = get_leaderboard_data()
     sorted_leaderboard_data = sort_leaderboard_data(leaderboard_data, sort_type)
-    
+    for i, row in zip(range(1, len(sorted_leaderboard_data)+1), sorted_leaderboard_data):
+        print(empty_leaderboard_line())
+        print(leaderboard_data_line(row, i))
+        print(empty_leaderboard_line())
+        print(top_bottom_of_leaderboard())
 
 def get_leaderboard_data():
     """
     Gets the leaderboard data from the worksheet
     Returns a 2d list of worksheet rows
+    Removes the first row
     """
-    return WORKSHEET.get_all_values()
+    data = WORKSHEET.get_all_values()
+    data.pop(0)
+    return data
+
+def sort_leaderboard_data(data, sort_type):
+    """
+    Sorts the data depending on sort type 
+    """
+    sorted_data = sorted(data, key=itemgetter(sort_type), reverse=True) if sort_type == 2 or sort_type == 3 else sorted(data, key=itemgetter(sort_type))
+    return sorted_data
+
+def leaderboard_data_line(row, i):
+    """
+    Returns an f string of correct data put in for row of leaderboard 
+    """
+    rank = format_leaderboard_rank_and_wins_and_name(str(i), "rank")
+    name = format_leaderboard_rank_and_wins_and_name(row[0], "name")
+    games = format_leaderboard_games_and_loses(row[2])
+    wins = format_leaderboard_rank_and_wins_and_name(row[3], "wins")
+    loses = format_leaderboard_games_and_loses(row[4])
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank + Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games + Fore.YELLOW + '|' + wins + Fore.YELLOW + '|' + loses + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+
+def format_leaderboard_rank_and_wins_and_name(str, type):
+    """ 
+    Correctly formats rank or wins to place in leaderboard
+    """
+    length = len(str)
+    if length == 1:
+        return f"{Fore.WHITE + ' ' * 7 + str + ' ' * 7}"
+    elif length == 2:
+        return f"{Fore.WHITE + ' ' * 6 + str[0] + ' ' + str[1] + ' ' * 6}"
+    elif length == 3:
+        return f"{Fore.WHITE + ' ' * 5 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' * 5}"
+    elif length == 4:
+        return f"{Fore.WHITE + ' ' * 4 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' * 4}"
+    else:
+        if type == "name":
+            return f"{Fore.WHITE + ' ' * 2 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + '... ' + ' ' * 2}" 
+        else:
+            return f"{Fore.WHITE + ' ' * 3 + '1 0 0 0 +' + ' ' * 3}"
+
+def format_leaderboard_games_and_loses(str):
+    """ 
+    Correctly formats games or loses to place in leaderboard
+    """
+    length = len(str)
+    if length == 1:
+        return f"{Fore.WHITE + ' ' * 8 + str + ' ' * 8}"
+    elif length == 2:
+        return f"{Fore.WHITE + ' ' * 7 + str[0] + ' ' + str[1] + ' ' * 7}"
+    elif length == 3:
+        return f"{Fore.WHITE + ' ' * 6 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' * 6}"
+    elif length == 4:
+        return f"{Fore.WHITE + ' ' * 5 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' * 5}"
+    else:
+        return f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}"
 
 def exit_game():
     """ 
