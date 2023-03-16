@@ -571,14 +571,14 @@ def ask_user_to_sort_ranks():
     3 choices, by wins, by games, by loses 
     """
     print(Fore.YELLOW + "What would you like the leaderboard to be sorted by?:")
-    options = "1) Wins\n2) Total Games\n3) Loses\n4) Return to main menu"
+    options = "1) Wins\n2) Total Games\n3) Loses\n4) Return to main menu\n"
     option_selected = input(options)
     while True:
         if validate_sort_ranks_input(option_selected):
             return validate_sort_ranks_input(option_selected)
             break
         new_line()
-        print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
+        print(Fore.YELLOW + "Please input 1 or 2 or 3 for sort or (4 to return):")
         option_selected = input(options)
 
 def validate_sort_ranks_input(option):
@@ -658,7 +658,18 @@ def sort_leaderboard_data(data, sort_type):
     """
     Sorts the data depending on sort type 
     """
-    sorted_data = sorted(data, key=itemgetter(sort_type), reverse=True) if sort_type == 2 or sort_type == 3 else sorted(data, key=itemgetter(sort_type))
+    for row in data:
+        for i in range(len(row)):
+            if i == 2 or i == 3 or i == 4:
+                row[i] = int(row[i])
+
+    sorted_data = sorted(data, key=itemgetter(sort_type), reverse=True) if (sort_type == 2 or sort_type == 3) else sorted(data, key=itemgetter(sort_type))
+    
+    for row in data:
+        for i in range(len(row)):
+            if i == 2 or i == 3 or i == 4:
+                row[i] = str(row[i])
+
     return sorted_data
 
 def leaderboard_data_line(row, i):
@@ -687,9 +698,14 @@ def format_leaderboard_rank_and_wins_and_name(str, type):
         return f"{Fore.WHITE + ' ' * 4 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' * 4}"
     else:
         if type == "name":
-            return f"{Fore.WHITE + ' ' * 2 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + '... ' + ' ' * 2}" 
+            if length == 5:
+                return f"{Fore.WHITE + ' ' * 3 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' + str[4] + ' ' * 3}"
+            elif length == 6:
+                return f"{Fore.WHITE + ' ' * 2 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' + str[4] + ' ' + str[5] + ' ' * 2}"
+            else:
+                return f"{Fore.WHITE + ' ' * 3 + str[0:5] + '... ' + ' ' * 3}" 
         else:
-            return f"{Fore.WHITE + ' ' * 3 + '1 0 0 0 +' + ' ' * 3}"
+            return f"{Fore.WHITE + ' ' * 3 + '9 9 9 9 +' + ' ' * 3}"
 
 def format_leaderboard_games_and_loses(str):
     """ 
