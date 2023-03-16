@@ -13,12 +13,12 @@ class GameState():
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
         self.board = [
+            ["x", "W", "x", "_", "x", "_", "x", "_"],
+            ["_", "x", "b", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["_", "x", "_", "x", "b", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["_", "x", "_", "x", "_", "x", "b", "x"],
             ["x", "_", "x", "w", "x", "_", "x", "_"],
             ["_", "x", "b", "x", "_", "x", "_", "x"]
         ]

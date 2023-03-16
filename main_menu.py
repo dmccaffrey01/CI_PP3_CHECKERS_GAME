@@ -244,13 +244,12 @@ def log_in_players(num):
             
             start_checkers_game(player1, player2, num)
             return [player1.display_player_stats(), player2.display_player_stats()]  
-    except Exception as e:
+    except:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         main_menu_screen()
-        print(e)
-
+        
 def ask_registered(num):
     """
     Ask the user if the player has been registered
@@ -545,8 +544,55 @@ def go_to_leaderboard():
     Display leader board
     Ask user to rank players by name, total games, wins and loses 
     """
-    cls()
-    display_leaderboard_heading()
+    try:
+        sort_type = "wins"
+        viewing_leaderboard = True
+        while viewing_leaderboard:
+            cls()
+            display_leaderboard_heading()
+            display_leaderboard_ranks(sort_type)
+            sort_type = ask_user_to_sort_ranks()
+            if sort_type == "return":
+                viewing_leaderboard = False
+                return_to_main_menu()
+    except:
+        welcome()
+        print(Fore.YELLOW + "Returning to main menu...")
+        time.sleep(1)
+        main_menu_screen()
+
+def ask_user_to_sort_ranks():
+    """
+    Asks the user to sort the ranks
+    3 choices, by wins, by games, by loses 
+    """
+    print(Fore.YELLOW + "What would you like the leaderboard to be sorted by?:")
+    options = "1) Wins\n2) Total Games\n3) Loses\n4) Return to main menu"
+    option_selected = input(options)
+    while True:
+        if validate_sort_ranks_input(option_selected):
+            return validate_sort_ranks_input(option_selected)
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
+        option_selected = input(options)
+
+def validate_sort_ranks_input(option):
+    """
+    Checks if the option is valid
+    If it is a 1 or 2 it returns 1 or 2
+    and if anything else it returns an error
+    """
+    if option == "1" or option.lower() == "one":
+        return "wins"
+    elif option == "2" or option.lower() == "two":
+        return "games"
+    elif option == "3" or option.lower() == "three":
+        return "loses"
+    elif option == "r" or option == "4":
+        return "return"
+    else:
+        return False
 
 def display_leaderboard_heading():
     """
@@ -580,6 +626,21 @@ def leaderboard_headings():
     """
     return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.YELLOW + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
     
+def display_leaderboard_ranks(sort_type):
+    """
+    Display the leaderboard depending on the type to rank 
+    Sorts the leaderboard entries depending on what type
+    """
+    leaderboard_data = get_leaderboard_data()
+    sorted_leaderboard_data = sort_leaderboard_data(leaderboard_data, sort_type)
+    
+
+def get_leaderboard_data():
+    """
+    Gets the leaderboard data from the worksheet
+    Returns a 2d list of worksheet rows
+    """
+    return WORKSHEET.get_all_values()
 
 def exit_game():
     """ 
