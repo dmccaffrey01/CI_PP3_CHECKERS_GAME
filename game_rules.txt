@@ -1,0 +1,27 @@
+Checkers is a classic board game that is played on an 8x8 board with 64 squares of alternating
+colors, red and yellow in this game. The game is played between two players, who each have
+12 pieces in their respective colors, either white or black, arranged on opposite sides of the
+board.
+nl
+The objective of the game is to capture all of the opponent's pieces or to block them so they
+cannot make any more moves.
+nl
+The rules of checkers are as follows:
+nl
+Players take turns moving one piece diagonally forward on the dark squares.
+nl
+Normal pieces can only move forward, but if they reach the last row on the opposite side of the 
+board, they can be promoted to a king, which can move diagonally in any direction.
+nl
+Captures are made by jumping over an opponent's piece that is adjacent and landing on an
+empty square. Multiple jumps are allowed in one turn.
+nl
+If there is a choice between multiple captures, the player can choose which one to make.
+nl
+The game ends when one player captures all of the opponent's pieces or blocks them so they cannot
+make any more moves.
+nl
+If a player is unable to make a move or has no legal moves left, they lose the game.
+nl
+These are the basic rules of checkers, but there are variations in rules depending on the
+location and culture where it is played.

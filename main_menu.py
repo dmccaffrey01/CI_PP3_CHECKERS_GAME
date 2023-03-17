@@ -69,7 +69,7 @@ def main_menu_selection(option):
     if option == 1:
         get_num_players()
     elif option == 2:
-        pass
+        display_game_rules()
     elif option == 3:
         go_to_leaderboard()
     elif option == 4:
@@ -722,6 +722,71 @@ def format_leaderboard_games_and_loses(str):
         return f"{Fore.WHITE + ' ' * 5 + str[0] + ' ' + str[1] + ' ' + str[2] + ' ' + str[3] + ' ' * 5}"
     else:
         return f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}"
+
+def display_game_rules():
+    """
+    Displays the game rules 
+    """
+    cls()
+    for i in range(3):
+        print(" ")
+
+    print(f"{game_rules_heading() + game_rules_top_and_bottom_line() + game_rules_empty_line() + format_game_rules_lines() + game_rules_empty_line() + game_rules_top_and_bottom_line()}")
+
+def game_rules_heading():
+    """
+    Returns f string of game rules heading 
+    """
+    return f"{' ' * 46 + Fore.CYAN + 'G A M E   R U L E S'}\n"
+
+def get_game_rules_lines():
+    """ 
+    Returns the lines of strings in a list
+    """
+    file = open("game_rules.txt", "r")
+    lines = file.readlines()
+    formatted_lines = []
+    for line in lines:
+        formatted_lines.append(line.strip())
+    return formatted_lines
+
+def format_game_rules_lines():
+    """
+    Returns f string of lines put together 
+    """
+    formatted_line = f""
+    lines = get_game_rules_lines()
+    for line in lines:
+        formatted_line += format_game_rule_line(line)
+    return formatted_line
+
+def format_game_rule_line(line):
+    """ 
+    Return f string of line
+    """
+    if line == "nl":
+        return game_rules_empty_line()
+    else:
+        return f"{game_rules_start_of_line() + Fore.WHITE + line + ' ' * (100 - len(line)) + Fore.YELLOW + '|'}\n"
+
+def game_rules_top_and_bottom_line():
+    """
+    Returns f string 
+    """
+    return f"{' ' * 6 + Fore.YELLOW + '=' * 106}\n"
+   
+
+def game_rules_empty_line():
+    """
+    Returns f string 
+    """
+    return f"{' ' * 6 + Fore.YELLOW + '|' + ' ' * 104 + Fore.YELLOW + '|'}\n"
+
+def game_rules_start_of_line():
+    """
+    Returns f string 
+    """
+    return f"{' ' * 6 + Fore.YELLOW + '|' + ' ' * 4}"
 
 def exit_game():
     """ 
