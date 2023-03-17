@@ -31,10 +31,10 @@ def start_game(player1, player2, num):
         p1 = player1
         p2 = player2
 
-    start_game_loop(game_state, p1, p2, player1, player2)
+    start_game_loop(game_state, p1, p2, player1, player2, num)
     
 
-def start_game_loop(game_state, p1, p2, player1, player2):
+def start_game_loop(game_state, p1, p2, player1, player2, num):
     """ 
     Starts the basic game loop
     Asks player to pick a piece to move from movable pieces
@@ -52,7 +52,7 @@ def start_game_loop(game_state, p1, p2, player1, player2):
         movable_pieces = game_state.get_movable_pieces(color)
         if not movable_pieces or moves >= 1000:
             game_over = True
-            display_game_over(game_state, moves, p1, p2, player1, player2)
+            display_game_over(game_state, moves, p1, p2, player1, player2, num)
             
         else:
             selecting_move = True 
@@ -76,6 +76,8 @@ def start_game_loop(game_state, p1, p2, player1, player2):
             
             display_board(game_state)
             
+            time.sleep(2)
+
             game_state.change_color_go()
             
             moves += 1
@@ -270,7 +272,7 @@ def format_available_moves(moves):
     
     return formatted_moves
 
-def display_game_over(game_state, moves, p1, p2, player1, player2):
+def display_game_over(game_state, moves, p1, p2, player1, player2, num):
     """
     Displays game over and winner
     Updates players wins, loses and games played
@@ -288,7 +290,7 @@ def display_game_over(game_state, moves, p1, p2, player1, player2):
     display_stats(stats, moves)
     time.sleep(2)
     new_line()
-    ask_whats_next()
+    ask_whats_next(p1, p2, player1, player2, num)
 
 def game_over(winner_color, winner_name):
     """ 
@@ -378,7 +380,7 @@ def check_winner(game_state, moves, type, p1, p2, player1, player2):
                 message = "CPU"
     return message
 
-def ask_whats_next():
+def ask_whats_next(p1, p2, player1, player2, num):
     """ 
     Ask the user what to do next
     Their options are play again
@@ -389,45 +391,43 @@ def ask_whats_next():
     print(Fore.YELLOW + "What would you like to do:")
     options = "1) Play Again\n2) Return to Main Menu\n3) View the Leaderboards\n4) Quit\n"
     option_selected = input(options)
+    new_line()
     while True:
-        num = validate_whats_next_input(option_selected)
-        if num:
-            after_game_selection(num)
-            return num
+        option = validate_whats_next_input(option_selected)
+        if option:
+            after_game_selection(option, p1, p2, player1, player2, num)
+            return option
             break
         new_line()
-        print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
+        print(Fore.YELLOW + "Please input 1, 2, 3 or 4(r to return):")
         option_selected = input(options)
 
 def validate_whats_next_input(option):
     """
     Checks if the option is valid
-    If it is a 1, 2, 3 or 4 it returns 1, 2, 3 or 4
+    If it is a 1, 2, 3 or 4 it returns 1, 2, 3 or 4False
     and if anything else it returns an error
     """
     if option == "1" or option.lower() == "one":
         return 1
-    elif option == "2" or option.lower() == "two":
+    elif option == "2" or option.lower() == "two" or option == "r":
         return 2
     elif option == "3" or option.lower() == "three":
         return 3
-    elif option == "4" or option.lower() == "three":
+    elif option == "4" or option.lower() == "four":
         return 4
-    elif option == "r":
-        return_to_main_menu()
-        return 5
     else:
         return False
 
-def after_game_selection(num, player1, player2):
+def after_game_selection(option, p1, p2, player1, player2, num):
     """ 
     Decide what the game does after game has been played
     """
-    if num == 1:
+    if option == 1:
         start_game(player1, player2, num)
-    elif num == 2:
+    elif option == 2:
         mm.return_to_main_menu()
-    elif num == 3:
-        pass
+    elif option == 3:
+        mm.go_to_leaderboard()
     else:
         mm.exit_game()

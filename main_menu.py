@@ -9,6 +9,7 @@ from google.oauth2.service_account import Credentials
 import checkers
 import checkers_engine
 from operator import itemgetter
+import sys
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -58,7 +59,7 @@ def validate_main_menu_selection(option):
     elif option == "3" or option.lower() == "three":
         return 3
     elif option == "4" or option.lower() == "four":
-        return 3
+        return 4
     else:
         return False
 
@@ -101,13 +102,12 @@ def get_num_players():
             print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
             option_selected = input(options)
             new_line()
-    except:
+    except Exception as e:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         main_menu_screen()
            
-
 def validate_num_players(option):
     """
     Checks if the option is valid
@@ -508,6 +508,7 @@ def ask_cpu_difficulty():
     print(Fore.YELLOW + "What level of difficulty would you like the cpu to be?:")
     options = "1) Beginner\n2) Novice\n3) Expert\n"
     option_selected = input(options)
+    new_line()
     while True:
         if validate_cpu_difficulty_input(option_selected):
             return validate_cpu_difficulty_input(option_selected)
@@ -556,14 +557,11 @@ def go_to_leaderboard():
             if sort_type == "return":
                 viewing_leaderboard = False
                 return_to_main_menu()
-    except Exception as e:
-        """
+    except:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         main_menu_screen()
-        """
-        print(e)
 
 def ask_user_to_sort_ranks():
     """
@@ -733,6 +731,36 @@ def display_game_rules():
 
     print(f"{game_rules_heading() + game_rules_top_and_bottom_line() + game_rules_empty_line() + format_game_rules_lines() + game_rules_empty_line() + game_rules_top_and_bottom_line()}")
 
+    if ask_user_to_exit_game_rules():
+        welcome()
+        print(Fore.YELLOW + "Returning to main menu...")
+        time.sleep(1)
+        main_menu_screen()
+        
+def ask_user_to_exit_game_rules():
+    """
+    Asks the user to return to the main menu
+    """
+    print(Fore.YELLOW + "Press 1 or r to return to the main menu:")
+    options = "1) Return to the main menu\n"
+    option_selected = input(options)
+    while True:
+        if validate_exit_game_rules_input(option_selected):
+            return validate_exit_game_rules_input(option_selected)
+            break
+        new_line()
+        print(Fore.YELLOW + "Please input 1 or r:")
+        option_selected = input(options)    
+
+def validate_exit_game_rules_input(option):
+    """
+    Validates if input is 1 or r
+    """
+    if option == "1" or option.lower() == "one" or option == "r":
+        return "return"
+    else:
+        return False
+
 def game_rules_heading():
     """
     Returns f string of game rules heading 
@@ -792,6 +820,10 @@ def exit_game():
     """ 
     System exits the game
     """
-    typewriter(f"""{' ' * 24}T h a n k   y o u   f o r   p l a y i n g\t\n
-    {' ' * 20}H a v e   a   g o o d   d a y !\t\n""")
-    sys.exit()
+    cls()
+    for i in range (5):
+        print(" ")
+
+    typewriter(f"{' ' * 6}T h a n k   y o u   f o r   p l a y i n g\n{' ' * 10}H a v e   a   g o o d   d a y !\n")
+    sys.exit(0)
+    
