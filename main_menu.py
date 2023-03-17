@@ -103,10 +103,11 @@ def get_num_players():
             option_selected = input(options)
             new_line()
     except Exception as e:
-        welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        main_menu_screen()
+        #welcome()
+        #print(Fore.YELLOW + "Returning to main menu...")
+        #time.sleep(1)
+        #main_menu_screen()
+        print(e)
            
 def validate_num_players(option):
     """

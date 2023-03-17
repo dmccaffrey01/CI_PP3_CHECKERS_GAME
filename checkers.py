@@ -11,6 +11,7 @@ import time
 import smart_move_finder as smf
 import main_menu as mm
 import sys
+import math
 
 def start_game(player1, player2, num):
     """ 
@@ -302,10 +303,7 @@ def game_over(winner_color, winner_name):
     wn = " ".join(list(wn))
     for i in range(5):
         print(" ")
-    typewriter(f"""{' ' * 24}G A M E\t\n
-    {' ' * 20}O V E R\t\n
-    {' ' * 20}T H E   W I N N E R   I S   {wc}\t\n
-    {' ' * 20}C O N G R A T U L A T I O N S    {wn}\t\n""")
+    typewriter(f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n")
 
 def display_stats(stats, moves):
     """ 
