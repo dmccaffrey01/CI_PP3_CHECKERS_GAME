@@ -38,9 +38,10 @@ def main_menu_screen():
     option_selected = input(options)
     new_line()
     while True:
-        if validate_main_menu_selection(option_selected):
-            main_menu_selection(validate_main_menu_selection(option_selected))
-            return validate_main_menu_selection(option_selected)
+        validated_option = validate_main_menu_selection(option_selected)
+        if validated_option:
+            main_menu_selection(validated_option)
+            return validated_option
             break
         welcome()
         print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four):")
@@ -86,28 +87,28 @@ def get_num_players():
         welcome()
         print(Fore.YELLOW + "Enter r to return")
         print(Fore.YELLOW + "How many players?(1 or 2 or 0)")
-        options = "1) One\n2) Two\n3) None (CPU vs CPU)\n"
+        options = "1) One (Player vs CPU)\n2) Two (Player vs Player)\n3) None (CPU vs CPU)\n"
         option_selected = input(options)
         new_line()
         while True:
-            num = validate_num_players(option_selected)
-            if num:
-                if num == 3:
+            validated_option = validate_num_players(option_selected)
+            if validated_option:
+                if validated_option == 3:
                     start_cpu_game(0)
                 else:
-                    log_in_players(num)
-                return num
+                    log_in_players(validated_option)
+                return validated_option
                 break
             welcome()
             print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
             option_selected = input(options)
             new_line()
     except Exception as e:
-        #welcome()
-        #print(Fore.YELLOW + "Returning to main menu...")
-        #time.sleep(1)
-        #main_menu_screen()
-        print(e)
+        welcome()
+        print(Fore.YELLOW + "Returning to main menu...")
+        time.sleep(1)
+        main_menu_screen()
+
            
 def validate_num_players(option):
     """
@@ -184,8 +185,7 @@ class Player:
         """
         Displayer the players stats 
         """
-        text = f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.loses)}"
-        return text
+        return f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.loses)}"
         
 def start_cpu_game(num):
     """
@@ -225,7 +225,7 @@ def log_in_players(num):
             if num == 1:
                 cpu_difficulty = ask_cpu_difficulty()
                 start_checkers_game(player1, cpu_difficulty, num)
-                return [player1.display_player_stats()]
+                return num
 
         if num == 2:
             global player2
@@ -245,7 +245,7 @@ def log_in_players(num):
             player2.register_or_login_player()
             
             start_checkers_game(player1, player2, num)
-            return [player1.display_player_stats(), player2.display_player_stats()]  
+            return num  
     except:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
@@ -263,10 +263,11 @@ def ask_registered(num):
     options = "1) Yes\n2) No\n"
     option_selected = input(options)
     while True:
-        if validate_registered_input(option_selected):
-            if validate_registered_input(option_selected) == 1:
+        validated_option = validate_registered_input(option_selected)
+        if validated_option:
+            if validated_option == 1:
                 return True
-            elif validate_registered_input(option_selected) == 2:
+            elif validated_option == 2:
                 return False
             break
         welcome()
@@ -426,8 +427,9 @@ def ask_incorrect_email_question1(name, registered):
     options = "1) Try entering email again\n2) Register as new player\n"
     option_selected = input(options)
     while True:
-        if validate_incorrect_email_input(option_selected):
-            if validate_incorrect_email_input(option_selected) == 1:
+        validated_option = validate_incorrect_email_input(option_selected)
+        if validated_option:
+            if validated_option == 1:
                 return validate_email_registered(ask_player_email(name), registered, name)
             elif validate_registered_input(option_selected) == 2:
                 new_line()
@@ -449,13 +451,14 @@ def ask_incorrect_email_question2(name, registered, email):
     options = "1) Try entering email again\n2) Sign in as that player\n"
     option_selected = input(options)
     while True:
-        if validate_incorrect_email_input(option_selected):
-            if validate_incorrect_email_input(option_selected) == 1:
+        validated_option = validate_incorrect_email_input(option_selected)
+        if validated_option:
+            if validated_option == 1:
                 new_line()
                 print(Fore.BLUE + "Try again")
                 new_line()
                 return validate_email_registered(ask_player_email(name), registered, name)
-            elif validate_registered_input(option_selected) == 2:
+            elif validated_option == 2:
                 new_line()
                 print(Fore.BLUE + "Logging in")
                 new_line()
@@ -541,6 +544,7 @@ def start_checkers_game(player1, player2, num):
     Starts the checkers game
     """
     checkers.start_game(player1, player2, num)
+    return True
 
 def go_to_leaderboard():
     """
