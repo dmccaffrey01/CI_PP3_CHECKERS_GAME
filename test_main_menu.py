@@ -374,7 +374,20 @@ class TestLogInPlayers(unittest.TestCase):
     def test_log_in_players(self):
         self.assertEqual(mm.log_in_players(1), 1)
         self.assertEqual(mm.log_in_players(2), 2)
-        
+
+class TestCheckersGame(unittest.TestCase):
+    """
+    Testing of the start checkers game 
+    """
+
+    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    def test_validate_cpu_difficulty_input(self):
+        self.assertEqual(mm.validate_cpu_difficulty_input("1"), 1)
+        self.assertEqual(mm.validate_cpu_difficulty_input("2"), 2)
+        self.assertEqual(mm.validate_cpu_difficulty_input("3"), 3)
+        self.assertEqual(mm.validate_cpu_difficulty_input("r"), 4)
+        self.assertEqual(mm.validate_cpu_difficulty_input("5"), False)
+
 # Enable print output
 sys.stdout = sys.__stdout__
 
