@@ -646,8 +646,9 @@ def display_leaderboard_ranks(sort_type):
     sorted_leaderboard_data = sort_leaderboard_data(leaderboard_data, sort_type)
     for i, row in zip(range(1, len(sorted_leaderboard_data)+1), sorted_leaderboard_data):
         leaderboard_row = f"{empty_leaderboard_line() + leaderboard_data_line(row, i) + empty_leaderboard_line() + top_bottom_of_leaderboard()}"
-        print(leaderboad_row)
-        leaderboard_rows.append(leaderboard_row)
+        print(leaderboard_row)
+        row.insert(0, i)
+        leaderboard_rows.append(row)
 
     return leaderboard_rows
 

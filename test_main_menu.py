@@ -487,6 +487,21 @@ class TestLeaderboardDisplay(unittest.TestCase):
         self.assertEqual(mm.format_leaderboard_games_and_loses("1234"), f"{Fore.WHITE + ' ' * 5 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' * 5}")
         self.assertEqual(mm.format_leaderboard_games_and_loses("12345"), f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}")
 
+    def test_leaderboard_data_line(self):
+        self.assertEqual(mm.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], 2), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + mm.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + mm.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + mm.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + mm.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + mm.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}")
+
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_display_leaderboard_ranks(self):
+        self.assertEqual(mm.display_leaderboard_ranks(2), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
+        self.assertEqual(mm.display_leaderboard_ranks(3), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
+        self.assertEqual(mm.display_leaderboard_ranks(4), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
+
+    @patch("builtins.input", lambda _: "4")
+    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    def test_go_to_leaderboard(self):
+        self.assertEqual(mm.go_to_leaderboard(), False)
+        
+
 # Enable print output
 sys.stdout = sys.__stdout__
 
