@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import main_menu as mm
+import game_rules
 import checkers
 import run
 import sys
@@ -151,7 +152,7 @@ class TestMainMenu(unittest.TestCase):
         
 
     @patch("main_menu.get_num_players", mock_function_0_arg_true)
-    @patch("main_menu.display_game_rules", mock_function_0_arg_true)
+    @patch("game_rules.display_game_rules", mock_function_0_arg_true)
     @patch("leaderboard.go_to_leaderboard", mock_function_0_arg_true)
     @patch("main_menu.exit_game", mock_function_0_arg_true)
     def test_main_menu_selection(self):

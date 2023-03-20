@@ -12,6 +12,7 @@ def cls():
     Clear the console
     """
     os.system("cls" if os.name == "nt" else "clear")
+    return "clear"
 
 def new_line():
     """
@@ -20,6 +21,7 @@ def new_line():
     print(" ")
     print(Fore.YELLOW + "=" * 80)
     print(" ")
+    return "new line"
 
 def welcome():
     """
@@ -39,6 +41,7 @@ def welcome():
     print(Fore.BLUE + "                                            for 1 and 2 players")
     print(" ")
     print(" ")
+    return "welcome"
 
 def typewriter(str):
     """
@@ -48,3 +51,5 @@ def typewriter(str):
         sys.stdout.write(c)
         sys.stdout.flush()
         time.sleep(0.05)
+
+    return "typewriter"
