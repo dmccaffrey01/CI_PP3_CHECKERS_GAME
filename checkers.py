@@ -12,6 +12,7 @@ import smart_move_finder as smf
 import main_menu as mm
 import sys
 import math
+import leaderboard
 
 def start_game(player1, player2, num):
     """ 
@@ -426,6 +427,6 @@ def after_game_selection(option, p1, p2, player1, player2, num):
     elif option == 2:
         mm.return_to_main_menu()
     elif option == 3:
-        mm.go_to_leaderboard()
+        leaderboard.go_to_leaderboard()
     else:
         mm.exit_game()
