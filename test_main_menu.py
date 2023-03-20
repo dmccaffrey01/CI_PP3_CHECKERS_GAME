@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import main_menu as mm
+import checkers
 import run
 import sys
 import io
@@ -387,6 +388,30 @@ class TestCheckersGame(unittest.TestCase):
         self.assertEqual(mm.validate_cpu_difficulty_input("3"), 3)
         self.assertEqual(mm.validate_cpu_difficulty_input("r"), 4)
         self.assertEqual(mm.validate_cpu_difficulty_input("5"), False)
+
+    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("builtins.input", lambda _: "1")
+    def test_ask_cpu_difficulty1(self):
+        self.assertEqual(mm.ask_cpu_difficulty(), 1)
+
+    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("builtins.input", lambda _: "2")
+    def test_ask_cpu_difficulty2(self):
+        self.assertEqual(mm.ask_cpu_difficulty(), 2)
+
+    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("builtins.input", lambda _: "3")
+    def test_ask_cpu_difficulty3(self):
+        self.assertEqual(mm.ask_cpu_difficulty(), 3)
+
+    @patch("builtins.input", lambda _: "1")
+    @patch("main_menu.start_checkers_game", mock_scg)
+    def test_start_cpu_game(self):
+        self.assertEqual(mm.start_cpu_game(0), [1, 1])
+
+    @patch("checkers.start_game", mock_scg)
+    def test_start_checkers_game(self):
+        self.assertEqual(mm.start_checkers_game(1, 1, 0), True)
 
 # Enable print output
 sys.stdout = sys.__stdout__

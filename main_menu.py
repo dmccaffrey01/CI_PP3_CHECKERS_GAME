@@ -514,8 +514,9 @@ def ask_cpu_difficulty():
     option_selected = input(options)
     new_line()
     while True:
-        if validate_cpu_difficulty_input(option_selected):
-            return validate_cpu_difficulty_input(option_selected)
+        validated_option = validate_cpu_difficulty_input(option_selected)
+        if validated_option:
+            return validated_option
             break
         new_line()
         print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
