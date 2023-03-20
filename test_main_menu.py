@@ -16,10 +16,8 @@ class MockWorksheet():
     """
     Creates an mock instance of Worksheet class from gspread
     """
-    mock_player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
-
     def col_values(self, value):
-        cols = [["empty col"], [self.mock_player1.name], [self.mock_player1.email], [self.mock_player1.total_games], [self.mock_player1.wins], [self.mock_player1.loses]]
+        cols = [["empty col"], ["John"], ["john@gmail.com"], ["10"], ["4"], ["6"]]
         return cols[value]
 
     def update_cell(self, row, cell, value):
@@ -27,6 +25,9 @@ class MockWorksheet():
 
     def append_row(self, row):
         return True
+
+    def get_all_values(self):
+        return [["Name", "Email", "Games", "Wins", "Loses"], ["John", "john@gmail.com", "10", "4", "6"], ["Pat", "pat@gmail.com", "12", "8", "4"]]
 
 mock_worksheet = MockWorksheet()
 
@@ -413,9 +414,9 @@ class TestCheckersGame(unittest.TestCase):
     def test_start_checkers_game(self):
         self.assertEqual(mm.start_checkers_game(1, 1, 0), True)
 
-class TestLeaderboard(unittest.TestCase):
+class TestLeaderboardSortRanks(unittest.TestCase):
     """
-    Testing of the leaderboard feature 
+    Testing of the leaderboard sort ranks 
     """
 
     def test_validate_sort_ranks_input(self):
@@ -441,6 +442,12 @@ class TestLeaderboard(unittest.TestCase):
     def test_ask_user_to_sort_ranks4(self):
         self.assertEqual(mm.ask_user_to_sort_ranks(), "return")
 
+    
+class TestLeaderboardDisplay(unittest.TestCase):
+    """
+    Testing of the leaderboard display functions 
+    """
+
     def test_top_bottom_of_leaderboard(self):
         self.assertEqual(mm.top_bottom_of_leaderboard(), f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n")
 
@@ -452,6 +459,27 @@ class TestLeaderboard(unittest.TestCase):
 
     def test_display_leaderboard_heading(self):
         self.assertEqual(mm.display_leaderboard_heading(), f"{mm.top_bottom_of_leaderboard() + mm.empty_leaderboard_line() + mm.leaderboard_headings() + mm.empty_leaderboard_line() + mm.top_bottom_of_leaderboard()}")
+
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_get_leaderboard_data(self):
+        self.assertEqual(mm.get_leaderboard_data(), [["John", "john@gmail.com", "10", "4", "6"], ["Pat", "pat@gmail.com", "12", "8", "4"]])
+
+    @patch("main_menu.WORKSHEET", mock_worksheet)
+    def test_sort_leaderboard_data(self):
+        self.assertEqual(mm.sort_leaderboard_data(mm.get_leaderboard_data(), 2), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
+        self.assertEqual(mm.sort_leaderboard_data(mm.get_leaderboard_data(), 3), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
+        self.assertEqual(mm.sort_leaderboard_data(mm.get_leaderboard_data(), 4), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
+
+    def test_format_leaderboard_rank_and_wins_and_name(self):
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("1", "rank"), f"{Fore.WHITE + ' ' * 7 + '1' + ' ' * 7}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("12", "rank"), f"{Fore.WHITE + ' ' * 6 + '1' + ' ' + '2' + ' ' * 6}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("123", "rank"), f"{Fore.WHITE + ' ' * 5 + '1' + ' ' + '2' + ' ' + '3' + ' ' * 5}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("1234", "rank"), f"{Fore.WHITE + ' ' * 4 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' * 4}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("12345", "rank"), f"{Fore.WHITE + ' ' * 3 + '9 9 9 9 +' + ' ' * 3}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("12345", "name"), f"{Fore.WHITE + ' ' * 3 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' + '5' + ' ' * 3}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("123456", "name"), f"{Fore.WHITE + ' ' * 2 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' + '5' + ' ' + '6' + ' ' * 2}")
+        self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("1234567", "name"), f"{Fore.WHITE + ' ' * 3 + '12345' + '... ' + ' ' * 3}")
+
 
 # Enable print output
 sys.stdout = sys.__stdout__
