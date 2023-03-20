@@ -413,6 +413,40 @@ class TestCheckersGame(unittest.TestCase):
     def test_start_checkers_game(self):
         self.assertEqual(mm.start_checkers_game(1, 1, 0), True)
 
+class TestLeaderboard(unittest.TestCase):
+    """
+    Testing of the leaderboard feature 
+    """
+
+    def test_validate_sort_ranks_input(self):
+        self.assertEqual(mm.validate_sort_ranks_input("1"), 3)
+        self.assertEqual(mm.validate_sort_ranks_input("2"), 2)
+        self.assertEqual(mm.validate_sort_ranks_input("3"), 4)
+        self.assertEqual(mm.validate_sort_ranks_input("r"), "return")
+        self.assertEqual(mm.validate_sort_ranks_input("5"), False)
+
+    @patch("builtins.input", lambda _: "1")
+    def test_ask_user_to_sort_ranks1(self):
+        self.assertEqual(mm.ask_user_to_sort_ranks(), 3)
+
+    @patch("builtins.input", lambda _: "2")
+    def test_ask_user_to_sort_ranks2(self):
+        self.assertEqual(mm.ask_user_to_sort_ranks(), 2)
+
+    @patch("builtins.input", lambda _: "3")
+    def test_ask_user_to_sort_ranks3(self):
+        self.assertEqual(mm.ask_user_to_sort_ranks(), 4)
+
+    @patch("builtins.input", lambda _: "r")
+    def test_ask_user_to_sort_ranks4(self):
+        self.assertEqual(mm.ask_user_to_sort_ranks(), "return")
+
+    def test_top_bottom_of_leaderboard(self):
+        self.assertEqual(mm.top_bottom_of_leaderboard(), f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n")
+
+    def test_empty_leaderboard_line(self):
+        self.assertEqual(mm.empty_leaderboard_line(), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
+
 # Enable print output
 sys.stdout = sys.__stdout__
 

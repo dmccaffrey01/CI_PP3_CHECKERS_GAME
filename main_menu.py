@@ -563,6 +563,7 @@ def go_to_leaderboard():
             if sort_type == "return":
                 viewing_leaderboard = False
                 return_to_main_menu()
+                return viewing_leaderboard
     except:
         welcome()
         print(Fore.YELLOW + "Returning to main menu...")
@@ -578,8 +579,9 @@ def ask_user_to_sort_ranks():
     options = "1) Wins\n2) Total Games\n3) Loses\n4) Return to main menu\n"
     option_selected = input(options)
     while True:
-        if validate_sort_ranks_input(option_selected):
-            return validate_sort_ranks_input(option_selected)
+        validated_option = validate_sort_ranks_input(option_selected)
+        if validated_option:
+            return validated_option
             break
         new_line()
         print(Fore.YELLOW + "Please input 1 or 2 or 3 for sort or (4 to return):")
@@ -610,43 +612,44 @@ def display_leaderboard_heading():
     for i in range(5):
         print(" ")
     
-    print(top_bottom_of_leaderboard())
-    print(empty_leaderboard_line())
-    print(leaderboard_headings())
-    print(empty_leaderboard_line())
-    print(top_bottom_of_leaderboard())
+    heading = f"{top_bottom_of_leaderboard() + empty_leaderboard_line() + leaderboard_headings() + empty_leaderboard_line() + top_bottom_of_leaderboard()}"
+    print(heading)
+    return heading
 
 
 def top_bottom_of_leaderboard():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '=' * 87}"
+    return f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n"
 
 def empty_leaderboard_line():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
 
 def leaderboard_headings():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
     
 def display_leaderboard_ranks(sort_type):
     """
     Display the leaderboard depending on the type to rank 
     Sorts the leaderboard entries depending on what type
     """
+    leaderboard_rows = []
+
     leaderboard_data = get_leaderboard_data()
     sorted_leaderboard_data = sort_leaderboard_data(leaderboard_data, sort_type)
     for i, row in zip(range(1, len(sorted_leaderboard_data)+1), sorted_leaderboard_data):
-        print(empty_leaderboard_line())
-        print(leaderboard_data_line(row, i))
-        print(empty_leaderboard_line())
-        print(top_bottom_of_leaderboard())
+        leaderboard_row = f"{empty_leaderboard_line() + leaderboard_data_line(row, i) + empty_leaderboard_line() + top_bottom_of_leaderboard()}"
+        print(leaderboad_row)
+        leaderboard_rows.append(leaderboard_row)
+
+    return leaderboard_rows
 
 def get_leaderboard_data():
     """
