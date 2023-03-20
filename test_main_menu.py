@@ -447,6 +447,12 @@ class TestLeaderboard(unittest.TestCase):
     def test_empty_leaderboard_line(self):
         self.assertEqual(mm.empty_leaderboard_line(), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
+    def test_leaderboard_headings(self):
+        self.assertEqual(mm.leaderboard_headings(), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
+
+    def test_display_leaderboard_heading(self):
+        self.assertEqual(mm.display_leaderboard_heading(), f"{mm.top_bottom_of_leaderboard() + mm.empty_leaderboard_line() + mm.leaderboard_headings() + mm.empty_leaderboard_line() + mm.top_bottom_of_leaderboard()}")
+
 # Enable print output
 sys.stdout = sys.__stdout__
 
