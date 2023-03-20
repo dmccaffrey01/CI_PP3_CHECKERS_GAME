@@ -4,7 +4,7 @@ and displaying the current game state
 """
 
 import checkers_engine as check_eng
-from run import cls, new_line, typewriter
+import display
 import colorama
 from colorama import Fore, Back, Style
 import time
@@ -90,7 +90,7 @@ def display_board(game_state):
     """
     global col_index, icons
     icons = []
-    cls()
+    display.cls()
     board_state = game_state.board
     rows = game_state.BOARD_ROWS
     cols = game_state.BOARD_COLS
@@ -188,7 +188,7 @@ def select_piece(game_state, movable_pieces, color):
     """
     display_board(game_state)
 
-    new_line()
+    display.new_line()
 
     print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2)...)")
 
@@ -197,13 +197,13 @@ def select_piece(game_state, movable_pieces, color):
         text = f"{i}) {piece}\n"
         options += text
     option_selected = input(options)
-    new_line()
+    display.new_line()
     while True:
         if validate_selected_option(option_selected, "movable_pieces", movable_pieces):
             return movable_pieces[validate_selected_option(option_selected, "movable_pieces", movable_pieces) - 1]
             break
         display_board(game_state)
-        new_line() 
+        display.new_line() 
         print(Fore.YELLOW + f"Please input (1 - {len(movable_pieces)})")
         option_selected = input(options)
           
@@ -232,7 +232,7 @@ def select_move(game_state, piece, color):
     """
     display_board(game_state)
 
-    new_line()
+    display.new_line()
 
     print(Fore.YELLOW + "Choose a position to move to eg.(1(F1) or 2(F2)...)")
     print(Fore.YELLOW + "(Enter r to return to selecting a piece)")
@@ -246,7 +246,7 @@ def select_move(game_state, piece, color):
         text = f"{i}) {move}\n"
         options += text
     option_selected = input(options)
-    new_line()
+    display.new_line()
     while True:
         if validate_selected_option(option_selected, "available_moves", available_moves) == "return":
             return "return"
@@ -255,7 +255,7 @@ def select_move(game_state, piece, color):
             return [available_moves[validate_selected_option(option_selected, "available_moves", available_moves) - 1], validate_selected_option(option_selected, "available_moves", available_moves)]
             break
         display_board(game_state)
-        new_line()
+        display.new_line()
         print(Fore.YELLOW + f"Please input (1 - {len(available_moves)})")
         option_selected = input(options)
 
@@ -285,13 +285,13 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num):
 
     stats = update_player_stats(winner_color, p1, p2, player1, player2)
 
-    cls()
+    display.cls()
     game_over(winner_color, winner_name)
     time.sleep(3)
-    cls()
+    display.cls()
     display_stats(stats, moves)
     time.sleep(2)
-    new_line()
+    display.new_line()
     ask_whats_next(p1, p2, player1, player2, num)
 
 def game_over(winner_color, winner_name):
@@ -304,7 +304,7 @@ def game_over(winner_color, winner_name):
     wn = " ".join(list(wn))
     for i in range(5):
         print(" ")
-    typewriter(f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n")
+    display.typewriter(f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n")
 
 def display_stats(stats, moves):
     """ 
@@ -312,12 +312,12 @@ def display_stats(stats, moves):
     """
     for i in range(5):
         print(" ")
-    new_line()
+    display.new_line()
     print(Fore.CYAN + f"Total Moves: " + Fore.WHITE + str(moves))
-    new_line()
+    display.new_line()
     if stats[0] != "cpu":
         print(stats[0])
-        new_line()
+        display.new_line()
     if stats[1] != "cpu":
         print(stats[1])
     
@@ -390,14 +390,14 @@ def ask_whats_next(p1, p2, player1, player2, num):
     print(Fore.YELLOW + "What would you like to do:")
     options = "1) Play Again\n2) Return to Main Menu\n3) View the Leaderboards\n4) Quit\n"
     option_selected = input(options)
-    new_line()
+    display.new_line()
     while True:
         option = validate_whats_next_input(option_selected)
         if option:
             after_game_selection(option, p1, p2, player1, player2, num)
             return option
             break
-        new_line()
+        display.new_line()
         print(Fore.YELLOW + "Please input 1, 2, 3 or 4(r to return):")
         option_selected = input(options)
 

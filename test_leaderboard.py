@@ -1,18 +1,20 @@
 import unittest
 from unittest.mock import patch
 import leaderboard
-import checkers
+import test_main_menu as tmm
 import run
 import sys
 import io
 import colorama
 from colorama import Fore, Back, Style
 
+# Disable print output
+sys.stdout = io.StringIO()
+
 class TestLeaderboardSortRanks(unittest.TestCase):
     """
     Testing of the leaderboard sort ranks 
     """
-
     def test_validate_sort_ranks_input(self):
         self.assertEqual(leaderboard.validate_sort_ranks_input("1"), 3)
         self.assertEqual(leaderboard.validate_sort_ranks_input("2"), 2)
@@ -54,11 +56,11 @@ class TestLeaderboardDisplay(unittest.TestCase):
     def test_display_leaderboard_heading(self):
         self.assertEqual(leaderboard.display_leaderboard_heading(), f"{leaderboard.top_bottom_of_leaderboard() + leaderboard.empty_leaderboard_line() + leaderboard.leaderboard_headings() + leaderboard.empty_leaderboard_line() + leaderboard.top_bottom_of_leaderboard()}")
 
-    @patch("main_menu.WORKSHEET", mock_worksheet)
+    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
     def test_get_leaderboard_data(self):
         self.assertEqual(leaderboard.get_leaderboard_data(), [["John", "john@gmail.com", "10", "4", "6"], ["Pat", "pat@gmail.com", "12", "8", "4"]])
 
-    @patch("main_menu.WORKSHEET", mock_worksheet)
+    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
     def test_sort_leaderboard_data(self):
         self.assertEqual(leaderboard.sort_leaderboard_data(leaderboard.get_leaderboard_data(), 2), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.sort_leaderboard_data(leaderboard.get_leaderboard_data(), 3), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
@@ -82,24 +84,22 @@ class TestLeaderboardDisplay(unittest.TestCase):
         self.assertEqual(leaderboard.format_leaderboard_games_and_loses("12345"), f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}")
 
     def test_leaderboard_data_line(self):
-        self.assertEqual(leaderboard.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], 2), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}")
+        self.assertEqual(leaderboard.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], "2"), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
-    @patch("main_menu.WORKSHEET", mock_worksheet)
+    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
     def test_display_leaderboard_ranks(self):
         self.assertEqual(leaderboard.display_leaderboard_ranks(2), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.display_leaderboard_ranks(3), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.display_leaderboard_ranks(4), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
 
     @patch("builtins.input", lambda _: "4")
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.return_to_main_menu", tmm.mock_function_0_arg_true)
     def test_go_to_leaderboard(self):
         self.assertEqual(leaderboard.go_to_leaderboard(), False)
 
 
 # Enable print output
 sys.stdout = sys.__stdout__
-
-
 
 if __name__ == "__main__":
     unittest.main()

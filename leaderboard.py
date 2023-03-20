@@ -1,16 +1,13 @@
 import colorama
 from colorama import Fore, Back, Style
 import os
-from run import welcome, cls, new_line, typewriter
 import time
-from email_validator import validate_email, EmailNotValidError
 import gspread
 from google.oauth2.service_account import Credentials
-import checkers
-import checkers_engine
 from operator import itemgetter
 import sys
-from main_menu import return_to_main_menu
+import main_menu as mm
+import display
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -36,19 +33,19 @@ def go_to_leaderboard():
         sort_type = 3
         viewing_leaderboard = True
         while viewing_leaderboard:
-            cls()
+            display.cls()
             display_leaderboard_heading()
             display_leaderboard_ranks(sort_type)
             sort_type = ask_user_to_sort_ranks()
             if sort_type == "return":
                 viewing_leaderboard = False
-                return_to_main_menu()
+                mm.return_to_main_menu()
                 return viewing_leaderboard
     except:
-        welcome()
+        display.welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
-        main_menu_screen()
+        mm.main_menu_screen()
 
 def ask_user_to_sort_ranks():
     """
@@ -63,7 +60,7 @@ def ask_user_to_sort_ranks():
         if validated_option:
             return validated_option
             break
-        new_line()
+        display.new_line()
         print(Fore.YELLOW + "Please input 1 or 2 or 3 for sort or (4 to return):")
         option_selected = input(options)
 
@@ -93,7 +90,7 @@ def display_leaderboard_heading():
         print(" ")
     
     heading = f"{top_bottom_of_leaderboard() + empty_leaderboard_line() + leaderboard_headings() + empty_leaderboard_line() + top_bottom_of_leaderboard()}"
-    print(heading)
+    print(heading, end="")
     return heading
 
 
@@ -125,8 +122,7 @@ def display_leaderboard_ranks(sort_type):
     leaderboard_data = get_leaderboard_data()
     sorted_leaderboard_data = sort_leaderboard_data(leaderboard_data, sort_type)
     for i, row in zip(range(1, len(sorted_leaderboard_data)+1), sorted_leaderboard_data):
-        leaderboard_row = f"{empty_leaderboard_line() + leaderboard_data_line(row, i) + empty_leaderboard_line() + top_bottom_of_leaderboard()}"
-        print(leaderboard_row)
+        print(f"{empty_leaderboard_line() + leaderboard_data_line(row, i) + empty_leaderboard_line() + top_bottom_of_leaderboard()}", end="")
         row.insert(0, i)
         leaderboard_rows.append(row)
 
@@ -169,7 +165,7 @@ def leaderboard_data_line(row, i):
     games = format_leaderboard_games_and_loses(row[2])
     wins = format_leaderboard_rank_and_wins_and_name(row[3], "wins")
     loses = format_leaderboard_games_and_loses(row[4])
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank + Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games + Fore.YELLOW + '|' + wins + Fore.YELLOW + '|' + loses + Fore.YELLOW + '|' + Fore.YELLOW + '|'}"
+    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank + Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games + Fore.YELLOW + '|' + wins + Fore.YELLOW + '|' + loses + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
 
 def format_leaderboard_rank_and_wins_and_name(str, type):
     """ 
