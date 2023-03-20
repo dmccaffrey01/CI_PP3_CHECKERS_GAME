@@ -480,6 +480,12 @@ class TestLeaderboardDisplay(unittest.TestCase):
         self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("123456", "name"), f"{Fore.WHITE + ' ' * 2 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' + '5' + ' ' + '6' + ' ' * 2}")
         self.assertEqual(mm.format_leaderboard_rank_and_wins_and_name("1234567", "name"), f"{Fore.WHITE + ' ' * 3 + '12345' + '... ' + ' ' * 3}")
 
+    def test_format_leaderboard_games_and_loses(self):
+        self.assertEqual(mm.format_leaderboard_games_and_loses("1"), f"{Fore.WHITE + ' ' * 8 + '1' + ' ' * 8}")
+        self.assertEqual(mm.format_leaderboard_games_and_loses("12"), f"{Fore.WHITE + ' ' * 7 + '1' + ' ' + '2' + ' ' * 7}")
+        self.assertEqual(mm.format_leaderboard_games_and_loses("123"), f"{Fore.WHITE + ' ' * 6 + '1' + ' ' + '2' + ' ' + '3' + ' ' * 6}")
+        self.assertEqual(mm.format_leaderboard_games_and_loses("1234"), f"{Fore.WHITE + ' ' * 5 + '1' + ' ' + '2' + ' ' + '3' + ' ' + '4' + ' ' * 5}")
+        self.assertEqual(mm.format_leaderboard_games_and_loses("12345"), f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}")
 
 # Enable print output
 sys.stdout = sys.__stdout__
