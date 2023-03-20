@@ -24,6 +24,7 @@ def display_game_rules():
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         mm.main_menu_screen()
+        return True
         
 def ask_user_to_exit_game_rules():
     """
@@ -65,6 +66,8 @@ def get_game_rules_lines():
     formatted_lines = []
     for line in lines:
         formatted_lines.append(line.strip())
+
+    file.close()
     return formatted_lines
 
 def format_game_rules_lines():

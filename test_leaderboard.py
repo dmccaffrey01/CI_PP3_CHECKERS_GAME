@@ -2,11 +2,13 @@ import unittest
 from unittest.mock import patch
 import leaderboard
 import test_main_menu as tmm
-import run
 import sys
 import io
 import colorama
 from colorama import Fore, Back, Style
+
+#Initialize colorama
+colorama.init(autoreset=True)
 
 # Disable print output
 sys.stdout = io.StringIO()

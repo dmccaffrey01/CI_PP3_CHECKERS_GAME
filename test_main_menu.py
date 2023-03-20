@@ -38,7 +38,7 @@ def mock_function_1_arg_true(arg):
 
 def mock_function_0_arg_true():
     """ 
-    Mocks a functino with zero arguments to return True
+    Mocks a function with zero arguments to return True
     """
     return True
 
