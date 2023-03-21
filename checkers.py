@@ -13,12 +13,13 @@ import main_menu as mm
 import sys
 import math
 import leaderboard
+import feature_testing as ft
 
-def start_game(player1, player2, num):
+def start_game(player1, player2, num, board_state):
     """ 
     Start the checkers game
     """
-    game_state = check_eng.GameState()
+    game_state = check_eng.GameState(board_state)
     
     p1 = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
     p2 = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
@@ -72,13 +73,13 @@ def start_game_loop(game_state, p1, p2, player1, player2, num):
 
                 ai_move = smf.find_best_move(game_state, available_moves, p1 if game_state.color_go == "black" else p2)
                 
-                time.sleep(2)
+                time.sleep(1)
 
                 game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
             display_board(game_state)
             
-            time.sleep(2)
+            time.sleep(1)
 
             game_state.change_color_go()
             
@@ -101,6 +102,8 @@ def display_board(game_state):
             print(format_board_line(board_state, r, i, row_index))
             col_index = -1   
     print(Style.DIM + Fore.BLUE + format_cols_line(cols))
+
+    return board_state
     
 def format_board_line(board_state, r, i, row_index):
     """

@@ -12,6 +12,7 @@ import sys
 import leaderboard
 import display
 import game_rules as gr
+import feature_testing as ft
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -546,7 +547,7 @@ def start_checkers_game(player1, player2, num):
     """ 
     Starts the checkers game
     """
-    checkers.start_game(player1, player2, num)
+    checkers.start_game(player1, player2, num, ft.board_states["full"])
     return True
 
 def exit_game():

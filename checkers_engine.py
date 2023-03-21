@@ -7,21 +7,12 @@ class GameState():
     """ 
     Creates an instance of the game state
     """
-    def __init__(self):
+    def __init__(self, board):
         # board is an 8x8 2d list, each element of the list has 1 character.
         # Characters w and b represtent pieces white or black
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
-        self.board = [
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "w", "x", "_", "x"],
-            ["x", "_", "x", "b", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"]
-        ]
+        self.board = board
 
         self.BOARD_ROWS = ["8", "7", "6", "5", "4", "3", "2", "1"]
         self.BOARD_COLS = ["A", "B", "C", "D", "E", "F", "G", "H"]
