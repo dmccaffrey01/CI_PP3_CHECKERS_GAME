@@ -2,6 +2,7 @@
 This file is responsible for storing all the information about the current state of the chess game.
 It will also be responsible for determining the valid moves at the current state.
 """
+import copy
 
 class GameState():
     """ 
@@ -12,7 +13,7 @@ class GameState():
         # Characters w and b represtent pieces white or black
         # Character x represents an empty space that cannot be moved into
         # Character _ represents an empty space that can be moved into
-        self.board = board
+        self.board = copy.deepcopy(board)
 
         self.BOARD_ROWS = ["8", "7", "6", "5", "4", "3", "2", "1"]
         self.BOARD_COLS = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -480,6 +481,8 @@ class GameState():
         else:
             self.board[new_position_index[0]][new_position_index[1]] = "b" if color == "black" else "w"
 
+        return new_position_index
+
     def check_if_move_was_jump(self, move, option, color):
         """
         Checks if the move was a jump
@@ -545,6 +548,7 @@ class GameState():
         """
         piece_index = self.get_index_of_piece(piece)
         self.board[piece_index[0]][piece_index[1]] = "_"
+        return self.board[piece_index[0]][piece_index[1]]
 
     def delete_last_log(self):
         """ 
@@ -554,6 +558,7 @@ class GameState():
         if self.jump_count != 0:
             self.jump_count -= 1
             del self.jumped_pieces_log[self.jump_count]
+        return "deleted"
             
     def add_move_to_log(self, piece, move, option, removed_pieces, kinged, color):
         """ 

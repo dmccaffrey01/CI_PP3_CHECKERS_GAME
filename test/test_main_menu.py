@@ -126,7 +126,7 @@ def mock_gwv(email, value):
         else:
             return 0
 
-def mock_scg(player1, player2, num):
+def mock_scg(player1, player2, num, board):
     """
     Mocks the start checkers game function to return True 
     """
@@ -413,7 +413,7 @@ class TestCheckersGame(unittest.TestCase):
 
     @patch("checkers.start_game", mock_scg)
     def test_start_checkers_game(self):
-        self.assertEqual(mm.start_checkers_game(1, 1, 0), True)
+        self.assertEqual(mm.start_checkers_game(1, 1, 0, "full"), True)
 
 # Enable print output
 sys.stdout = sys.__stdout__

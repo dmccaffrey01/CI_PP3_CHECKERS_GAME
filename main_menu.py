@@ -196,7 +196,7 @@ def start_cpu_game(num):
     """
     cpu_difficulty_1 = ask_cpu_difficulty()
     cpu_difficulty_2 = ask_cpu_difficulty()
-    start_checkers_game(cpu_difficulty_1, cpu_difficulty_2, num)
+    start_checkers_game(cpu_difficulty_1, cpu_difficulty_2, num, "full")
     return [cpu_difficulty_1, cpu_difficulty_2]
 
 def log_in_players(num):
@@ -227,7 +227,7 @@ def log_in_players(num):
 
             if num == 1:
                 cpu_difficulty = ask_cpu_difficulty()
-                start_checkers_game(player1, cpu_difficulty, num)
+                start_checkers_game(player1, cpu_difficulty, num, "full")
                 return num
 
         if num == 2:
@@ -247,7 +247,7 @@ def log_in_players(num):
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
             
-            start_checkers_game(player1, player2, num)
+            start_checkers_game(player1, player2, num, "full")
             return num  
     except:
         display.welcome()
@@ -543,7 +543,7 @@ def validate_cpu_difficulty_input(option):
     else:
         return False
 
-def start_checkers_game(player1, player2, num):
+def start_checkers_game(player1, player2, num, board):
     """ 
     Starts the checkers game
     """

@@ -1,4 +1,3 @@
-import checkers_engine as check_eng
 
 board_states = {
     "empty": [

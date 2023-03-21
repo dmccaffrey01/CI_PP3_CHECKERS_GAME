@@ -73,13 +73,13 @@ def start_game_loop(game_state, p1, p2, player1, player2, num):
 
                 ai_move = smf.find_best_move(game_state, available_moves, p1 if game_state.color_go == "black" else p2)
                 
-                time.sleep(1)
+                time.sleep(0.2)
 
                 game_state.move_piece(ai_move[0], ai_move[1], ai_move[2], ai_move[3])
             
             display_board(game_state)
             
-            time.sleep(1)
+            time.sleep(0.2)
 
             game_state.change_color_go()
             

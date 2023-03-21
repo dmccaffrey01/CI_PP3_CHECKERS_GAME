@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 import leaderboard
-import test_main_menu as tmm
+from test import test_main_menu as tmm
 import sys
 import io
 import colorama
