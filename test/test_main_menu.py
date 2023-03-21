@@ -1,10 +1,15 @@
 import unittest
 from unittest.mock import patch
+import os
+import sys
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
 import main_menu as mm
 import game_rules
 import checkers
 import run
-import sys
 import io
 import colorama
 from colorama import Fore, Back, Style

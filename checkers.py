@@ -35,6 +35,8 @@ def start_game(player1, player2, num, board_state):
         p2 = player2
 
     start_game_loop(game_state, p1, p2, player1, player2, num)
+
+    return [p1, p2]
     
 
 def start_game_loop(game_state, p1, p2, player1, player2, num):
@@ -56,6 +58,7 @@ def start_game_loop(game_state, p1, p2, player1, player2, num):
         if not movable_pieces or moves >= 1000:
             game_over = True
             display_game_over(game_state, moves, p1, p2, player1, player2, num)
+            return "game over"
             
         else:
             selecting_move = True 
@@ -96,7 +99,6 @@ def display_board(game_state):
     rows = game_state.BOARD_ROWS
     cols = game_state.BOARD_COLS
     col_index = -1
-    odd_row = True
     for r, row_index in zip(rows, range(8)):
         for i in range(5):
             print(format_board_line(board_state, r, i, row_index))

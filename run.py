@@ -7,9 +7,6 @@ def main():
     Run all program functions
     """
     mm.main_menu_screen()
-    #gs = ce.GameState(ft.board_states["test board 1"])
-    
-    
 
 if __name__ == "__main__":
     main()

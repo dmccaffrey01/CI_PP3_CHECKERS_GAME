@@ -547,7 +547,7 @@ def start_checkers_game(player1, player2, num, board):
     """ 
     Starts the checkers game
     """
-    checkers.start_game(player1, player2, num, ft.board_states["full"])
+    checkers.start_game(player1, player2, num, ft.board_states["test board 2"])
     return True
 
 def exit_game():
