@@ -567,7 +567,7 @@ class GameState():
         """
         played_move = [piece, move, option, removed_pieces, kinged, color]
         self.move_log.append(played_move)
-        return played_move
+        return self.move_log
 
     def undo_move(self):
         """
@@ -593,6 +593,9 @@ class GameState():
         if type == "jump":
             self.restore_jumped_pieces(jumped_pieces)
 
+        return self.move_log
+        
+
     def undo_king_piece(self, piece_index, kinged):
         """
         Undo king piece if the move lead to the piece getting kinged 
@@ -614,6 +617,8 @@ class GameState():
             p = piece[0]
             piece_index = self.get_index_of_piece(p)
             self.board[piece_index[0]][piece_index[1]] = piece[1]
+
+        return self.board[piece_index[0]][piece_index[1]]
 
     def change_color_go(self):
         """ 

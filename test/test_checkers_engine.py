@@ -180,35 +180,56 @@ class TestMovePiece(unittest.TestCase):
     def setUp(self):
         self.test_game_state_1 = check_eng.GameState(ft.board_states["test board 1"])
         self.test_game_state_1.original_piece_index = [2, 3]
+        self.test_game_state_1.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black")
+        self.test_game_state_2 = check_eng.GameState(ft.board_states["test board 1"])
+        self.test_game_state_2.original_piece_index = [2, 3]
         
     def test_move_piece(self):
-        self.assertEqual(self.test_game_state_1.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
+        self.assertEqual(self.test_game_state_2.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
 
     def test_move_board_icon(self):
-        self.assertEqual(self.test_game_state_1.move_board_icon([2, 3], [0, 1], "black"), [0, 1])
+        self.assertEqual(self.test_game_state_2.move_board_icon([2, 3], [0, 1], "black"), [0, 1])
 
     def test_check_if_move_was_jump(self):
-        self.assertEqual(self.test_game_state_1.check_if_move_was_jump(['8B', 'jump', [['7C']]], 1, "black"), [["7C","w"]])
-        self.assertEqual(self.test_game_state_1.check_if_move_was_jump(['7E', 'move', []], 2, "black"), "move")
+        self.assertEqual(self.test_game_state_2.check_if_move_was_jump(['8B', 'jump', [['7C']]], 1, "black"), [["7C","w"]])
+        self.assertEqual(self.test_game_state_2.check_if_move_was_jump(['7E', 'move', []], 2, "black"), "move")
 
     def test_check_if_piece_needs_kinged(self):
-        self.assertEqual(self.test_game_state_1.check_if_piece_needs_kinged([0,1], "black"), "Kinged")
-        self.assertEqual(self.test_game_state_1.check_if_piece_needs_kinged([2,3], "black"), "Not kinged")
+        self.assertEqual(self.test_game_state_2.check_if_piece_needs_kinged([0,1], "black"), "Kinged")
+        self.assertEqual(self.test_game_state_2.check_if_piece_needs_kinged([2,3], "black"), "Not kinged")
 
     def test_king_piece(self):
-        self.assertEqual(self.test_game_state_1.king_piece([2, 3], "black"), "B")
+        self.assertEqual(self.test_game_state_2.king_piece([2, 3], "black"), "B")
 
     def test_check_if_piece_is_kinged(self):
-        self.assertEqual(self.test_game_state_1.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
-        self.assertEqual(self.test_game_state_1.check_if_piece_is_kinged([0, 1], "black"), True)
-        self.assertEqual(self.test_game_state_1.check_if_piece_is_kinged([2,3], "black"), False)
+        self.assertEqual(self.test_game_state_2.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
+        self.assertEqual(self.test_game_state_2.check_if_piece_is_kinged([0, 1], "black"), True)
+        self.assertEqual(self.test_game_state_2.check_if_piece_is_kinged([2,3], "black"), False)
 
     def test_remove_piece_from_board(self):
-        self.assertEqual(self.test_game_state_1.remove_piece_from_board("7C"), "_")
+        self.assertEqual(self.test_game_state_2.remove_piece_from_board("7C"), "_")
 
     def test_delete_last_log(self):
-        self.assertEqual(self.test_game_state_1.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
         self.assertEqual(self.test_game_state_1.delete_last_log(), "deleted")
+
+    def test_add_move_to_log(self):
+        self.assertEqual(self.test_game_state_2.add_move_to_log("6D", ['8B', 'jump', [['7C']]], 1, [['7C', "w"]], "Kinged", "black"), [["6D", ['8B', 'jump', [['7C']]], 1, [['7C', "w"]], "Kinged", "black"]])
+
+    def test_undo_move(self):
+        self.assertEqual(self.test_game_state_1.move_log, [["6D", ['8B', 'jump', [['7C']]], 1, [['7C', "w"]], "Kinged", "black"]])
+        self.assertEqual(self.test_game_state_1.undo_move(), [])
+
+    def test_undo_king_piece(self):
+        self.assertEqual(self.test_game_state_1.undo_king_piece([0, 1], "Kinged"), "Unkinged")
+        self.assertEqual(self.test_game_state_1.undo_king_piece([0, 1], "Not kinged"), "Not kinged")
+
+    def test_restore_jumped_pieces(self):
+        self.assertEqual(self.test_game_state_1.restore_jumped_pieces([['7C', "w"]]), "w")
+
+    def test_change_color_go(self):
+        self.assertEqual(self.test_game_state_1.change_color_go(), "white")
+        self.assertEqual(self.test_game_state_1.change_color_go(), "black")
+    
 
 if __name__ == "__main__":
     unittest.main()
