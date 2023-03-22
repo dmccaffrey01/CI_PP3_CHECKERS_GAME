@@ -9,7 +9,7 @@ def find_best_move(game_state, available_moves, ai_difficulty):
     """
     global next_move, search_depth
     next_move = None
-    random.shuffle(available_moves)
+    #random.shuffle(available_moves)
     search_depth = set_search_depth(ai_difficulty)
     #find_move_nega_max(game_state, available_moves, search_depth, 1 if game_state.black_to_move else -1, game_state.color_go)
     if ai_difficulty == 1:
@@ -107,5 +107,4 @@ def score_the_pieces_on_board(board):
         for square in row:
             if square in PIECE_SCORES:
                 score += PIECE_SCORES[square]
-
     return score

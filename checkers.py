@@ -204,8 +204,9 @@ def select_piece(game_state, movable_pieces, color):
     option_selected = input(options)
     display.new_line()
     while True:
-        if validate_selected_option(option_selected, "movable_pieces", movable_pieces):
-            return movable_pieces[validate_selected_option(option_selected, "movable_pieces", movable_pieces) - 1]
+        validated_option = validate_selected_option(option_selected, "movable_pieces", movable_pieces)
+        if validated_option:
+            return movable_pieces[validated_option - 1]
             break
         display_board(game_state)
         display.new_line() 
@@ -253,11 +254,12 @@ def select_move(game_state, piece, color):
     option_selected = input(options)
     display.new_line()
     while True:
-        if validate_selected_option(option_selected, "available_moves", available_moves) == "return":
+        validated_option = validate_selected_option(option_selected, "available_moves", available_moves)
+        if validated_option == "return":
             return "return"
             break
-        elif validate_selected_option(option_selected, "available_moves", available_moves):
-            return [available_moves[validate_selected_option(option_selected, "available_moves", available_moves) - 1], validate_selected_option(option_selected, "available_moves", available_moves)]
+        elif validated_option:
+            return [available_moves[validated_option - 1], validated_option]
             break
         display_board(game_state)
         display.new_line()
@@ -291,13 +293,15 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num):
     stats = update_player_stats(winner_color, p1, p2, player1, player2)
 
     display.cls()
-    game_over(winner_color, winner_name)
+    winning_message = game_over(winner_color, winner_name)
     time.sleep(3)
     display.cls()
     display_stats(stats, moves)
     time.sleep(2)
     display.new_line()
     ask_whats_next(p1, p2, player1, player2, num)
+
+    return winning_message
 
 def game_over(winner_color, winner_name):
     """ 
@@ -309,7 +313,9 @@ def game_over(winner_color, winner_name):
     wn = " ".join(list(wn))
     for i in range(5):
         print(" ")
-    display.typewriter(f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n")
+    winning_message = f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n"
+    display.typewriter(winning_message)
+    return winning_message
 
 def display_stats(stats, moves):
     """ 
@@ -325,6 +331,8 @@ def display_stats(stats, moves):
         display.new_line()
     if stats[1] != "cpu":
         print(stats[1])
+
+    return stats
     
 
 def update_player_stats(winner, p1, p2, player1, player2):
@@ -423,15 +431,19 @@ def validate_whats_next_input(option):
     else:
         return False
 
-def after_game_selection(option, p1, p2, player1, player2, num):
+def after_game_selection(option, player1, player2, num):
     """ 
     Decide what the game does after game has been played
     """
     if option == 1:
         start_game(player1, player2, num)
+        return "start game"
     elif option == 2:
         mm.return_to_main_menu()
+        return "return to main menu"
     elif option == 3:
         leaderboard.go_to_leaderboard()
+        return "go to leaderboard"
     else:
         mm.exit_game()
+        return "exit game"

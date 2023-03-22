@@ -5,16 +5,17 @@ from colorama import Fore, Back, Style
 import os
 import sys
 import io
-import test_main_menu as tmm
 # Get the parent path of the current script
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
+from test import test_main_menu as tmm
 import main_menu as mm
 import checkers as ch
 import checkers_engine as ce
 import feature_testing as ft
 import smart_move_finder as smf
+import math
 
 
 #Initialize colorama
@@ -52,6 +53,30 @@ def mock_dp(arg1, arg2 ,arg3, arg4):
     """
     return " "
 
+def mock_function_2_arg_true(arg1, arg2):
+    """
+    Mocks 2 arg funciton 
+    """
+    return True
+
+def mock_function_3_arg_true(arg1, arg2, arg3):
+    """
+    Mocks 2 arg funciton 
+    """
+    return True
+
+def mock_function_5_arg_true(arg1, arg2 ,arg3, arg4, arg5):
+    """
+    Mocks the display piece 
+    """
+    return True
+
+def mock_function_6_arg_true(arg1, arg2 ,arg3, arg4, arg5, arg6):
+    """
+    Mocks the display piece 
+    """
+    return True
+
 class TestGameStart(unittest.TestCase):
     """
     Testing of the game state initialize
@@ -60,6 +85,10 @@ class TestGameStart(unittest.TestCase):
         self.gs = ce.GameState(ft.board_states["full"])
         self.bs = self.gs.board
         self.mgs = MockGameState("full")
+        self.test_bs = board_state = ce.GameState(ft.board_states["test board 3"]).board
+        self.black_available_moves = self.gs.find_all_available_moves("black")
+        self.player2 = mm.Player("Pat", "pat@gmail.com", 12, 8, 4)
+        self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         
         # Disable print output
         self.saved_stdout = sys.stdout
@@ -102,6 +131,93 @@ class TestGameStart(unittest.TestCase):
 
     def test_yellow_square(self):
         self.assertEqual(ch.yellow_square(), f"{Back.YELLOW + ' ' * 10}")
+
+    def test_display_piece(self):
+        self.assertEqual(ch.display_piece(self.test_bs, 1, 7, 0), f"{Back.BLACK + ' ' * 6}")
+        self.assertEqual(ch.display_piece(self.test_bs, 1, 7, 2), f"{Back.BLACK + ' ' * 6}")
+        self.assertEqual(ch.display_piece(self.test_bs, 2, 7, 2), f"{Back.BLACK + ' ' * 2 + Back.GREEN + ' ' * 2 + Back.BLACK + ' ' * 2}")
+        self.assertEqual(ch.display_piece(self.test_bs, 1, 0, 3), f"{Back.WHITE + ' ' * 6}")
+        self.assertEqual(ch.display_piece(self.test_bs, 1, 0, 1), f"{Back.WHITE + ' ' * 6}")
+        self.assertEqual(ch.display_piece(self.test_bs, 2, 0, 1), f"{Back.WHITE + ' ' * 2 + Back.GREEN + ' ' * 2 + Back.WHITE + ' ' * 2}")
+        self.assertEqual(ch.display_piece(self.test_bs, 2, 0, 5), f"{Back.RED + ' ' * 6}")
+
+    def test_get_piece_icon(self):
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 7, 0), "b")
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 7, 2), "B")
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 0, 1), "W")
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 0, 3), "w")
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 0, 0), "x")
+        self.assertEqual(ch.get_piece_icon(self.test_bs, 1, 0), "_")
+
+    def test_fomrat_cols_line(self):
+        self.assertEqual(ch.format_cols_line(self.gs.BOARD_COLS), f"{' ' * 10 + ' ' * 5 + 'A' + ' ' * 4 + ' ' * 5 + 'B' + ' ' * 4 + ' ' * 5 + 'C' + ' ' * 4 + ' ' * 5 + 'D' + ' ' * 4 + ' ' * 5 + 'E' + ' ' * 4 + ' ' * 5 + 'F' + ' ' * 4 + ' ' * 5 + 'G' + ' ' * 4 + ' ' * 5 + 'H' + ' ' * 4}")
+
+    @patch("builtins.input", lambda _: "1")
+    def test_select_piece(self):
+        self.assertEqual(ch.select_piece(self.gs, self.gs.get_movable_pieces("black"), "black"), "3A")
+
+    def test_validate_selected_option(self):
+        self.assertEqual(ch.validate_selected_option("1", "available_moves", self.black_available_moves), 1)
+        self.assertEqual(ch.validate_selected_option("10", "available_moves", self.black_available_moves), False)
+        self.assertEqual(ch.validate_selected_option("a", "available_moves", self.black_available_moves), False)
+        self.assertEqual(ch.validate_selected_option("r", "available_moves", self.black_available_moves), "return")
+
+    @patch("builtins.input", lambda _: "1")
+    def test_select_move(self):
+        self.assertEqual(ch.select_move(self.gs, "3A", "black"), [["4B", "move", []], 1])
+
+    @patch("builtins.input", lambda _: "r")
+    def test_select_move(self):
+        self.assertEqual(ch.select_move(self.gs, "3A", "black"), "return")
+
+    def test_format_available_moves(self):
+        self.assertEqual(ch.format_available_moves([["4B", "move", []], ["5C", "jump", ["4B"]]]), ["Move to: 4B", "Jump to: 5C"])
+
+    @patch("checkers.ask_whats_next", mock_function_5_arg_true)
+    @patch("checkers.display_stats", mock_function_2_arg_true)
+    @patch("time.sleep", tmm.mock_function_1_arg_true)
+    def test_display_game_over(self):
+        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+
+    def test_game_over(self):
+        self.assertEqual(ch.game_over("white", "Pat"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+
+    def test_display_stats(self):
+        self.assertEqual(ch.display_stats(["cpu", "cpu"], 1), ["cpu", "cpu"])
+        self.assertEqual(ch.display_stats(["p1", "p2"], 1), ["p1", "p2"])
+        self.assertEqual(ch.display_stats(["p1", "cpu"], 1), ["p1", "cpu"])
+
+    def test_update_player_stats(self):
+        self.assertEqual(ch.update_player_stats("Black", 0, 0, self.player1, self.player2), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player2.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player2.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player2.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player2.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player2.loses)}"])
+        self.assertEqual(ch.update_player_stats("Black", 0, 1, self.player1, 1), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", "cpu"])
+
+    def test_check_winner(self):
+        self.assertEqual(ch.check_winner(self.gs, 1000, "type", "p1", "p2", "player1", "player2"), "Draw")
+        self.assertEqual(ch.check_winner(self.gs, 1, "color", "p1", "p2", "player1", "player2"), "White")
+        self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 0, "player1", self.player2), "Pat")
+        self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 1, "player1", self.player2), "CPU")
+
+    @patch("checkers.after_game_selection", mock_function_6_arg_true)
+    @patch("builtins.input", lambda _: "1")
+    def test_ask_whats_next(self):
+        self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num"), 1)
+
+    def test_validate_whats_next_input(self):
+        self.assertEqual(ch.validate_whats_next_input("1"), 1)
+        self.assertEqual(ch.validate_whats_next_input("2"), 2)
+        self.assertEqual(ch.validate_whats_next_input("3"), 3)
+        self.assertEqual(ch.validate_whats_next_input("4"), 4)
+        self.assertEqual(ch.validate_whats_next_input("5"), False)
+
+    @patch("checkers.start_game", mock_function_3_arg_true)
+    @patch("main_menu.return_to_main_menu", tmm.mock_function_0_arg_true)
+    @patch("main_menu.exit_game", tmm.mock_function_0_arg_true)
+    @patch("leaderboard.go_to_leaderboard", tmm.mock_function_0_arg_true)
+    def test_after_game_selection(self):
+        self.assertEqual(ch.after_game_selection(1, "player1", "player2", "num"), "start game")
+        self.assertEqual(ch.after_game_selection(2, "player1", "player2", "num"), "return to main menu")
+        self.assertEqual(ch.after_game_selection(3, "player1", "player2", "num"), "go to leaderboard")
+        self.assertEqual(ch.after_game_selection(4, "player1", "player2", "num"), "exit game")
 
 if __name__ == "__main__":
     unittest.main()
