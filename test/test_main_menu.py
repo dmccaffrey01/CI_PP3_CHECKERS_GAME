@@ -167,8 +167,8 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(mm.main_menu_selection(4), 4)
 
     @patch("main_menu.main_menu_selection", mock_function_1_arg_true)
-    @patch("builtins.input", lambda _: "1")
-    def test_main_menu_screen_1(self):
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_main_menu_screen_1(self, mock_input):
         self.assertEqual(mm.main_menu_screen(), 1)
 
     @patch("main_menu.main_menu_selection", mock_function_1_arg_true)
@@ -196,9 +196,9 @@ class TestNumPlayers(unittest.TestCase):
 
 
     # Test if statement in while loop
-    @patch("builtins.input", lambda _: "1")
+    @patch("builtins.input", side_effect=["wrong", "1"])
     @patch("main_menu.log_in_players", mock_function_1_arg_true)
-    def test_get_num_players_1(self):
+    def test_get_num_players_1(self, mock_input):
         self.assertEqual(mm.get_num_players(), 1)
 
 
@@ -290,8 +290,8 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_registered_input("4"), False)
         self.assertEqual(mm.validate_registered_input("-1"), False)
 
-    @patch("builtins.input", lambda _: "1")
-    def test_ask_registered_1(self):
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_ask_registered_1(self, mock_input):
         self.assertEqual(mm.ask_registered("1"), True)
    
     @patch("builtins.input", lambda _: "2")
@@ -301,17 +301,17 @@ class TestLogInPlayers(unittest.TestCase):
     def test_validate_user_name(self):
         self.assertEqual(mm.validate_user_name(self.player1.name), True)
 
-    @patch("builtins.input", lambda _: "John")
-    def test_ask_player_name(self):
+    @patch("builtins.input", side_effect=["1234567890123", "12A", "John"])
+    def test_ask_player_name(self, mock_input):
         self.assertEqual(mm.ask_player_name("1"), self.player1.name)
 
     @patch("main_menu.validate_email", mock_function_1_arg_true)
     def test_validate_user_email(self):
         self.assertEqual(mm.validate_user_email(self.player1.email), True)
 
-    @patch("main_menu.validate_email", mock_function_1_arg_true)
-    @patch("builtins.input", lambda _: "john@gmail.com")
-    def test_ask_player_email(self):
+    
+    @patch("builtins.input", side_effect=["123", "asdf@asdf", "john@gmail.com"])
+    def test_ask_player_email(self, mock_input):
         self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
    
     @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
@@ -321,10 +321,10 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_incorrect_email_input("r"), 3)
         self.assertEqual(mm.validate_incorrect_email_input("3"), False)
 
-    @patch("builtins.input", lambda _: "1")
+    @patch("builtins.input", side_effect=["wrong", "1"])
     @patch("main_menu.validate_email_registered", mock_ver)
     @patch("main_menu.ask_player_email", mock_ape)
-    def test_ask_incorrect_email_question1_1(self):
+    def test_ask_incorrect_email_question1_1(self, mock_input):
         self.assertEqual(mm.ask_incorrect_email_question1(self.player1.name, True), self.player1.email)
        
     @patch("builtins.input", lambda _: "2")
@@ -333,10 +333,10 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_incorrect_email_question1_2(self):
         self.assertEqual(mm.ask_incorrect_email_question1(self.player1.name, True), self.player1.email)
 
-    @patch("builtins.input", lambda _: "1")
+    @patch("builtins.input", side_effect=["wrong", "1"])
     @patch("main_menu.validate_email_registered", mock_ver)
     @patch("main_menu.ask_player_email", mock_ape)
-    def test_ask_incorrect_email_question2_1(self):
+    def test_ask_incorrect_email_question2_1(self, mock_input):
         self.assertEqual(mm.ask_incorrect_email_question2(self.player1.name, True, self.player1.email), self.player1.email)
 
     @patch("builtins.input", lambda _: "2")
@@ -387,7 +387,6 @@ class TestCheckersGame(unittest.TestCase):
     """
     Testing of the start checkers game 
     """
-
     @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
     def test_validate_cpu_difficulty_input(self):
         self.assertEqual(mm.validate_cpu_difficulty_input("1"), 1)
@@ -397,8 +396,8 @@ class TestCheckersGame(unittest.TestCase):
         self.assertEqual(mm.validate_cpu_difficulty_input("5"), False)
 
     @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
-    @patch("builtins.input", lambda _: "1")
-    def test_ask_cpu_difficulty1(self):
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_ask_cpu_difficulty1(self, mock_input):
         self.assertEqual(mm.ask_cpu_difficulty(), 1)
 
     @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)

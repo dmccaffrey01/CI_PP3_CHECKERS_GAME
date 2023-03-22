@@ -7,7 +7,6 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-import test_main_menu as tmm
 import smart_move_finder as smf
 import checkers_engine as ce
 import feature_testing as ft

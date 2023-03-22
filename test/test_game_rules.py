@@ -52,8 +52,8 @@ class TestGameRules(unittest.TestCase):
         self.assertEqual(gr.validate_exit_game_rules_input("r"), "return")
         self.assertEqual(gr.validate_exit_game_rules_input("2"), False)
 
-    @patch("builtins.input", lambda _: "1")
-    def test_ask_user_to_exit_game_rules(self):
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_ask_user_to_exit_game_rules(self, mock_input):
         self.assertEqual(gr.ask_user_to_exit_game_rules(), "return")
 
     @patch("builtins.input", lambda _: "1")

@@ -1,9 +1,15 @@
 import unittest
 from unittest.mock import patch
+import os
+import sys
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
 import leaderboard
-from test import test_main_menu as tmm
 import sys
 import io
+from test import test_main_menu as tmm
 import colorama
 from colorama import Fore, Back, Style
 
@@ -17,12 +23,25 @@ class TestLeaderboardSortRanks(unittest.TestCase):
     """
     Testing of the leaderboard sort ranks 
     """
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
     def test_validate_sort_ranks_input(self):
         self.assertEqual(leaderboard.validate_sort_ranks_input("1"), 3)
         self.assertEqual(leaderboard.validate_sort_ranks_input("2"), 2)
         self.assertEqual(leaderboard.validate_sort_ranks_input("3"), 4)
         self.assertEqual(leaderboard.validate_sort_ranks_input("r"), "return")
         self.assertEqual(leaderboard.validate_sort_ranks_input("5"), False)
+
+    @patch('builtins.input', side_effect=['5', '1'])
+    def test_ask_user_to_sort_ranks(self, mock_input):
+        self.assertEqual(leaderboard.ask_user_to_sort_ranks(), 3)
 
     @patch("builtins.input", lambda _: "1")
     def test_ask_user_to_sort_ranks1(self):

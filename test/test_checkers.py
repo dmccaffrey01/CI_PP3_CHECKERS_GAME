@@ -152,6 +152,10 @@ class TestGameStart(unittest.TestCase):
     def test_fomrat_cols_line(self):
         self.assertEqual(ch.format_cols_line(self.gs.BOARD_COLS), f"{' ' * 10 + ' ' * 5 + 'A' + ' ' * 4 + ' ' * 5 + 'B' + ' ' * 4 + ' ' * 5 + 'C' + ' ' * 4 + ' ' * 5 + 'D' + ' ' * 4 + ' ' * 5 + 'E' + ' ' * 4 + ' ' * 5 + 'F' + ' ' * 4 + ' ' * 5 + 'G' + ' ' * 4 + ' ' * 5 + 'H' + ' ' * 4}")
 
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_select_piece_side(self, mock_input):
+        self.assertEqual(ch.select_piece(self.gs, self.gs.get_movable_pieces("black"), "black"), "3A")
+
     @patch("builtins.input", lambda _: "1")
     def test_select_piece(self):
         self.assertEqual(ch.select_piece(self.gs, self.gs.get_movable_pieces("black"), "black"), "3A")
@@ -162,12 +166,16 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.validate_selected_option("a", "available_moves", self.black_available_moves), False)
         self.assertEqual(ch.validate_selected_option("r", "available_moves", self.black_available_moves), "return")
 
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_select_move_side(self, mock_input):
+        self.assertEqual(ch.select_move(self.gs, "3A", "black"), [["4B", "move"], 1])
+
     @patch("builtins.input", lambda _: "1")
-    def test_select_move(self):
-        self.assertEqual(ch.select_move(self.gs, "3A", "black"), [["4B", "move", []], 1])
+    def test_select_move1(self):
+        self.assertEqual(ch.select_move(self.gs, "3A", "black"), [["4B", "move"], 1])
 
     @patch("builtins.input", lambda _: "r")
-    def test_select_move(self):
+    def test_select_move2(self):
         self.assertEqual(ch.select_move(self.gs, "3A", "black"), "return")
 
     def test_format_available_moves(self):
@@ -198,8 +206,8 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 1, "player1", self.player2), "CPU")
 
     @patch("checkers.after_game_selection", mock_function_6_arg_true)
-    @patch("builtins.input", lambda _: "1")
-    def test_ask_whats_next(self):
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    def test_ask_whats_next(self, mock_input):
         self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num"), 1)
 
     def test_validate_whats_next_input(self):
