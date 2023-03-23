@@ -203,7 +203,7 @@ def start_cpu_game(num):
     """
     cpu_difficulty_1 = ask_cpu_difficulty()
     cpu_difficulty_2 = ask_cpu_difficulty()
-    start_checkers_game(cpu_difficulty_1, cpu_difficulty_2, num, "full")
+    start_checkers_game(cpu_difficulty_1, cpu_difficulty_2, num, "full", False)
     return [cpu_difficulty_1, cpu_difficulty_2]
 
 def log_in_players(num):
@@ -234,7 +234,7 @@ def log_in_players(num):
 
             if num == 1:
                 cpu_difficulty = ask_cpu_difficulty()
-                start_checkers_game(player1, cpu_difficulty, num, "full")
+                start_checkers_game(player1, cpu_difficulty, num, "full", False)
                 return num
 
         if num == 2:
@@ -254,7 +254,7 @@ def log_in_players(num):
             player2 = Player(p2_name, p2_email, p2_total_games, p2_wins, p2_loses)
             player2.register_or_login_player()
             
-            start_checkers_game(player1, player2, num, "full")
+            start_checkers_game(player1, player2, num, "full", False)
             return num  
     except:
         return return_to_main_menu()
@@ -553,22 +553,27 @@ def validate_cpu_difficulty_input(option):
     else:
         return False
 
-def start_checkers_game(player1, player2, num, board):
+def start_checkers_game(player1, player2, num, board, test):
     """ 
     Starts the checkers game
     """
-    checkers.start_game(player1, player2, num, ft.board_states[board])
+    checkers.start_game(player1, player2, num, ft.board_states[board], test)
     return True
 
 def exit_game():
     """ 
     System exits the game
     """
-    display.cls()
-    for i in range (5):
-        print(" ")
+    try:
+        display.cls()
+        for i in range (5):
+            print(" ")
 
-    display.typewriter(f"{' ' * 6}T h a n k   y o u   f o r   p l a y i n g\n{' ' * 10}H a v e   a   g o o d   d a y !\n")
-    sys.exit(0)
-    return "exit_game"
+        display.typewriter(f"{' ' * 6}T h a n k   y o u   f o r   p l a y i n g\n{' ' * 10}H a v e   a   g o o d   d a y !\n")
+        sys.exit(0)
+        return "exit_game"
+    except SystemExit:
+        print("Exiting program...")
+        return "exit_game"
+
     

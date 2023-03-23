@@ -23,7 +23,7 @@ import smart_move_finder as smf
 import checkers_engine as check_eng
 
 
-def start_game(player1, player2, num, board_state):
+def start_game(player1, player2, num, board_state, test):
     """ 
     Start the checkers game
     """
@@ -42,12 +42,12 @@ def start_game(player1, player2, num, board_state):
         p1 = player1
         p2 = player2
 
-    start_game_loop(game_state, p1, p2, player1, player2, num)
+    start_game_loop(game_state, p1, p2, player1, player2, num, test)
 
     return [p1, p2]
     
 
-def start_game_loop(game_state, p1, p2, player1, player2, num):
+def start_game_loop(game_state, p1, p2, player1, player2, num, test):
     """ 
     Starts the basic game loop
     Asks player to pick a piece to move from movable pieces
@@ -65,7 +65,7 @@ def start_game_loop(game_state, p1, p2, player1, player2, num):
         movable_pieces = game_state.get_movable_pieces(color)
         if not movable_pieces or moves >= 1000:
             game_over = True
-            display_game_over(game_state, moves, p1, p2, player1, player2, num)
+            display_game_over(game_state, moves, p1, p2, player1, player2, num, test)
             return "game over"
             
         else:
@@ -289,7 +289,7 @@ def format_available_moves(moves):
     
     return formatted_moves
 
-def display_game_over(game_state, moves, p1, p2, player1, player2, num):
+def display_game_over(game_state, moves, p1, p2, player1, player2, num, test):
     """
     Displays game over and winner
     Updates players wins, loses and games played
@@ -298,7 +298,7 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num):
     winner_color = check_winner(game_state, moves, "color", p1, p2, player1, player2)
     winner_name = check_winner(game_state, moves, "name", p1, p2, player1, player2)
 
-    stats = update_player_stats(winner_color, p1, p2, player1, player2)
+    stats = update_player_stats(winner_color, p1, p2, player1, player2, test)
 
     display.cls()
     winning_message = game_over(winner_color, winner_name)
@@ -342,13 +342,12 @@ def display_stats(stats, moves):
 
     return stats
     
-
-def update_player_stats(winner, p1, p2, player1, player2):
+def update_player_stats(winner, p1, p2, player1, player2, test):
     """
     Updates the players, wins, loses and total games played 
     """
     stats = []
-    if p1 == 0:
+    if p1 == 0 and not test:
         player1.total_games += 1
         player1.update_database_value("total_games", player1.total_games, player1.email)
         if winner == "Black":
@@ -361,7 +360,7 @@ def update_player_stats(winner, p1, p2, player1, player2):
     else:
         stats.append("cpu")
     
-    if p2 == 0:
+    if p2 == 0 and not test:
         player2.total_games += 1
         player2.update_database_value("total_games", player2.total_games, player2.email)
         if winner == "White":
@@ -415,7 +414,7 @@ def ask_whats_next(p1, p2, player1, player2, num):
     while True:
         option = validate_whats_next_input(option_selected)
         if option:
-            after_game_selection(option, p1, p2, player1, player2, num)
+            after_game_selection(option, player1, player2, num)
             return option
             break
         display.new_line()

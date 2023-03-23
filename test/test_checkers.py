@@ -83,14 +83,14 @@ class TestGameStart(unittest.TestCase):
 
     @patch("checkers.start_game_loop", mock_function)
     def test_start_game(self):
-        self.assertEqual(ch.start_game("player1", "player2", 2, "full"), [0, 0])
-        self.assertEqual(ch.start_game("player1", 1, 1, "full"), [0, 1])
-        self.assertEqual(ch.start_game(1, 1, 0, "full"), [1, 1])
+        self.assertEqual(ch.start_game("player1", "player2", 2, "full", False), [0, 0])
+        self.assertEqual(ch.start_game("player1", 1, 1, "full", False), [0, 1])
+        self.assertEqual(ch.start_game(1, 1, 0, "full", False), [1, 1])
 
     @patch("checkers.display_game_over", mock_function)
     @patch("builtins.input", lambda _: "1")
     def test_start_game_loop(self):
-        self.assertEqual(ch.start_game_loop(self.test_gs, 0, 1, self.player1, 1, 1), "game over")
+        self.assertEqual(ch.start_game_loop(self.test_gs, 0, 1, self.player1, 1, 1, False), "game over")
 
     def test_display_board(self):
         self.assertEqual(ch.display_board(self.gs), self.bs)
@@ -171,7 +171,7 @@ class TestGameStart(unittest.TestCase):
     @patch("checkers.display_stats", mock_function)
     @patch("time.sleep", mock_function)
     def test_display_game_over(self):
-        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2, False), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
 
     def test_game_over(self):
         self.assertEqual(ch.game_over("white", "Pat"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
@@ -182,9 +182,9 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.display_stats(["p1", "cpu"], 1), ["p1", "cpu"])
 
     def test_update_player_stats(self):
-        self.assertEqual(ch.update_player_stats("Black", 0, 0, self.player1, self.player2), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player2.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player2.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player2.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player2.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player2.loses)}"])
-        self.assertEqual(ch.update_player_stats("Black", 0, 1, self.player1, 1), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", "cpu"])
-        self.assertEqual(ch.update_player_stats("Black", 1, 1, 1, 1), ["cpu", "cpu"])
+        self.assertEqual(ch.update_player_stats("Black", 0, 0, self.player1, self.player2, False), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player2.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player2.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player2.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player2.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player2.loses)}"])
+        self.assertEqual(ch.update_player_stats("Black", 0, 1, self.player1, 1, False), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", "cpu"])
+        self.assertEqual(ch.update_player_stats("Black", 1, 1, 1, 1, False), ["cpu", "cpu"])
 
     def test_check_winner(self):
         self.assertEqual(ch.check_winner(self.gs, 1000, "type", "p1", "p2", "player1", "player2"), "Draw")

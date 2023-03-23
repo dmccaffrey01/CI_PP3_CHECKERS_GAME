@@ -37,7 +37,7 @@ class TestFeatureTesting(unittest.TestCase):
     @patch("builtins.input", side_effect=["wrong", "1"])
     @patch("feature_testing.set_up_board", mock_function)
     def test_go_to_feature_testing(self, mock_input):
-        self.assertEqual(ft.go_to_feature_testing(), 1)
+        self.assertEqual(ft.go_to_feature_testing(), "single jump")
 
     @patch("builtins.input", lambda _: "r")
     @patch("main_menu.main_menu_screen", mock_function)
@@ -45,14 +45,18 @@ class TestFeatureTesting(unittest.TestCase):
         self.assertEqual(ft.go_to_feature_testing(), "return_to_main_menu")
 
     def test_validate_ask_feature_testing(self):
-        self.assertEqual(ft.validate_ask_feature_testing("1"), 1)
-        self.assertEqual(ft.validate_ask_feature_testing("2"), 2)
-        self.assertEqual(ft.validate_ask_feature_testing("3"), 3)
-        self.assertEqual(ft.validate_ask_feature_testing("4"), 4)
-        self.assertEqual(ft.validate_ask_feature_testing("5"), 5)
-        self.assertEqual(ft.validate_ask_feature_testing("6"), 6)
+        self.assertEqual(ft.validate_ask_feature_testing("1"), "single jump")
+        self.assertEqual(ft.validate_ask_feature_testing("2"), "double jump")
+        self.assertEqual(ft.validate_ask_feature_testing("3"), "triple jump")
+        self.assertEqual(ft.validate_ask_feature_testing("4"), "quintuple jump")
+        self.assertEqual(ft.validate_ask_feature_testing("5"), "king")
+        self.assertEqual(ft.validate_ask_feature_testing("6"), "jump to king")
         self.assertEqual(ft.validate_ask_feature_testing("r"), "return")
         self.assertEqual(ft.validate_ask_feature_testing("wrong"), False)
+
+    @patch("main_menu.start_checkers_game", mock_function)
+    def test_set_up_board(self):
+        self.assertEqual(ft.set_up_board("singe jump"), "set_up_board")
 
 
 if __name__ == "__main__":

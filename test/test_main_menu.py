@@ -148,7 +148,7 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(mm.validate_main_menu_selection("two"), 2)
         self.assertEqual(mm.validate_main_menu_selection("3"), 3)
         self.assertEqual(mm.validate_main_menu_selection("three"), 3)
-        self.assertEqual(mm.validate_main_menu_selection("4"), 4)\
+        self.assertEqual(mm.validate_main_menu_selection("4"), 4)
         self.assertEqual(mm.validate_main_menu_selection("5"), 5)
         self.assertEqual(mm.validate_main_menu_selection("-1"), False)
         self.assertEqual(mm.validate_main_menu_selection("6"), False)

@@ -37,7 +37,7 @@ board_states = {
             ["b", "x", "b", "x", "b", "x", "b", "x"]
         ],
 
-    "singe jump": [
+    "single jump": [
             ["x", "W", "x", "_", "x", "_", "x", "W"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
             ["x", "_", "x", "W", "x", "W", "x", "_"],
@@ -82,7 +82,7 @@ board_states = {
         ],
 
     "king": [
-            ["x", "_", "x", "b", "x", "_", "x", "w"],
+            ["x", "_", "x", "B", "x", "_", "x", "w"],
             ["_", "x", "_", "x", "b", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
@@ -246,17 +246,17 @@ def validate_ask_feature_testing(option):
     And false if not valid 
     """
     if option == "1" or option.lower() == "one":
-        return 1
+        return "single jump"
     elif option == "2" or option.lower() == "two":
-        return 2
+        return "double jump"
     elif option == "3" or option.lower() == "three":
-        return 3
+        return "triple jump"
     elif option == "4" or option.lower() == "four":
-        return 4
+        return "quintuple jump"
     elif option == "5" or option.lower() == "five":
-        return 5
+        return "king"
     elif option == "6" or option.lower() == "six":
-        return 6
+        return "jump to king"
     elif option == "r":
         return "return"
     else:
@@ -265,8 +265,12 @@ def validate_ask_feature_testing(option):
 def set_up_board(option):
     """
     Sets up the board with correct option to test
-    Starts a checkers game with that board 
+    Creates fake players to start the game
+    Starts a checkers game with that board
     """
-    return True
+    test_player_1 = mm.Player("test_one", "testone@gmail.com", 0, 0, 0)
+    test_player_2 = mm.Player("test_two", "testtwo@gmail.com", 0, 0, 0)
+    mm.start_checkers_game(test_player_1, test_player_2, 2, option, True)
+    return "set_up_board"
 
 
