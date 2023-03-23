@@ -216,8 +216,7 @@ board_states = {
 
 def go_to_feature_testing():
     """
-    Display leader board
-    Ask user to rank players by name, total games, wins and loses 
+    Ask the user what feature they would like to test
     """
     try:
         display.welcome()
@@ -233,7 +232,7 @@ def go_to_feature_testing():
                     mm.raise_return_to_main_menu()
                     return "return"
                 else:
-                    set_up_board(validated_option)
+                    #set_up_board(validated_option)
                     return validated_option
             display.welcome()
             print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four) or (5, five) or (6, six):")
@@ -241,6 +240,28 @@ def go_to_feature_testing():
             display.new_line()
     except:
         return mm.return_to_main_menu()
+
+def validate_ask_feature_testing(option):
+    """
+    Validate the option, returns number or return if valid
+    And false if not valid 
+    """
+    if option == "1" or option.lower() == "one":
+        return 1
+    elif option == "2" or option.lower() == "two":
+        return 2
+    elif option == "3" or option.lower() == "three":
+        return 3
+    elif option == "4" or option.lower() == "four":
+        return 4
+    elif option == "5" or option.lower() == "five":
+        return 5
+    elif option == "6" or option.lower() == "six":
+        return 6
+    elif option == "r":
+        return "return"
+    else:
+        return False
 
 
 
