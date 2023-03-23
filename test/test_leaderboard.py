@@ -143,7 +143,7 @@ class TestLeaderboardDisplay(unittest.TestCase):
         self.assertEqual(leaderboard.display_leaderboard_ranks(4), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
 
     @patch("builtins.input", side_effect=["1", "2", "3", "4"])
-    @patch("main_menu.return_to_main_menu", mock_function)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_go_to_leaderboard(self, mock_input):
         self.assertEqual(leaderboard.go_to_leaderboard(), False)
 

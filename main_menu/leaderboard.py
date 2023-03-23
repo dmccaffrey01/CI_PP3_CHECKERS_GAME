@@ -6,6 +6,11 @@ import gspread
 from google.oauth2.service_account import Credentials
 from operator import itemgetter
 import sys
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu')
 import main_menu as mm
 import display
 
@@ -39,13 +44,14 @@ def go_to_leaderboard():
             sort_type = ask_user_to_sort_ranks()
             if sort_type == "return":
                 viewing_leaderboard = False
-                mm.return_to_main_menu()
+                mm.raise_return_to_main_menu()
                 return viewing_leaderboard
     except:
         display.welcome()
         print(Fore.YELLOW + "Returning to main menu...")
         time.sleep(1)
         mm.main_menu_screen()
+        return False
 
 def ask_user_to_sort_ranks():
     """

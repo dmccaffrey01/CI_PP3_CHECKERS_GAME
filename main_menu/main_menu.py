@@ -5,14 +5,22 @@ import time
 from email_validator import validate_email, EmailNotValidError
 import gspread
 from google.oauth2.service_account import Credentials
-import checkers
-import checkers_engine
 from operator import itemgetter
 import sys
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu')
 import leaderboard
 import display
 import game_rules as gr
+sys.path.remove('main_menu')
+sys.path.insert(0, 'checkers')
+import checkers
+import checkers_engine
 import feature_testing as ft
+
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -126,7 +134,7 @@ def validate_num_players(option):
     elif option == "3" or option.lower() == "three":
         return 3
     elif option == "r":
-        return_to_main_menu()
+        raise_return_to_main_menu()
         return 4
     else:
         return False
@@ -288,7 +296,7 @@ def validate_registered_input(option):
     elif option == "2" or option.lower() == "n" or option.lower() == "no":
         return 2
     elif option.lower() == "r" or option.lower() == "return":
-        return_to_main_menu()
+        raise_return_to_main_menu()
         return 3
     else:
         return False 
@@ -304,7 +312,7 @@ def ask_player_name(num):
     while True:
         name = input("Your Name: ")
         if name == "r":
-            return_to_main_menu()
+            raise_return_to_main_menu()
             break
         if validate_user_name(name):
             break
@@ -333,7 +341,9 @@ def validate_user_name(name):
     except TypeError:
         return False
 
-def return_to_main_menu():
+
+
+def raise_return_to_main_menu():
     """ 
     Raises an exception
     """
@@ -350,7 +360,7 @@ def ask_player_email(name):
     while True:
         email = input("Email: ")
         if email == "r":
-            return_to_main_menu()
+            raise_return_to_main_menu()
             break
         if validate_user_email(email):
             break
@@ -481,7 +491,7 @@ def validate_incorrect_email_input(option):
     elif option == "2":
         return 2
     elif option.lower() == "r":
-        return_to_main_menu()
+        raise_return_to_main_menu()
         return 3
     else:
         return False
@@ -538,7 +548,7 @@ def validate_cpu_difficulty_input(option):
     elif option == "3" or option.lower() == "three":
         return 3
     elif option == "r":
-        return_to_main_menu()
+        raise_return_to_main_menu()
         return 4
     else:
         return False

@@ -1,10 +1,16 @@
 import unittest
 from unittest.mock import patch
-import game_rules as gr
 import sys
 import io
+import os
 import colorama
 from colorama import Fore, Back, Style
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu')
+import game_rules as gr
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -30,6 +36,11 @@ class TestGameRules(unittest.TestCase):
         # Disable print output
         self.saved_stdout = sys.stdout
         sys.stdout = io.StringIO()
+
+        # Disable time.sleep
+        patcher1 = patch('time.sleep', return_value=None)
+        patcher1.start()
+        self.addCleanup(patcher1.stop)
 
     def tearDown(self):
         # Enable print output

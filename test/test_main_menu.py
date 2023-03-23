@@ -186,7 +186,7 @@ class TestNumPlayers(unittest.TestCase):
     Testing of the number of players
     input values and types
     """
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     def test_validate_num_players(self):
         self.assertEqual(mm.validate_num_players("1"), 1)
         self.assertEqual(mm.validate_num_players("2"), 2)
@@ -278,7 +278,7 @@ class TestLogInPlayers(unittest.TestCase):
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
 
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     def test_validate_registered_input(self):
         self.assertEqual(mm.validate_registered_input("1"), 1)
         self.assertEqual(mm.validate_registered_input("y"), 1)
@@ -314,7 +314,7 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_email(self, mock_input):
         self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
    
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     def test_validate_incorrect_email_input(self):
         self.assertEqual(mm.validate_incorrect_email_input("1"), 1)
         self.assertEqual(mm.validate_incorrect_email_input("2"), 2)
@@ -387,7 +387,7 @@ class TestCheckersGame(unittest.TestCase):
     """
     Testing of the start checkers game 
     """
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     def test_validate_cpu_difficulty_input(self):
         self.assertEqual(mm.validate_cpu_difficulty_input("1"), 1)
         self.assertEqual(mm.validate_cpu_difficulty_input("2"), 2)
@@ -395,17 +395,17 @@ class TestCheckersGame(unittest.TestCase):
         self.assertEqual(mm.validate_cpu_difficulty_input("r"), 4)
         self.assertEqual(mm.validate_cpu_difficulty_input("5"), False)
 
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_ask_cpu_difficulty1(self, mock_input):
         self.assertEqual(mm.ask_cpu_difficulty(), 1)
 
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     @patch("builtins.input", lambda _: "2")
     def test_ask_cpu_difficulty2(self):
         self.assertEqual(mm.ask_cpu_difficulty(), 2)
 
-    @patch("main_menu.return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
     @patch("builtins.input", lambda _: "3")
     def test_ask_cpu_difficulty3(self):
         self.assertEqual(mm.ask_cpu_difficulty(), 3)

@@ -2,18 +2,26 @@
 This is the main file for the game. It will be responsible for handling user input
 and displaying the current game state 
 """
-
-import checkers_engine as check_eng
-import display
 import colorama
 from colorama import Fore, Back, Style
 import time
-import smart_move_finder as smf
-import main_menu as mm
+import os
 import sys
 import math
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu')
 import leaderboard
+import main_menu as mm
+import display
+sys.path.remove('main_menu')
+sys.path.insert(0, 'checkers')
 import feature_testing as ft
+import smart_move_finder as smf
+import checkers_engine as check_eng
+
 
 def start_game(player1, player2, num, board_state):
     """ 
@@ -439,7 +447,7 @@ def after_game_selection(option, player1, player2, num):
         start_game(player1, player2, num)
         return "start game"
     elif option == 2:
-        mm.return_to_main_menu()
+        mm.raise_return_to_main_menu()
         return "return to main menu"
     elif option == 3:
         leaderboard.go_to_leaderboard()

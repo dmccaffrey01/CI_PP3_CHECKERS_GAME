@@ -1,8 +1,14 @@
 import unittest
 from unittest.mock import patch
-import display
+import os
 import sys
 import io
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+from main_menu import display
+
 
 class TestDisplay(unittest.TestCase):
     """

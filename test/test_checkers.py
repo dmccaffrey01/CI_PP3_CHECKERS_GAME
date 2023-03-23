@@ -9,7 +9,11 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu')
 import main_menu as mm
+import display
+sys.path.remove('main_menu')
+sys.path.insert(0, 'checkers')
 import checkers as ch
 import checkers_engine as ce
 import feature_testing as ft
@@ -63,6 +67,11 @@ class TestGameStart(unittest.TestCase):
         patcher1 = patch('time.sleep', return_value=None)
         patcher1.start()
         self.addCleanup(patcher1.stop)
+
+        # Disable display.typewriter
+        patcher2 = patch('display.typewriter', return_value=None)
+        patcher2.start()
+        self.addCleanup(patcher2.stop)
         
         # Disable print output
         self.saved_stdout = sys.stdout
@@ -199,7 +208,7 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.validate_whats_next_input("5"), False)
 
     @patch("checkers.start_game", mock_function)
-    @patch("main_menu.return_to_main_menu", mock_function)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     @patch("main_menu.exit_game", mock_function)
     @patch("leaderboard.go_to_leaderboard", mock_function)
     def test_after_game_selection(self):
