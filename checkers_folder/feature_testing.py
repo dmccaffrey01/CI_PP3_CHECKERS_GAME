@@ -1,3 +1,18 @@
+import colorama
+from colorama import Fore, Back, Style
+import os
+import time
+import sys
+# Get the parent path of the current script
+parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# Add the parent path to the system path
+sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu_folder/')
+import main_menu as mm
+import display
+
+#Initialize colorama
+colorama.init(autoreset=True)
 
 board_states = {
     "empty": [
@@ -20,6 +35,17 @@ board_states = {
             ["b", "x", "b", "x", "b", "x", "b", "x"],
             ["x", "b", "x", "b", "x", "b", "x", "b"],
             ["b", "x", "b", "x", "b", "x", "b", "x"]
+        ],
+
+    "singe jump": [
+            ["x", "W", "x", "_", "x", "_", "x", "W"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "_", "x", "W", "x", "W", "x", "_"],
+            ["_", "x", "_", "x", "B", "x", "_", "x"],
+            ["x", "_", "x", "W", "x", "W", "x", "_"],
+            ["_", "x", "_", "x", "_", "x", "_", "x"],
+            ["x", "W", "x", "_", "x", "_", "x", "W"],
+            ["W", "x", "_", "x", "_", "x", "_", "x"]
         ],
 
     "double jump": [
@@ -56,7 +82,7 @@ board_states = {
         ],
 
     "king": [
-            ["x", "_", "x", "B", "x", "_", "x", "w"],
+            ["x", "_", "x", "b", "x", "_", "x", "w"],
             ["_", "x", "_", "x", "b", "x", "_", "x"],
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
@@ -187,4 +213,35 @@ board_states = {
             ["_", "x", "_", "x", "b", "x", "_", "x"]
         ],
 }
+
+def go_to_feature_testing():
+    """
+    Display leader board
+    Ask user to rank players by name, total games, wins and loses 
+    """
+    try:
+        display.welcome()
+        print(Fore.YELLOW + "Choose what board scenario you would like to test:")
+        print(Fore.YELLOW + "(Enter r to return to main menu)")
+        options = "1) Singe Jump\n2) Double jump\n3) Triple Jump\n4) Quintuple Jump\n5) King\n6) Jump To King\n"
+        option_selected = input(options)
+        display.new_line()
+        while True:
+            validated_option = validate_ask_feature_testing(option_selected)
+            if validated_option:
+                if validated_option == "return":
+                    mm.raise_return_to_main_menu()
+                    return "return"
+                else:
+                    set_up_board(validated_option)
+                    return validated_option
+            display.welcome()
+            print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four) or (5, five) or (6, six):")
+            option_selected = input(options)
+            display.new_line()
+    except:
+        return mm.return_to_main_menu()
+
+
+
 

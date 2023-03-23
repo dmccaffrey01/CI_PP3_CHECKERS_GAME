@@ -15,6 +15,7 @@ import game_rules
 sys.path.remove('main_menu_folder/')
 sys.path.insert(0, 'checkers_folder/')
 import checkers
+import feature_testing
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -147,20 +148,23 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(mm.validate_main_menu_selection("two"), 2)
         self.assertEqual(mm.validate_main_menu_selection("3"), 3)
         self.assertEqual(mm.validate_main_menu_selection("three"), 3)
-        self.assertEqual(mm.validate_main_menu_selection("4"), 4)
+        self.assertEqual(mm.validate_main_menu_selection("4"), 4)\
+        self.assertEqual(mm.validate_main_menu_selection("5"), 5)
         self.assertEqual(mm.validate_main_menu_selection("-1"), False)
-        self.assertEqual(mm.validate_main_menu_selection("5"), False)
+        self.assertEqual(mm.validate_main_menu_selection("6"), False)
         
 
     @patch("main_menu.get_num_players", mock_function)
     @patch("game_rules.display_game_rules", mock_function)
     @patch("leaderboard.go_to_leaderboard", mock_function)
+    @patch("feature_testing.go_to_feature_testing", mock_function)
     @patch("main_menu.exit_game", mock_function)
     def test_main_menu_selection(self):
         self.assertEqual(mm.main_menu_selection(1), 1)
         self.assertEqual(mm.main_menu_selection(2), 2)
         self.assertEqual(mm.main_menu_selection(3), 3)
         self.assertEqual(mm.main_menu_selection(4), 4)
+        self.assertEqual(mm.main_menu_selection(5), 5)
 
     @patch("main_menu.main_menu_selection", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
@@ -176,6 +180,16 @@ class TestMainMenu(unittest.TestCase):
     @patch("builtins.input", lambda _: "3")
     def test_main_menu_screen_3(self):
         self.assertEqual(mm.main_menu_screen(), 3)
+
+    @patch("main_menu.main_menu_selection", mock_function)
+    @patch("builtins.input", lambda _: "4")
+    def test_main_menu_screen_3(self):
+        self.assertEqual(mm.main_menu_screen(), 4)
+
+    @patch("main_menu.main_menu_selection", mock_function)
+    @patch("builtins.input", lambda _: "5")
+    def test_main_menu_screen_3(self):
+        self.assertEqual(mm.main_menu_screen(), 5)
 
 class TestNumPlayers(unittest.TestCase):
     """

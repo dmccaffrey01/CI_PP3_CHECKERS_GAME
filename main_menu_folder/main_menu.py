@@ -44,8 +44,8 @@ def main_menu_screen():
     To start the game, to view the game rules or to view the leaderboard
     """
     display.welcome()
-    print(Fore.YELLOW + "Choose between the 4 options (eg. 1, 2, 3 or 4):")
-    options = "1) Play game\n2) View game rules\n3) View leaderboard\n4) Exit Game\n"
+    print(Fore.YELLOW + "Choose between the 5 options (eg. 1, 2, 3, 4, or 5):")
+    options = "1) Play game\n2) View game rules\n3) View leaderboard\n4) Test Features\n5) Exit Game\n"
     option_selected = input(options)
     display.new_line()
     while True:
@@ -54,7 +54,7 @@ def main_menu_screen():
             main_menu_selection(validated_option)
             return validated_option
         display.welcome()
-        print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four):")
+        print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four) or (5, five):")
         option_selected = input(options)
         display.new_line()
 
@@ -71,6 +71,8 @@ def validate_main_menu_selection(option):
         return 3
     elif option == "4" or option.lower() == "four":
         return 4
+    elif option == "5" or option.lower() == "four":
+        return 5
     else:
         return False
 
@@ -85,6 +87,8 @@ def main_menu_selection(option):
     elif option == 3:
         leaderboard.go_to_leaderboard()
     elif option == 4:
+        feature_testing.go_to_feature_testing()
+    elif option == 5:
         exit_game()
 
     return option
@@ -95,8 +99,8 @@ def get_num_players():
     """
     try:
         display.welcome()
-        print(Fore.YELLOW + "Enter r to return")
         print(Fore.YELLOW + "How many players?(1 or 2 or 0)")
+        print(Fore.YELLOW + "(Enter r to return)")
         options = "1) One (Player vs CPU)\n2) Two (Player vs Player)\n3) None (CPU vs CPU)\n"
         option_selected = input(options)
         display.new_line()
@@ -261,8 +265,8 @@ def ask_registered(num):
     Returns true if they have
     Returns false if they have not
     """
-    print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Has player {num} played before and have an existing account?")
+    print(Fore.YELLOW + "(Enter r to return)")
     options = "1) Yes\n2) No\n"
     option_selected = input(options)
     while True:
@@ -298,8 +302,8 @@ def ask_player_name(num):
     Returns to number of players if input is r
     Returns name 
     """
-    print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter name of player {num}:") 
+    print(Fore.YELLOW + "(Enter r to return)")
     while True:
         name = input("Your Name: ")
         if name == "r":
@@ -354,8 +358,8 @@ def ask_player_email(name):
     Returns to number of players if r is pressed
     Checks if email is valid 
     """
-    print(Fore.YELLOW + "Enter r to return")
     print(Fore.YELLOW + f"Enter email of {name}:") 
+    print(Fore.YELLOW + "(Enter r to return)")
     while True:
         email = input("Email: ")
         if email == "r":
