@@ -172,20 +172,12 @@ class GameState():
         """
         if self.check_if_piece_on_edge_of_board(piece_index) == "Left":
             if self.check_if_piece_on_kings_edge(piece_index):
-                if self.check_if_piece_on_kings_edge(piece_index) == "Top":
-                    if color == "black":
-                        diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
-                        return ["blocked", "blocked", "blocked", self.check_if_diaganol_empty(diaganol_right_king)] 
-                    elif color == "white":
-                        diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
-                        return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", "blocked"]
-                elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom":
-                    if color == "white":
-                        diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
-                        return ["blocked", "blocked", "blocked", self.check_if_diaganol_empty(diaganol_right_king)]
-                    elif color == "black":
-                        diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
-                        return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", "blocked"]
+                if color == "white":
+                    diaganol_right_king = self.get_diaganol(piece_index, "Right-King", color)
+                    return ["blocked", "blocked", "blocked", self.check_if_diaganol_empty(diaganol_right_king)]
+                elif color == "black":
+                    diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
+                    return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal), "blocked", "blocked"]
             else:
                 diaganol_right_normal = self.get_diaganol(piece_index, "Right", color)
                 if self.check_if_piece_is_kinged(piece_index, color):
@@ -195,25 +187,17 @@ class GameState():
                     return ["blocked", self.check_if_diaganol_empty(diaganol_right_normal)]
         elif self.check_if_piece_on_edge_of_board(piece_index) == "Right":
             if self.check_if_piece_on_kings_edge(piece_index):
-                if self.check_if_piece_on_kings_edge(piece_index) == "Top":
-                    if color == "black":
-                        diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
-                        return ["blocked", "blocked", self.check_if_diaganol_empty(diaganol_left_king), "blocked"] 
-                    elif color == "white":
-                        diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
-                        return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked", "blocked", "blocked"]
-                elif self.check_if_piece_on_kings_edge(piece_index) == "Bottom":
-                    if color == "white":
-                        diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
-                        return ["blocked", "blocked", self.check_if_diaganol_empty(diaganol_left_king), "blocked"]
-                    elif color == "black":
-                        diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
-                        return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked", "blocked", "blocked"]
+                if color == "black":
+                    diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
+                    return ["blocked", "blocked", self.check_if_diaganol_empty(diaganol_left_king), "blocked"] 
+                elif color == "white":
+                    diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
+                    return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked", "blocked", "blocked"]
             else:
                 diaganol_left_normal = self.get_diaganol(piece_index, "Left", color)
                 if self.check_if_piece_is_kinged(piece_index, color):
                     diaganol_left_king = self.get_diaganol(piece_index, "Left-King", color)
-                    return ["blocked", self.check_if_diaganol_empty(diaganol_left_normal), "blocked", self.check_if_diaganol_empty(diaganol_left_king)]
+                    return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked", self.check_if_diaganol_empty(diaganol_left_king), "blocked"]
                 else:
                     return [self.check_if_diaganol_empty(diaganol_left_normal), "blocked"]
         else:

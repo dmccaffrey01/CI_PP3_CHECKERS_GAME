@@ -9,7 +9,6 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-from test import test_main_menu as tmm
 import main_menu as mm
 import checkers as ch
 import checkers_engine as ce
@@ -21,9 +20,9 @@ import math
 #Initialize colorama
 colorama.init(autoreset=True)
 
-def mock_sgl(gs, p1, p2, pl1, pl2, n):
-    """
-    Mocks the start game loop function to return True 
+def mock_function(*args, **kwargs):
+    """ 
+    Mocks a function to return True
     """
     return True
 
@@ -41,41 +40,11 @@ class MockGameState():
         """
         return []
 
-def mock_dgo(arg1, arg2 ,arg3, arg4, arg5, arg6, arg7):
-    """
-    Mocks the display game over 
-    """
-    return True
-
 def mock_dp(arg1, arg2 ,arg3, arg4):
     """
     Mocks the display piece 
     """
     return " "
-
-def mock_function_2_arg_true(arg1, arg2):
-    """
-    Mocks 2 arg funciton 
-    """
-    return True
-
-def mock_function_3_arg_true(arg1, arg2, arg3):
-    """
-    Mocks 2 arg funciton 
-    """
-    return True
-
-def mock_function_5_arg_true(arg1, arg2 ,arg3, arg4, arg5):
-    """
-    Mocks the display piece 
-    """
-    return True
-
-def mock_function_6_arg_true(arg1, arg2 ,arg3, arg4, arg5, arg6):
-    """
-    Mocks the display piece 
-    """
-    return True
 
 class TestGameStart(unittest.TestCase):
     """
@@ -84,11 +53,16 @@ class TestGameStart(unittest.TestCase):
     def setUp(self):
         self.gs = ce.GameState(ft.board_states["full"])
         self.bs = self.gs.board
-        self.mgs = MockGameState("full")
-        self.test_bs = board_state = ce.GameState(ft.board_states["test board 3"]).board
+        self.test_gs = ce.GameState(ft.board_states["test board 2"])
+        self.test_bs = ce.GameState(ft.board_states["test board 3"]).board
         self.black_available_moves = self.gs.find_all_available_moves("black")
         self.player2 = mm.Player("Pat", "pat@gmail.com", 12, 8, 4)
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
+
+        # Disable time.sleep
+        patcher1 = patch('time.sleep', return_value=None)
+        patcher1.start()
+        self.addCleanup(patcher1.stop)
         
         # Disable print output
         self.saved_stdout = sys.stdout
@@ -98,13 +72,16 @@ class TestGameStart(unittest.TestCase):
         # Enable print output
         sys.stdout = self.saved_stdout
 
-    @patch("checkers.start_game_loop", mock_sgl)
+    @patch("checkers.start_game_loop", mock_function)
     def test_start_game(self):
         self.assertEqual(ch.start_game("player1", "player2", 2, "full"), [0, 0])
+        self.assertEqual(ch.start_game("player1", 1, 1, "full"), [0, 1])
+        self.assertEqual(ch.start_game(1, 1, 0, "full"), [1, 1])
 
-    @patch("checkers.display_game_over", mock_dgo)
+    @patch("checkers.display_game_over", mock_function)
+    @patch("builtins.input", lambda _: "1")
     def test_start_game_loop(self):
-        self.assertEqual(ch.start_game_loop(self.mgs, 0, 1, mm.Player("John", "john@gmail.com", 10, 4, 6), 1, 1), "game over")
+        self.assertEqual(ch.start_game_loop(self.test_gs, 0, 1, self.player1, 1, 1), "game over")
 
     def test_display_board(self):
         self.assertEqual(ch.display_board(self.gs), self.bs)
@@ -181,9 +158,9 @@ class TestGameStart(unittest.TestCase):
     def test_format_available_moves(self):
         self.assertEqual(ch.format_available_moves([["4B", "move", []], ["5C", "jump", ["4B"]]]), ["Move to: 4B", "Jump to: 5C"])
 
-    @patch("checkers.ask_whats_next", mock_function_5_arg_true)
-    @patch("checkers.display_stats", mock_function_2_arg_true)
-    @patch("time.sleep", tmm.mock_function_1_arg_true)
+    @patch("checkers.ask_whats_next", mock_function)
+    @patch("checkers.display_stats", mock_function)
+    @patch("time.sleep", mock_function)
     def test_display_game_over(self):
         self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
 
@@ -198,14 +175,18 @@ class TestGameStart(unittest.TestCase):
     def test_update_player_stats(self):
         self.assertEqual(ch.update_player_stats("Black", 0, 0, self.player1, self.player2), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player2.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player2.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player2.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player2.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player2.loses)}"])
         self.assertEqual(ch.update_player_stats("Black", 0, 1, self.player1, 1), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", "cpu"])
+        self.assertEqual(ch.update_player_stats("Black", 1, 1, 1, 1), ["cpu", "cpu"])
 
     def test_check_winner(self):
         self.assertEqual(ch.check_winner(self.gs, 1000, "type", "p1", "p2", "player1", "player2"), "Draw")
         self.assertEqual(ch.check_winner(self.gs, 1, "color", "p1", "p2", "player1", "player2"), "White")
         self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 0, "player1", self.player2), "Pat")
         self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 1, "player1", self.player2), "CPU")
+        self.assertEqual(ch.check_winner(self.test_gs, 1, "color", "p1", "p2", "player1", "player2"), "Black")
+        self.assertEqual(ch.check_winner(self.test_gs, 1, "name", 0, "p2", self.player1, "player2"), "John")
+        self.assertEqual(ch.check_winner(self.test_gs, 1, "name", 1, "p2", self.player1, "player2"), "CPU")
 
-    @patch("checkers.after_game_selection", mock_function_6_arg_true)
+    @patch("checkers.after_game_selection", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_ask_whats_next(self, mock_input):
         self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num"), 1)
@@ -217,10 +198,10 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.validate_whats_next_input("4"), 4)
         self.assertEqual(ch.validate_whats_next_input("5"), False)
 
-    @patch("checkers.start_game", mock_function_3_arg_true)
-    @patch("main_menu.return_to_main_menu", tmm.mock_function_0_arg_true)
-    @patch("main_menu.exit_game", tmm.mock_function_0_arg_true)
-    @patch("leaderboard.go_to_leaderboard", tmm.mock_function_0_arg_true)
+    @patch("checkers.start_game", mock_function)
+    @patch("main_menu.return_to_main_menu", mock_function)
+    @patch("main_menu.exit_game", mock_function)
+    @patch("leaderboard.go_to_leaderboard", mock_function)
     def test_after_game_selection(self):
         self.assertEqual(ch.after_game_selection(1, "player1", "player2", "num"), "start game")
         self.assertEqual(ch.after_game_selection(2, "player1", "player2", "num"), "return to main menu")

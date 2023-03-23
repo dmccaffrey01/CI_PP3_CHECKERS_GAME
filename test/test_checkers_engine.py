@@ -72,6 +72,8 @@ class TestGameStateMoves(unittest.TestCase):
     """
     def setUp(self):
         self.test_game_state_1 = check_eng.GameState(ft.board_states["test board 1"])
+        self.test_game_state_2 = check_eng.GameState(ft.board_states["test_get_available_moves_black"])
+        self.test_game_state_3 = check_eng.GameState(ft.board_states["test_get_available_moves_white"])
 
     def test_find_all_available_moves(self):
         self.assertEqual(self.test_game_state_1.find_all_available_moves("black"), [['6D', ['8B', 'jump', [['7C']]], 1, 'black'], ['6D', ['7E', 'move'], 2, 'black'], ['2D', ['4F', 'jump', [['3E']]], 1, 'black'], ['2D', ['3C', 'move'], 2, 'black']])
@@ -111,9 +113,23 @@ class TestGameStateMoves(unittest.TestCase):
         self.assertEqual(self.test_game_state_1.get_index_of_piece("6D"), [2, 3])
         self.assertEqual(self.test_game_state_1.get_index_of_piece("7C"), [1, 2])
 
-    def test_get_available_moves(self):
-        self.assertEqual(self.test_game_state_1.get_available_moves([2,3], "black"), ["blocked", [1, 4]])
-        self.assertEqual(self.test_game_state_1.get_available_moves([1,2], "white"), [[2, 1], "blocked"])
+    def test_get_available_moves_black(self):
+        self.assertEqual(self.test_game_state_2.get_available_moves([7, 0], "black"), ["blocked", [6, 1], "blocked", "blocked"])
+        self.assertEqual(self.test_game_state_2.get_available_moves([5, 0], "black"), ["blocked", [4, 1], "blocked", [6, 1]])
+        self.assertEqual(self.test_game_state_2.get_available_moves([0, 7], "black"), ["blocked", "blocked", [1, 6], "blocked"])
+        self.assertEqual(self.test_game_state_2.get_available_moves([2, 7], "black"), [[1, 6], "blocked", [3, 6], "blocked"])
+        self.assertEqual(self.test_game_state_2.get_available_moves([0, 3], "black"), ["blocked", "blocked", [1, 2], [1, 4]])
+        self.assertEqual(self.test_game_state_2.get_available_moves([7, 4], "black"), [[6, 3], [6, 5], "blocked", "blocked"])
+        self.assertEqual(self.test_game_state_2.get_available_moves([3, 4], "black"), [[2, 3], [2, 5], [4, 3], [4, 5]])
+
+    def test_get_available_moves_white(self):
+        self.assertEqual(self.test_game_state_3.get_available_moves([7, 0], "white"), ["blocked", "blocked", "blocked", [6, 1]])
+        self.assertEqual(self.test_game_state_3.get_available_moves([5, 0], "white"), ["blocked", [6, 1], "blocked", [4, 1]])
+        self.assertEqual(self.test_game_state_3.get_available_moves([0, 7], "white"), [[1, 6], "blocked", "blocked", "blocked"])
+        self.assertEqual(self.test_game_state_3.get_available_moves([2, 7], "white"), [[3, 6], "blocked", [1, 6], "blocked"])
+        self.assertEqual(self.test_game_state_3.get_available_moves([0, 3], "white"), [[1, 2], [1, 4], "blocked", "blocked"])
+        self.assertEqual(self.test_game_state_3.get_available_moves([7, 4], "white"), ["blocked", "blocked", [6, 3], [6, 5]])
+        self.assertEqual(self.test_game_state_3.get_available_moves([3, 4], "white"), [[4, 3], [4, 5], [2, 3], [2, 5]])
 
     def test_check_if_piece_on_edge_of_board(self):
         self.assertEqual(self.test_game_state_1.check_if_piece_on_edge_of_board([2, 3]), False)
@@ -147,12 +163,32 @@ class TestGameStateJumps(unittest.TestCase):
     def setUp(self):
         self.test_game_state_1 = check_eng.GameState(ft.board_states["test board 1"])
         self.test_game_state_1.original_piece_index = [2, 3]
+        self.test_game_state_2 = check_eng.GameState(ft.board_states["test_check_kings_jumps_black"])
+        self.test_game_state_3 = check_eng.GameState(ft.board_states["test_check_kings_jumps_white"])
+        self.test_game_state_4 = check_eng.GameState(ft.board_states["test_check_kings_jumps_white"])
 
     def test_get_available_jumps(self):
         self.assertEqual(self.test_game_state_1.get_available_jumps([2, 3], "black"), [[0, 1]])
 
-    def test_check_kings_jumps(self):
-        self.assertEqual(self.test_game_state_1.check_kings_jumps([2, 3], "Left", "black"), [[0, 1]])
+    def test_check_kings_jumps_black(self):
+        self.test_game_state_2.original_piece_index = [0, 3]
+        self.assertEqual(self.test_game_state_2.check_kings_jumps([0, 3], "Left", "black"), [])
+        self.test_game_state_2.original_piece_index = [7, 4]
+        self.assertEqual(self.test_game_state_2.check_kings_jumps([7, 4], "Left", "black"), [])
+        self.test_game_state_2.original_piece_index = [4, 5]
+        self.assertEqual(self.test_game_state_2.check_kings_jumps([4, 5], "Left", "black"), [])
+        self.test_game_state_2.original_piece_index = [5, 2]
+        self.assertEqual(self.test_game_state_2.check_kings_jumps([5, 2], "Left", "black"), [])
+
+    def test_check_kings_jumps_white(self):
+        self.test_game_state_3.original_piece_index = [0, 3]
+        self.assertEqual(self.test_game_state_3.check_kings_jumps([0, 3], "Left", "white"), [])
+        self.test_game_state_3.original_piece_index = [7, 4]
+        self.assertEqual(self.test_game_state_3.check_kings_jumps([7, 4], "Left", "white"), [])
+        self.test_game_state_3.original_piece_index = [4, 5]
+        self.assertEqual(self.test_game_state_3.check_kings_jumps([4, 5], "Left", "white"), [])
+        self.test_game_state_3.original_piece_index = [5, 2]
+        self.assertEqual(self.test_game_state_3.check_kings_jumps([5, 2], "Left", "white"), [])
 
     def test_get_direction(self):
         self.assertEqual(self.test_game_state_1.get_direction("Left"), ["Left", "Left-King"])
@@ -162,8 +198,10 @@ class TestGameStateJumps(unittest.TestCase):
         self.assertEqual(self.test_game_state_1.get_jump([2, 3], "Left", "black"), "Left")
 
     def test_check_jump(self):
-        self.assertEqual(self.test_game_state_1.check_jump([1, 2], "Left", "black"), "success")
-        self.assertEqual(self.test_game_state_1.check_jump([1, 4], "Right", "black"), "blocked")
+        self.assertEqual(self.test_game_state_4.check_jump([5, 6], "Left", "black"), "blocked")
+        self.assertEqual(self.test_game_state_4.check_jump([7, 4], "Left", "black"), "blocked")
+        self.assertEqual(self.test_game_state_4.check_jump([3, 0], "Left", "black"), "blocked")
+        self.assertEqual(self.test_game_state_4.check_jump([2, 5], "Left", "black"), "blocked")
 
     def test_check_if_diaganol_contains_opposite_color_piece(self):
         self.assertEqual(self.test_game_state_1.check_if_diaganol_contains_opposite_color_piece([1, 2], "black"), True)
@@ -183,6 +221,7 @@ class TestMovePiece(unittest.TestCase):
         self.test_game_state_1.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black")
         self.test_game_state_2 = check_eng.GameState(ft.board_states["test board 1"])
         self.test_game_state_2.original_piece_index = [2, 3]
+        self.test_game_state_3 = check_eng.GameState(ft.board_states["test_check_ipnk"])
         
     def test_move_piece(self):
         self.assertEqual(self.test_game_state_2.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
@@ -195,11 +234,14 @@ class TestMovePiece(unittest.TestCase):
         self.assertEqual(self.test_game_state_2.check_if_move_was_jump(['7E', 'move', []], 2, "black"), "move")
 
     def test_check_if_piece_needs_kinged(self):
-        self.assertEqual(self.test_game_state_2.check_if_piece_needs_kinged([0,1], "black"), "Kinged")
-        self.assertEqual(self.test_game_state_2.check_if_piece_needs_kinged([2,3], "black"), "Not kinged")
+        self.assertEqual(self.test_game_state_3.check_if_piece_needs_kinged([0,3], "black"), "Kinged")
+        self.assertEqual(self.test_game_state_3.check_if_piece_needs_kinged([2,3], "black"), "Not kinged")
+        self.assertEqual(self.test_game_state_3.check_if_piece_needs_kinged([7,2], "white"), "Kinged")
+        self.assertEqual(self.test_game_state_3.check_if_piece_needs_kinged([5,2], "white"), "Not kinged")
 
     def test_king_piece(self):
-        self.assertEqual(self.test_game_state_2.king_piece([2, 3], "black"), "B")
+        self.assertEqual(self.test_game_state_3.king_piece([0, 3], "black"), "B")
+        self.assertEqual(self.test_game_state_3.king_piece([7, 2], "white"), "W")
 
     def test_check_if_piece_is_kinged(self):
         self.assertEqual(self.test_game_state_2.move_piece("6D", ['8B', 'jump', [['7C']]], 1, "black"), [0, 1])
@@ -220,8 +262,10 @@ class TestMovePiece(unittest.TestCase):
         self.assertEqual(self.test_game_state_1.undo_move(), [])
 
     def test_undo_king_piece(self):
-        self.assertEqual(self.test_game_state_1.undo_king_piece([0, 1], "Kinged"), "Unkinged")
-        self.assertEqual(self.test_game_state_1.undo_king_piece([0, 1], "Not kinged"), "Not kinged")
+        self.assertEqual(self.test_game_state_3.undo_king_piece([0, 5], "Kinged"), "Unkinged")
+        self.assertEqual(self.test_game_state_3.undo_king_piece([0, 3], "Not kinged"), "Not kinged")
+        self.assertEqual(self.test_game_state_3.undo_king_piece([7, 4], "Kinged"), "Unkinged")
+        self.assertEqual(self.test_game_state_3.undo_king_piece([7, 2], "Not kinged"), "Not kinged")
 
     def test_restore_jumped_pieces(self):
         self.assertEqual(self.test_game_state_1.restore_jumped_pieces([['7C', "w"]]), "w")
