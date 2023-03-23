@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch
 import game_rules as gr
-from test import test_main_menu as tmm
 import sys
 import io
 import colorama
@@ -10,8 +9,11 @@ from colorama import Fore, Back, Style
 #Initialize colorama
 colorama.init(autoreset=True)
 
-# Disable print output
-sys.stdout = io.StringIO()
+def mock_function(*args, **kwargs):
+    """ 
+    Mocks a function to return True
+    """
+    return True
 
 def mock_ggrl():
     """
@@ -24,6 +26,15 @@ class TestGameRules(unittest.TestCase):
     """
     Testing of the game rules functions 
     """
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
     def test_game_rules_start_of_line(self):
         self.assertEqual(gr.game_rules_start_of_line(), f"{' ' * 6 + Fore.YELLOW + '|' + ' ' * 4}")
 
@@ -57,13 +68,9 @@ class TestGameRules(unittest.TestCase):
         self.assertEqual(gr.ask_user_to_exit_game_rules(), "return")
 
     @patch("builtins.input", lambda _: "1")
-    @patch("main_menu.main_menu_screen", tmm.mock_function_0_arg_true)
+    @patch("main_menu.main_menu_screen", mock_function)
     def test_display_game_rules(self):
         self.assertEqual(gr.display_game_rules(), True)
-
-        # Enable print output
-        sys.stdout = sys.__stdout__
-    
 
 
 if __name__ == "__main__":

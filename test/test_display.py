@@ -8,11 +8,17 @@ class TestDisplay(unittest.TestCase):
     """
     Testing of the display functions 
     """
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
     def test_cls(self):
         self.assertEqual(display.cls(), "clear")
-
-        # Disable print output
-        sys.stdout = io.StringIO()
 
     def test_new_line(self):
         self.assertEqual(display.new_line(), "new line")

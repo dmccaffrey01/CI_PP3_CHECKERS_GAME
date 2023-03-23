@@ -9,15 +9,36 @@ sys.path.append(parent_path)
 import leaderboard
 import sys
 import io
-from test import test_main_menu as tmm
 import colorama
 from colorama import Fore, Back, Style
 
 #Initialize colorama
 colorama.init(autoreset=True)
 
-# Disable print output
-sys.stdout = io.StringIO()
+def mock_function(*args, **kwargs):
+    """ 
+    Mocks a function to return True
+    """
+    return True
+
+class MockWorksheet():
+    """
+    Creates an mock instance of Worksheet class from gspread
+    """
+    def col_values(self, value):
+        cols = [["empty col"], ["John"], ["john@gmail.com"], ["10"], ["4"], ["6"]]
+        return cols[value]
+
+    def update_cell(self, row, cell, value):
+        return True
+
+    def append_row(self, row):
+        return True
+
+    def get_all_values(self):
+        return [["Name", "Email", "Games", "Wins", "Loses"], ["John", "john@gmail.com", "10", "4", "6"], ["Pat", "pat@gmail.com", "12", "8", "4"]]
+
+mock_worksheet = MockWorksheet()
 
 class TestLeaderboardSortRanks(unittest.TestCase):
     """
@@ -64,6 +85,14 @@ class TestLeaderboardDisplay(unittest.TestCase):
     """
     Testing of the leaderboard display functions 
     """
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
 
     def test_top_bottom_of_leaderboard(self):
         self.assertEqual(leaderboard.top_bottom_of_leaderboard(), f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n")
@@ -77,11 +106,11 @@ class TestLeaderboardDisplay(unittest.TestCase):
     def test_display_leaderboard_heading(self):
         self.assertEqual(leaderboard.display_leaderboard_heading(), f"{leaderboard.top_bottom_of_leaderboard() + leaderboard.empty_leaderboard_line() + leaderboard.leaderboard_headings() + leaderboard.empty_leaderboard_line() + leaderboard.top_bottom_of_leaderboard()}")
 
-    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
+    @patch("leaderboard.WORKSHEET", mock_worksheet)
     def test_get_leaderboard_data(self):
         self.assertEqual(leaderboard.get_leaderboard_data(), [["John", "john@gmail.com", "10", "4", "6"], ["Pat", "pat@gmail.com", "12", "8", "4"]])
 
-    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
+    @patch("leaderboard.WORKSHEET", mock_worksheet)
     def test_sort_leaderboard_data(self):
         self.assertEqual(leaderboard.sort_leaderboard_data(leaderboard.get_leaderboard_data(), 2), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.sort_leaderboard_data(leaderboard.get_leaderboard_data(), 3), [["Pat", "pat@gmail.com", "12", "8", "4"], ["John", "john@gmail.com", "10", "4", "6"]])
@@ -107,16 +136,20 @@ class TestLeaderboardDisplay(unittest.TestCase):
     def test_leaderboard_data_line(self):
         self.assertEqual(leaderboard.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], "2"), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
-    @patch("leaderboard.WORKSHEET", tmm.mock_worksheet)
+    @patch("leaderboard.WORKSHEET", mock_worksheet)
     def test_display_leaderboard_ranks(self):
         self.assertEqual(leaderboard.display_leaderboard_ranks(2), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.display_leaderboard_ranks(3), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
         self.assertEqual(leaderboard.display_leaderboard_ranks(4), [[1, "Pat", "pat@gmail.com", "12", "8", "4"], [2, "John", "john@gmail.com", "10", "4", "6"]])
 
-    @patch("builtins.input", lambda _: "4")
-    @patch("main_menu.return_to_main_menu", tmm.mock_function_0_arg_true)
-    def test_go_to_leaderboard(self):
+    @patch("builtins.input", side_effect=["1", "2", "3", "4"])
+    @patch("main_menu.return_to_main_menu", mock_function)
+    def test_go_to_leaderboard(self, mock_input):
         self.assertEqual(leaderboard.go_to_leaderboard(), False)
+
+    @patch("builtins.input", lambda _: "r")
+    def test_go_to_leaderboard_exception(self):
+        self.assertRaises(Exception, "Return to main menu")
 
 
 # Enable print output
