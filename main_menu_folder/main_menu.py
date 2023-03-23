@@ -87,7 +87,7 @@ def main_menu_selection(option):
     elif option == 3:
         leaderboard.go_to_leaderboard()
     elif option == 4:
-        feature_testing.go_to_feature_testing()
+        ft.go_to_feature_testing()
     elif option == 5:
         exit_game()
 

@@ -9,8 +9,17 @@ from colorama import Fore, Back, Style
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu_folder/')
+import main_menu as mm
+sys.path.remove("main_menu_folder/")
 sys.path.insert(0, 'checkers_folder/')
 import feature_testing as ft
+
+def mock_function(*args, **kwargs):
+    """
+    Mocks a function with any arguments 
+    """
+    return True
 
 class TestFeatureTesting(unittest.TestCase):
     """
@@ -25,5 +34,16 @@ class TestFeatureTesting(unittest.TestCase):
         # Enable print output
         sys.stdout = self.saved_stdout
 
-    def test_go_to_feature_testing(self):
-        
+    @patch("builtins.input", side_effect=["wrong", "1"])
+    @patch("feature_testing.set_up_board", mock_function)
+    def test_go_to_feature_testing(self, mock_input):
+        self.assertEqual(ft.go_to_feature_testing(), 1)
+
+    @patch("builtins.input", lambda _: "r")
+    @patch("main_menu.main_menu_screen", mock_function)
+    def test_go_to_feature_testing_return(self):
+        self.assertEqual(ft.go_to_feature_testing(), "return_to_main_menu")
+
+
+if __name__ == "__main__":
+    unittest.main()

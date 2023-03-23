@@ -230,10 +230,9 @@ def go_to_feature_testing():
             if validated_option:
                 if validated_option == "return":
                     mm.raise_return_to_main_menu()
-                    return "return"
                 else:
-                    #set_up_board(validated_option)
-                    return validated_option
+                    set_up_board(validated_option)
+                return validated_option
             display.welcome()
             print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four) or (5, five) or (6, six):")
             option_selected = input(options)
@@ -263,6 +262,11 @@ def validate_ask_feature_testing(option):
     else:
         return False
 
-
+def set_up_board(option):
+    """
+    Sets up the board with correct option to test
+    Starts a checkers game with that board 
+    """
+    return True
 
 

@@ -157,10 +157,6 @@ class TestLeaderboardDisplay(unittest.TestCase):
     def test_go_to_leaderboard_exception(self):
         self.assertRaises(Exception, "Return to main menu")
 
-
-# Enable print output
-sys.stdout = sys.__stdout__
-
 if __name__ == "__main__":
     unittest.main()
  
