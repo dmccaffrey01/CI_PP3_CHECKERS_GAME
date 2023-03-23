@@ -25,11 +25,7 @@ def display_game_rules():
     print(f"{game_rules_heading() + game_rules_top_and_bottom_line() + game_rules_empty_line() + format_game_rules_lines() + game_rules_empty_line() + game_rules_top_and_bottom_line()}")
 
     if ask_user_to_exit_game_rules():
-        display.welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        mm.main_menu_screen()
-        return True
+        return mm.return_to_main_menu()
         
 def ask_user_to_exit_game_rules():
     """

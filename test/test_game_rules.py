@@ -81,7 +81,7 @@ class TestGameRules(unittest.TestCase):
     @patch("builtins.input", lambda _: "1")
     @patch("main_menu.main_menu_screen", mock_function)
     def test_display_game_rules(self):
-        self.assertEqual(gr.display_game_rules(), True)
+        self.assertEqual(gr.display_game_rules(), "return_to_main_menu")
 
 
 if __name__ == "__main__":

@@ -148,6 +148,11 @@ class TestLeaderboardDisplay(unittest.TestCase):
     def test_go_to_leaderboard(self, mock_input):
         self.assertEqual(leaderboard.go_to_leaderboard(), False)
 
+    @patch("builtins.input", side_effect=["1", "2", "3", "4"])
+    @patch("main_menu.main_menu_screen", mock_function)
+    def test_go_to_leaderboard_return(self, mock_input):
+        self.assertEqual(leaderboard.go_to_leaderboard(), "return_to_main_menu")
+
     @patch("builtins.input", lambda _: "r")
     def test_go_to_leaderboard_exception(self):
         self.assertRaises(Exception, "Return to main menu")

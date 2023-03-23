@@ -16,8 +16,8 @@ def find_best_move(game_state, available_moves, ai_difficulty):
         find_random_move(game_state, available_moves)
     else:
         find_move_nega_max_alpha_beta(game_state, available_moves, search_depth, -60, 60, 1 if game_state.black_to_move else -1, game_state.color_go)
-        if next_move == None:
-            find_random_move(game_state, available_moves)
+        #if next_move == None:
+            #find_random_move(game_state, available_moves)
     return next_move
 
 def find_random_move(game_state, available_moves):

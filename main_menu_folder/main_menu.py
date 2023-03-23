@@ -53,7 +53,6 @@ def main_menu_screen():
         if validated_option:
             main_menu_selection(validated_option)
             return validated_option
-            break
         display.welcome()
         print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four):")
         option_selected = input(options)
@@ -109,16 +108,12 @@ def get_num_players():
                 else:
                     log_in_players(validated_option)
                 return validated_option
-                break
             display.welcome()
             print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three):")
             option_selected = input(options)
             display.new_line()
     except Exception as e:
-        display.welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        main_menu_screen()
+        return return_to_main_menu()
 
            
 def validate_num_players(option):
@@ -258,10 +253,7 @@ def log_in_players(num):
             start_checkers_game(player1, player2, num, "full")
             return num  
     except:
-        display.welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        main_menu_screen()
+        return return_to_main_menu()
         
 def ask_registered(num):
     """
@@ -280,7 +272,6 @@ def ask_registered(num):
                 return True
             elif validated_option == 2:
                 return False
-            break
         display.welcome()
         print(Fore.YELLOW + "Please input (1, y, yes) or (2, n, no) for have you an existing account or (r to return):")
         option_selected = input(options)
@@ -313,7 +304,6 @@ def ask_player_name(num):
         name = input("Your Name: ")
         if name == "r":
             raise_return_to_main_menu()
-            break
         if validate_user_name(name):
             break
     return name
@@ -329,19 +319,28 @@ def validate_user_name(name):
             print(Fore.RED + "Player name must be between 1 - 12 characters long.")
             print(Fore.RED + "Please try again.\n")
             display.new_line()
-
+            raise TypeError()
         elif not name.isalpha():
             display.new_line()
             print(Fore.RED + "Player name must only contain a-z or A-Z.\n")
             print(Fore.RED + "Please try again.")
             display.new_line()
-                  
+            raise TypeError()   
         else:
             return True
     except TypeError:
         return False
 
-
+def return_to_main_menu():
+    """
+    Returns the player to the main menu 
+    """
+    display.welcome()
+    print(Fore.YELLOW + "Returning to main menu...")
+    time.sleep(1)
+    main_menu_screen()
+    return "return_to_main_menu"
+    
 
 def raise_return_to_main_menu():
     """ 
@@ -361,7 +360,6 @@ def ask_player_email(name):
         email = input("Email: ")
         if email == "r":
             raise_return_to_main_menu()
-            break
         if validate_user_email(email):
             break
     return email
@@ -379,6 +377,7 @@ def validate_user_email(email):
         print(Fore.RED + "\n" + str(e))
         print(Fore.RED + "Please try again.\n")
         display.new_line()
+        return False
         
 def validate_email_registered(email, registered, name):
     """
@@ -449,7 +448,6 @@ def ask_incorrect_email_question1(name, registered):
                 print(Fore.BLUE + "Creating a new user")
                 display.new_line()
                 return validate_email_registered(ask_player_email(name), False, name)
-            break
         display.new_line()
         print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or register or (r to return):")
         option_selected = input(options)
@@ -476,7 +474,6 @@ def ask_incorrect_email_question2(name, registered, email):
                 print(Fore.BLUE + "Logging in")
                 display.new_line()
                 return email
-            break
         display.new_line()
         print(Fore.YELLOW + "Please input 1 or 2 for have you an try again or sign in or (r to return):")
         option_selected = input(options)
@@ -530,7 +527,6 @@ def ask_cpu_difficulty():
         validated_option = validate_cpu_difficulty_input(option_selected)
         if validated_option:
             return validated_option
-            break
         display.new_line()
         print(Fore.YELLOW + "Please input 1 or 2 or 3 for cpu difficulty or (r to return):")
         option_selected = input(options)
@@ -557,7 +553,7 @@ def start_checkers_game(player1, player2, num, board):
     """ 
     Starts the checkers game
     """
-    checkers.start_game(player1, player2, num, ft.board_states["test board 2"])
+    checkers.start_game(player1, player2, num, ft.board_states[board])
     return True
 
 def exit_game():
@@ -570,4 +566,5 @@ def exit_game():
 
     display.typewriter(f"{' ' * 6}T h a n k   y o u   f o r   p l a y i n g\n{' ' * 10}H a v e   a   g o o d   d a y !\n")
     sys.exit(0)
+    return "exit_game"
     

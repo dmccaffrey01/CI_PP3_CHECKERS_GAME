@@ -199,13 +199,15 @@ class TestNumPlayers(unittest.TestCase):
         self.assertEqual(mm.validate_num_players("r"), 4)
         self.assertEqual(mm.validate_num_players("4"), False)
 
-
-    # Test if statement in while loop
     @patch("builtins.input", side_effect=["wrong", "1"])
     @patch("main_menu.log_in_players", mock_function)
     def test_get_num_players_1(self, mock_input):
         self.assertEqual(mm.get_num_players(), 1)
 
+    @patch("builtins.input", lambda _: "r")
+    @patch("main_menu.main_menu_screen", mock_function)
+    def test_get_num_players_return(self):
+        self.assertEqual(mm.get_num_players(), "return_to_main_menu")
 
     @patch("builtins.input", lambda _: "2")
     @patch("main_menu.log_in_players", mock_function)
@@ -321,19 +323,29 @@ class TestLogInPlayers(unittest.TestCase):
 
     def test_validate_user_name(self):
         self.assertEqual(mm.validate_user_name(self.player1.name), True)
+        self.assertEqual(mm.validate_user_name("1234"), False)
 
     @patch("builtins.input", side_effect=["1234567890123", "12A", "John"])
     def test_ask_player_name(self, mock_input):
         self.assertEqual(mm.ask_player_name("1"), self.player1.name)
 
-    @patch("main_menu.validate_email", mock_function)
+    @patch("builtins.input", lambda _: "r")
+    def test_ask_player_name_return(self):
+        with self.assertRaises(Exception):
+            mm.ask_player_name(1)
+
     def test_validate_user_email(self):
         self.assertEqual(mm.validate_user_email(self.player1.email), True)
+        self.assertEqual(mm.validate_user_email("wrong"), False)
 
-    
-    @patch("builtins.input", side_effect=["123", "asdf@asdf", "john@gmail.com"])
-    def test_ask_player_email(self, mock_input):
+    @patch("builtins.input", lambda _: "john@gmail.com")
+    def test_ask_player_email(self):
         self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
+
+    @patch("builtins.input", lambda _: "r")
+    def test_ask_player_email_return(self):
+         with self.assertRaises(Exception):
+            mm.ask_player_email("r")
    
     @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_validate_incorrect_email_input(self):
@@ -404,6 +416,12 @@ class TestLogInPlayers(unittest.TestCase):
         self.assertEqual(mm.log_in_players(1), 1)
         self.assertEqual(mm.log_in_players(2), 2)
 
+    @patch("builtins.input", lambda _: "r")
+    @patch("main_menu.main_menu_screen", mock_function)
+    def test_log_in_players_return(self):
+        self.assertEqual(mm.log_in_players(1), "return_to_main_menu")
+        
+
 class TestCheckersGame(unittest.TestCase):
     """
     Testing of the start checkers game 
@@ -412,6 +430,11 @@ class TestCheckersGame(unittest.TestCase):
         # Disable print output
         self.saved_stdout = sys.stdout
         sys.stdout = io.StringIO()
+
+        # Disable display.typewriter
+        patcher1 = patch('display.typewriter', return_value=None)
+        patcher1.start()
+        self.addCleanup(patcher1.stop)
 
     def tearDown(self):
         # Enable print output
@@ -448,6 +471,10 @@ class TestCheckersGame(unittest.TestCase):
     @patch("checkers.start_game", mock_function)
     def test_start_checkers_game(self):
         self.assertEqual(mm.start_checkers_game(1, 1, 0, "full"), True)
+
+    @patch("sys.exit", mock_function)
+    def test_exit_game(self):
+        self.assertEqual(mm.exit_game(), "exit_game")
 
 
 if __name__ == "__main__":

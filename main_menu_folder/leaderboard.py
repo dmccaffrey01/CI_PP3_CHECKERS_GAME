@@ -47,11 +47,7 @@ def go_to_leaderboard():
                 mm.raise_return_to_main_menu()
                 return viewing_leaderboard
     except:
-        display.welcome()
-        print(Fore.YELLOW + "Returning to main menu...")
-        time.sleep(1)
-        mm.main_menu_screen()
-        return False
+        return mm.return_to_main_menu()
 
 def ask_user_to_sort_ranks():
     """

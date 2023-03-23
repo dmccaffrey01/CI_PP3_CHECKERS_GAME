@@ -166,7 +166,7 @@ class TestGameStateJumps(unittest.TestCase):
         self.test_game_state_1.original_piece_index = [2, 3]
         self.test_game_state_2 = check_eng.GameState(ft.board_states["test_check_kings_jumps_black"])
         self.test_game_state_3 = check_eng.GameState(ft.board_states["test_check_kings_jumps_white"])
-        self.test_game_state_4 = check_eng.GameState(ft.board_states["test_check_kings_jumps_white"])
+        self.test_game_state_4 = check_eng.GameState(ft.board_states["test_check_jump"])
 
     def test_get_available_jumps(self):
         self.assertEqual(self.test_game_state_1.get_available_jumps([2, 3], "black"), [[0, 1]])
@@ -199,9 +199,7 @@ class TestGameStateJumps(unittest.TestCase):
         self.assertEqual(self.test_game_state_1.get_jump([2, 3], "Left", "black"), "Left")
 
     def test_check_jump(self):
-        self.assertEqual(self.test_game_state_4.check_jump([5, 6], "Left", "black"), "blocked")
-        self.assertEqual(self.test_game_state_4.check_jump([7, 4], "Left", "black"), "blocked")
-        self.assertEqual(self.test_game_state_4.check_jump([3, 0], "Left", "black"), "blocked")
+        self.assertEqual(self.test_game_state_4.check_jump([0, 7], "Right", "black"), "blocked")
         self.assertEqual(self.test_game_state_4.check_jump([2, 5], "Left", "black"), "blocked")
 
     def test_check_if_diaganol_contains_opposite_color_piece(self):
