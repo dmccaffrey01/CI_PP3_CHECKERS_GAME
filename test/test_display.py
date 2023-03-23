@@ -7,7 +7,8 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-from main_menu import display
+sys.path.insert(0, 'main_menu_folder/')
+import display
 
 
 class TestDisplay(unittest.TestCase):

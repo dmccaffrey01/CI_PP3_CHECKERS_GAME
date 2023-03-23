@@ -9,7 +9,7 @@ from colorama import Fore, Back, Style
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-sys.path.insert(0, 'main_menu')
+sys.path.insert(0, 'main_menu_folder/')
 import game_rules as gr
 
 #Initialize colorama

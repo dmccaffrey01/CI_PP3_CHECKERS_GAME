@@ -6,7 +6,7 @@ import sys
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-sys.path.insert(0, 'checkers')
+sys.path.insert(0, 'checkers_folder/')
 import checkers_engine as check_eng
 import feature_testing as ft
 

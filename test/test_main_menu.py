@@ -2,17 +2,19 @@ import unittest
 from unittest.mock import patch
 import os
 import sys
+import io
+import colorama
+from colorama import Fore, Back, Style
 # Get the parent path of the current script
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
+sys.path.insert(0, 'main_menu_folder/')
 import main_menu as mm
 import game_rules
+sys.path.remove('main_menu_folder/')
+sys.path.insert(0, 'checkers_folder/')
 import checkers
-import run
-import io
-import colorama
-from colorama import Fore, Back, Style
 
 #Initialize colorama
 colorama.init(autoreset=True)
@@ -36,15 +38,9 @@ class MockWorksheet():
 
 mock_worksheet = MockWorksheet()
 
-def mock_function_1_arg_true(arg):
-    """
-    Mocks a function with one argument to return True
-    """
-    return True
-
-def mock_function_0_arg_true():
+def mock_function(*args, **kwargs):
     """ 
-    Mocks a function with zero arguments to return True
+    Mocks a function to return True
     """
     return True
 
@@ -131,20 +127,20 @@ def mock_gwv(email, value):
         else:
             return 0
 
-def mock_scg(player1, player2, num, board):
-    """
-    Mocks the start checkers game function to return True 
-    """
-    return True
-
 class TestMainMenu(unittest.TestCase):
     """ 
     Testing of the main menu and the selection of options
     """
-    def test_validate_main_menu_selection(self):
+    def setUp(self):
         # Disable print output
+        self.saved_stdout = sys.stdout
         sys.stdout = io.StringIO()
-        
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
+    def test_validate_main_menu_selection(self):
         self.assertEqual(mm.validate_main_menu_selection("1"), 1)
         self.assertEqual(mm.validate_main_menu_selection("one"), 1)
         self.assertEqual(mm.validate_main_menu_selection("2"), 2)
@@ -156,27 +152,27 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(mm.validate_main_menu_selection("5"), False)
         
 
-    @patch("main_menu.get_num_players", mock_function_0_arg_true)
-    @patch("game_rules.display_game_rules", mock_function_0_arg_true)
-    @patch("leaderboard.go_to_leaderboard", mock_function_0_arg_true)
-    @patch("main_menu.exit_game", mock_function_0_arg_true)
+    @patch("main_menu.get_num_players", mock_function)
+    @patch("game_rules.display_game_rules", mock_function)
+    @patch("leaderboard.go_to_leaderboard", mock_function)
+    @patch("main_menu.exit_game", mock_function)
     def test_main_menu_selection(self):
         self.assertEqual(mm.main_menu_selection(1), 1)
         self.assertEqual(mm.main_menu_selection(2), 2)
         self.assertEqual(mm.main_menu_selection(3), 3)
         self.assertEqual(mm.main_menu_selection(4), 4)
 
-    @patch("main_menu.main_menu_selection", mock_function_1_arg_true)
+    @patch("main_menu.main_menu_selection", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_main_menu_screen_1(self, mock_input):
         self.assertEqual(mm.main_menu_screen(), 1)
 
-    @patch("main_menu.main_menu_selection", mock_function_1_arg_true)
+    @patch("main_menu.main_menu_selection", mock_function)
     @patch("builtins.input", lambda _: "2")
     def test_main_menu_screen_2(self):
         self.assertEqual(mm.main_menu_screen(), 2)
 
-    @patch("main_menu.main_menu_selection", mock_function_1_arg_true)
+    @patch("main_menu.main_menu_selection", mock_function)
     @patch("builtins.input", lambda _: "3")
     def test_main_menu_screen_3(self):
         self.assertEqual(mm.main_menu_screen(), 3)
@@ -186,7 +182,16 @@ class TestNumPlayers(unittest.TestCase):
     Testing of the number of players
     input values and types
     """
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_validate_num_players(self):
         self.assertEqual(mm.validate_num_players("1"), 1)
         self.assertEqual(mm.validate_num_players("2"), 2)
@@ -197,18 +202,18 @@ class TestNumPlayers(unittest.TestCase):
 
     # Test if statement in while loop
     @patch("builtins.input", side_effect=["wrong", "1"])
-    @patch("main_menu.log_in_players", mock_function_1_arg_true)
+    @patch("main_menu.log_in_players", mock_function)
     def test_get_num_players_1(self, mock_input):
         self.assertEqual(mm.get_num_players(), 1)
 
 
     @patch("builtins.input", lambda _: "2")
-    @patch("main_menu.log_in_players", mock_function_1_arg_true)
+    @patch("main_menu.log_in_players", mock_function)
     def test_get_num_players_2(self):
         self.assertEqual(mm.get_num_players(), 2)
 
     @patch("builtins.input", lambda _: "3")
-    @patch("main_menu.start_cpu_game", mock_function_1_arg_true)
+    @patch("main_menu.start_cpu_game", mock_function)
     def test_get_num_players_3(self):
         self.assertEqual(mm.get_num_players(), 3)
 
@@ -217,8 +222,16 @@ class TestPlayer(unittest.TestCase):
     Testing of player class
     """
     def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
 
     def test_name(self):
         self.assertEqual(self.player1.name, "John")
@@ -275,10 +288,18 @@ class TestLogInPlayers(unittest.TestCase):
     Testing of loging in players feature
     """
     def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
         self.player1 = mm.Player("John", "john@gmail.com", 10, 4, 6)
         self.player2 = mm.Player("Pat", "pat@gmail.com", 0, 0, 0)
 
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_validate_registered_input(self):
         self.assertEqual(mm.validate_registered_input("1"), 1)
         self.assertEqual(mm.validate_registered_input("y"), 1)
@@ -305,7 +326,7 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_name(self, mock_input):
         self.assertEqual(mm.ask_player_name("1"), self.player1.name)
 
-    @patch("main_menu.validate_email", mock_function_1_arg_true)
+    @patch("main_menu.validate_email", mock_function)
     def test_validate_user_email(self):
         self.assertEqual(mm.validate_user_email(self.player1.email), True)
 
@@ -314,7 +335,7 @@ class TestLogInPlayers(unittest.TestCase):
     def test_ask_player_email(self, mock_input):
         self.assertEqual(mm.ask_player_email(self.player1.name), self.player1.email)
    
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_validate_incorrect_email_input(self):
         self.assertEqual(mm.validate_incorrect_email_input("1"), 1)
         self.assertEqual(mm.validate_incorrect_email_input("2"), 2)
@@ -376,8 +397,8 @@ class TestLogInPlayers(unittest.TestCase):
     @patch("main_menu.validate_email_registered", mock_ver)
     @patch("main_menu.ask_player_email", mock_ape)
     @patch("main_menu.get_worksheet_value", mock_gwv)
-    @patch("main_menu.start_checkers_game", mock_scg)
-    @patch("main_menu.ask_cpu_difficulty", mock_function_0_arg_true)
+    @patch("main_menu.start_checkers_game", mock_function)
+    @patch("main_menu.ask_cpu_difficulty", mock_function)
     @patch("main_menu.WORKSHEET", mock_worksheet)
     def test_log_in_players(self):
         self.assertEqual(mm.log_in_players(1), 1)
@@ -387,7 +408,16 @@ class TestCheckersGame(unittest.TestCase):
     """
     Testing of the start checkers game 
     """
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    def setUp(self):
+        # Disable print output
+        self.saved_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+    def tearDown(self):
+        # Enable print output
+        sys.stdout = self.saved_stdout
+
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     def test_validate_cpu_difficulty_input(self):
         self.assertEqual(mm.validate_cpu_difficulty_input("1"), 1)
         self.assertEqual(mm.validate_cpu_difficulty_input("2"), 2)
@@ -395,33 +425,29 @@ class TestCheckersGame(unittest.TestCase):
         self.assertEqual(mm.validate_cpu_difficulty_input("r"), 4)
         self.assertEqual(mm.validate_cpu_difficulty_input("5"), False)
 
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_ask_cpu_difficulty1(self, mock_input):
         self.assertEqual(mm.ask_cpu_difficulty(), 1)
 
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     @patch("builtins.input", lambda _: "2")
     def test_ask_cpu_difficulty2(self):
         self.assertEqual(mm.ask_cpu_difficulty(), 2)
 
-    @patch("main_menu.raise_return_to_main_menu", mock_function_0_arg_true)
+    @patch("main_menu.raise_return_to_main_menu", mock_function)
     @patch("builtins.input", lambda _: "3")
     def test_ask_cpu_difficulty3(self):
         self.assertEqual(mm.ask_cpu_difficulty(), 3)
 
     @patch("builtins.input", lambda _: "1")
-    @patch("main_menu.start_checkers_game", mock_scg)
+    @patch("main_menu.start_checkers_game", mock_function)
     def test_start_cpu_game(self):
         self.assertEqual(mm.start_cpu_game(0), [1, 1])
 
-    @patch("checkers.start_game", mock_scg)
+    @patch("checkers.start_game", mock_function)
     def test_start_checkers_game(self):
         self.assertEqual(mm.start_checkers_game(1, 1, 0, "full"), True)
-
-# Enable print output
-sys.stdout = sys.__stdout__
-
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
+sys.path.insert(0, 'checkers_folder/')
 import smart_move_finder as smf
 import checkers_engine as ce
 import feature_testing as ft

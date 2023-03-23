@@ -12,12 +12,12 @@ import math
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-sys.path.insert(0, 'main_menu')
+sys.path.insert(0, 'main_menu_folder/')
 import leaderboard
 import main_menu as mm
 import display
-sys.path.remove('main_menu')
-sys.path.insert(0, 'checkers')
+sys.path.remove('main_menu_folder/')
+sys.path.insert(0, 'checkers_folder/')
 import feature_testing as ft
 import smart_move_finder as smf
 import checkers_engine as check_eng

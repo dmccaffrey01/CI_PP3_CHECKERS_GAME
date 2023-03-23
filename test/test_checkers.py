@@ -9,11 +9,11 @@ import io
 parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # Add the parent path to the system path
 sys.path.append(parent_path)
-sys.path.insert(0, 'main_menu')
+sys.path.insert(0, 'main_menu_folder/')
 import main_menu as mm
 import display
-sys.path.remove('main_menu')
-sys.path.insert(0, 'checkers')
+sys.path.remove('main_menu_folder/')
+sys.path.insert(0, 'checkers_folder/')
 import checkers as ch
 import checkers_engine as ce
 import feature_testing as ft
