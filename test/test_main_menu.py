@@ -484,10 +484,13 @@ class TestCheckersGame(unittest.TestCase):
 
     @patch("checkers.start_game", mock_function)
     def test_start_checkers_game(self):
-        self.assertEqual(mm.start_checkers_game(1, 1, 0, "full"), True)
+        self.assertEqual(mm.start_checkers_game(1, 1, 0, "full", False), True)
 
     @patch("sys.exit", mock_function)
     def test_exit_game(self):
+        self.assertEqual(mm.exit_game(), "exit_game")
+
+    def test_exit_game_exception(self):
         self.assertEqual(mm.exit_game(), "exit_game")
 
 
