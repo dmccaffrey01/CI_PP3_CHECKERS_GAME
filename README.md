@@ -46,7 +46,7 @@ location and culture where it is played.
     - [User Requirements and Expectations](#user-requirements-and-expectations)
     - [User Manual](#user-manual)
   - [User Stories](#user-stories)
-    - [Users](#users)
+    - [Users](#site-user)
     - [Site Owner](#site-owner)
   - [Technical Design](#technical-design)
     - [Flowchart](#flowchart)
@@ -241,14 +241,37 @@ The program creates a new board and starts a game where the user can test these 
 
 #### Exit Game
 When the user selects exit game in the main menu, the program displays a goodbye message and exits the programme.
-
-
-
-
-
-
-
-
-
-
 </details>
+
+## User Stories
+
+### Site User
+
+1. I want a nice and easily navigated main menu
+2. I want to be able to choose to play agains the computer or player, or have 2 computers play against eachother
+3. I want to be able to log in to the game
+4. I want to be able to register if I have never played before
+5. I want to personalise the game by entering my name
+6. I want to change the level of difficulty of the computer
+7. I want the board to be displayed in a nice and easy to understand way
+8. I want to have options like replay the game, or return to the main menu after I have finished the game
+9. I want to view the game rules and receive information on how to play
+10. I want my stats to be displayed in a leaderboard
+11. I want to sort the leaderboard in different ways
+12. I want to be able to test certain game features
+13. I want to be able to easily exit the programme from the main menu
+
+### Site Owner
+
+14. I want the user to enter valid emails when registering or logging in
+15. I want to store the user data so I can use it in the programme
+16. I want the user to receive feedback if they enter invalid input
+17. I want to thank the user for playing the game
+
+## Technical Design
+
+### Flowchart
+
+The following flowchart summarises the structure and logic of the application.
+
+
