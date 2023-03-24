@@ -12,7 +12,7 @@
     <style>
         body {
             font-family: Arial;
-            background-color: #5A5A5A;
+            background: linear-gradient(#CEE0DC, #B9CFD4, #AFAAB9);
         }
 
         .main-content {
@@ -21,6 +21,35 @@
             justify-content: center;
             align-items: center;
             gap: 20px
+        }
+
+        footer {
+            height: 75px;
+            position: absolute;
+            bottom: -75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-content li {
+            list-style-type: none;
+            color: white
+        }
+
+        .footer-content li i {
+            font-size: 1.8rem;
+        }
+
+        .copyright {
+            font-size: 2rem;
         }
 
         /**
@@ -167,12 +196,19 @@
         button {
             width: 200px;
             height: 40px;
-            background-color: #E84610;
-            border: 1px solid grey;
+            background-color: #A5243D;
             color: white;
             text-transform: uppercase;
             margin: 10px;
             border-radius: 8px;
+        }
+
+        .button:hover {
+            outline: 1px solid white;
+            outline-offset: -1px;
+            box-shadow: 0 0.4rem 1.4rem 0 white;
+            transform: translateY(-0.1rem);
+            transition: transform 0.15s;
         }
     </style>
 </head>
