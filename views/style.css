@@ -152,8 +152,8 @@ body {
 button {
     width: 200px;
     height: 40px;
-    background-image: linear-gradient(to right top, #ff0000, #ff6800, #ffa000, #ffd100, #f6ff00);
-    border: 1px solid yellow;
+    background-color: red;
+    border: 1px solid black;
     color: black;
     text-transform: uppercase;
     margin: 10px;
