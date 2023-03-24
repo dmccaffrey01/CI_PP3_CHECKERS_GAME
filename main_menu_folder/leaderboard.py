@@ -100,19 +100,19 @@ def top_bottom_of_leaderboard():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n"
+    return f"{' ' * 16 + Fore.YELLOW + '=' * 87}\n"
 
 def empty_leaderboard_line():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
+    return f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
 
 def leaderboard_headings():
     """ 
     Returns f string
     """
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
+    return f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
     
 def display_leaderboard_ranks(sort_type):
     """
@@ -167,7 +167,7 @@ def leaderboard_data_line(row, i):
     games = format_leaderboard_games_and_loses(row[2])
     wins = format_leaderboard_rank_and_wins_and_name(row[3], "wins")
     loses = format_leaderboard_games_and_loses(row[4])
-    return f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank + Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games + Fore.YELLOW + '|' + wins + Fore.YELLOW + '|' + loses + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
+    return f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank + Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games + Fore.YELLOW + '|' + wins + Fore.YELLOW + '|' + loses + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
 
 def format_leaderboard_rank_and_wins_and_name(str, type):
     """ 

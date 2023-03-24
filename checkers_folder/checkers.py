@@ -202,8 +202,6 @@ def select_piece(game_state, movable_pieces, color):
     """
     display_board(game_state)
 
-    display.new_line()
-
     print(Fore.YELLOW + "Choose a piece from the movable pieces eg.(1(F1) or 2(F2)...)")
 
     options = ""
@@ -246,8 +244,6 @@ def select_move(game_state, piece, color):
     Validates the option selected
     """
     display_board(game_state)
-
-    display.new_line()
 
     print(Fore.YELLOW + "Choose a position to move to eg.(1(F1) or 2(F2)...)")
     print(Fore.YELLOW + "(Enter r to return to selecting a piece)")

@@ -28,17 +28,17 @@ def welcome():
     Display welcome screen
     """
     cls()
-    print(Fore.BLUE + "Welcome to:")
+    print(f'{" " * 28 + Fore.BLUE + "Welcome to:"}')
     print(" ")
-    print(Fore.RED + Style.BRIGHT + "  ____  __   __  _____   ____  __   ___ _____  ______   _______ ")
-    print(Fore.GREEN + Style.BRIGHT + " / __ \|  | |  ||  ___| / __ \|  | /  /|  ___|/   _  \ |  _____|")
-    print(Fore.RED + Style.BRIGHT + "| /  \/|  |_|  || |___ | /  \/|  |/  / | |___ |  |_| / | |_____ ")
-    print(Fore.GREEN + Style.BRIGHT + "| |    |   _   ||  ___|| |    |     |  |  ___||     |  |_____  |")
-    print(Fore.RED + Style.BRIGHT + "| \__/\|  | |  || |___ | \__/\|  |\  \ | |___ |  |\  \  _____| |")
-    print(Fore.GREEN + Style.BRIGHT + " \____/|__| |__||_____| \____/|__| \__\|_____||__| \__\|_______|")
+    print(f'{" " * 28 + Fore.RED + Style.BRIGHT + "  ____  __   __  _____   ____  __   ___ _____  ______   _______ "}')
+    print(f'{" " * 28 + Fore.GREEN + Style.BRIGHT + " / __ \|  | |  ||  ___| / __ \|  | /  /|  ___|/   _  \ |  _____|"}')
+    print(f'{" " * 28 + Fore.RED + Style.BRIGHT + "| /  \/|  |_|  || |___ | /  \/|  |/  / | |___ |  |_| / | |_____ "}')
+    print(f'{" " * 28 + Fore.GREEN + Style.BRIGHT + "| |    |   _   ||  ___|| |    |     |  |  ___||     |  |_____  |"}')
+    print(f'{" " * 28 + Fore.RED + Style.BRIGHT + "| \__/\|  | |  || |___ | \__/\|  |\  \ | |___ |  |\  \  _____| |"}')
+    print(f'{" " * 28 + Fore.GREEN + Style.BRIGHT + " \____/|__| |__||_____| \____/|__| \__\|_____||__| \__\|_______|"}')
     print(" ")
     print(" ")
-    print(Fore.BLUE + "                                            for 1 and 2 players")
+    print(f'{" " * 28 + Fore.BLUE + "                                            for 1 and 2 players"}')
     print(" ")
     print(" ")
     return "welcome"
@@ -50,6 +50,6 @@ def typewriter(str):
     for c in str:
         sys.stdout.write(c)
         sys.stdout.flush()
-        time.sleep(0.05)
+        time.sleep(0.03)
 
     return "typewriter"
