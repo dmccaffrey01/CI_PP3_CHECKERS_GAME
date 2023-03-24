@@ -274,4 +274,38 @@ When the user selects exit game in the main menu, the program displays a goodbye
 
 The following flowchart summarises the structure and logic of the application.
 
+<details><summary>Flowchart</summary>
+<img src="docs/flowchart.png">
+</details>
+
+### Languages
+
+- [Python](https://www.python.org/) programming language for the logic of the program
+
+### Frameworks & Tool
+- [Font Awesome](https://fontawesome.com/) - icons from Font Awesome were used in the footer below the program terminal
+- [Drawio](https://github.com/jgraph/drawio-desktop/releases/tag/v20.8.16)
+- [GitHub](https://github.com/) was used as a remote repository to store project code
+- [Google Cloud Platform](https://cloud.google.com/cloud-console/) was used to manage access and permissions to the Google Services such as Google auth, sheets etc.
+- [Google Sheets](https://www.google.co.uk/sheets/about/) were used to store players details
+- [PEP8](http://pep8online.com/) was used to check my code against Python conventions
+- [GitPod](https://gitpod.io)
+
+### Libraries
+
+#### Python Libraries
+- os
+- sys
+- time
+- math
+- random
+- itemgetter
+- io
+- [unittest](https://docs.python.org/3/library/unittest.html) - used to carry out testing
+
+#### Third Party Libraries
+- [colorama](https://pypi.org/project/colorama/) - I used this library to add color to the terminal and enhance user experience.
+- [email_validator](https://pypi.org/project/email-validator/) - I used this library to validate the user email 
+- [gspread](https://docs.gspread.org/en/latest/) - I used gspread to add and change data in my Google spreadsheet and to interact with Google APIs
+- [google.oauth2.service_account](https://google-auth.readthedocs.io/en/master/) - I used this module to set up the authentication required for accessing the Google API and connecting my Service Account with the Credentials function. I created a creds.json file containing all the necessary details for the API to access my Google account.
 
