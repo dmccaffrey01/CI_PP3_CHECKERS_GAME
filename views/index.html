@@ -1,11 +1,24 @@
 <body>
-    <button onclick="window.location.reload()">Run Program</button>
-    <div id="terminal"></div>
-
+    <!-- Run Button and Terminal -->
+    <section class="main-content">
+        <button onclick="window.location.reload()">Run Program</button>
+        <div id="terminal"></div>
+    </section>    
+    <!-- Footer -->
+    <footer>
+        <ul class="social-icons">
+          <li>
+            <a href="https://github.com/dmccaffrey01/CI_PP3_CHECKERES_GAME/" target="_blank" rel="noopener" aria-label="View the project on GitHub page"><i class="fab fa-github"></i></a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/dillon-mc-caffrey-ab4771227/" target="_blank" rel="noopener" aria-label="Visit developer's LinkedIn (opens in new tab)"><i class="fab fa-linkedin"></i></a>
+          </li>
+        </ul>
+    </footer>
     <script>
         var term = new Terminal({
-            cols: 80,
-            rows: 24
+            cols: 140,
+            rows: 70
         });
         term.open(document.getElementById('terminal'));
         term.writeln('Running startup command: python3 run.py');
