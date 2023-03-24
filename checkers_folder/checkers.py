@@ -379,7 +379,7 @@ def check_winner(game_state, moves, type, p1, p2, player1, player2):
     """
     Checks who the winner is and formats a string to return 
     """
-    if moves >= 1000:
+    if moves >= 500:
         message = "Draw"
     elif smf.score_the_pieces_on_board(game_state.board) > 0:
         if type == "color":
