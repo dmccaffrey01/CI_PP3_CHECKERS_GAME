@@ -570,6 +570,9 @@ def exit_game():
             print(" ")
 
         display.typewriter(f"{' ' * 39}T h a n k   y o u   f o r   p l a y i n g\n{' ' * 43}H a v e   a   g o o d   d a y !\n")
+        for i in range(5):
+            print(" ")
+            
         sys.exit(0)
         return "exit_game"
     except SystemExit:

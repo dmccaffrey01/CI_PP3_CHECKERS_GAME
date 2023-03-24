@@ -192,7 +192,7 @@ def format_cols_line(cols):
     for col in cols:
         new_col = f"{' ' * 5 + col + ' ' * 4}"
         new_cols.append(new_col)
-    cols_line = f"{' ' * 10 + ''.join(new_cols)}"
+    cols_line = f"{' ' * 20 + ''.join(new_cols)}"
     return cols_line
 
 def select_piece(game_state, movable_pieces, color):
@@ -303,7 +303,6 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num, test, or
     display.cls()
     display_stats(stats, moves)
     time.sleep(2)
-    display.new_line()
     ask_whats_next(p1, p2, player1, player2, num, original_board, test)
 
     return winning_message
@@ -318,7 +317,7 @@ def game_over(winner_color, winner_name):
     wn = " ".join(list(wn))
     for i in range(5):
         print(" ")
-    winning_message = f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 36}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((120-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n"
+    winning_message = f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 41}T H E   W I N N E R   I S   {wc}\n{' ' * (math.ceil((120-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n"
     display.typewriter(winning_message)
     return winning_message
 
@@ -328,7 +327,6 @@ def display_stats(stats, moves):
     """
     for i in range(5):
         print(" ")
-    display.new_line()
     print(Fore.CYAN + f"Total Moves: " + Fore.WHITE + str(moves))
     display.new_line()
     if stats[0] != "cpu":
@@ -336,6 +334,7 @@ def display_stats(stats, moves):
         display.new_line()
     if stats[1] != "cpu":
         print(stats[1])
+        display.new_line()
 
     return stats
     

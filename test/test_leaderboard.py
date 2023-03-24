@@ -96,13 +96,13 @@ class TestLeaderboardDisplay(unittest.TestCase):
         sys.stdout = self.saved_stdout
 
     def test_top_bottom_of_leaderboard(self):
-        self.assertEqual(leaderboard.top_bottom_of_leaderboard(), f"{' ' * 19 + Fore.YELLOW + '=' * 87}\n")
+        self.assertEqual(leaderboard.top_bottom_of_leaderboard(), f"{' ' * 16 + Fore.YELLOW + '=' * 87}\n")
 
     def test_empty_leaderboard_line(self):
-        self.assertEqual(leaderboard.empty_leaderboard_line(), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
+        self.assertEqual(leaderboard.empty_leaderboard_line(), f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + ' ' * 15 + Fore.YELLOW + '|' + ' ' * 17 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
     def test_leaderboard_headings(self):
-        self.assertEqual(leaderboard.leaderboard_headings(), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
+        self.assertEqual(leaderboard.leaderboard_headings(), f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'R A N K' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'N A M E' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'G A M E S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'W I N S' + ' ' * 4 + Fore.YELLOW + '|' + ' ' * 4 + Fore.CYAN + 'L O S E S' + ' ' * 4 + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
     def test_display_leaderboard_heading(self):
         self.assertEqual(leaderboard.display_leaderboard_heading(), f"{leaderboard.top_bottom_of_leaderboard() + leaderboard.empty_leaderboard_line() + leaderboard.leaderboard_headings() + leaderboard.empty_leaderboard_line() + leaderboard.top_bottom_of_leaderboard()}")
@@ -135,7 +135,7 @@ class TestLeaderboardDisplay(unittest.TestCase):
         self.assertEqual(leaderboard.format_leaderboard_games_and_loses("12345"), f"{Fore.WHITE + ' ' * 4 + '1 0 0 0 +' + ' ' * 4}")
 
     def test_leaderboard_data_line(self):
-        self.assertEqual(leaderboard.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], "2"), f"{' ' * 19 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
+        self.assertEqual(leaderboard.leaderboard_data_line(["John", "john@gmail.com", "10", "4", "6"], "2"), f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('2', 'rank') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('John', 'name') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('10') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_rank_and_wins_and_name('4', 'wins') + Fore.YELLOW + '|' + leaderboard.format_leaderboard_games_and_loses('6') + Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n")
 
     @patch("leaderboard.WORKSHEET", mock_worksheet)
     def test_display_leaderboard_ranks(self):

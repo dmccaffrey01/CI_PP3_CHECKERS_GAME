@@ -101,13 +101,13 @@ class TestGameStart(unittest.TestCase):
         r = "8"
         i = 0
         row_index = 0
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 10 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 20 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
         i = 2
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 17 + Fore.GREEN + r + ' ' * 2 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
         r = "7"
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 17 + Fore.GREEN + r + ' ' * 2 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
         i = 0
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 10 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 20 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
 
     @patch("checkers.display_piece", mock_dp)   
     def test_red_square(self):
@@ -136,7 +136,7 @@ class TestGameStart(unittest.TestCase):
         self.assertEqual(ch.get_piece_icon(self.test_bs, 1, 0), "_")
 
     def test_fomrat_cols_line(self):
-        self.assertEqual(ch.format_cols_line(self.gs.BOARD_COLS), f"{' ' * 10 + ' ' * 5 + 'A' + ' ' * 4 + ' ' * 5 + 'B' + ' ' * 4 + ' ' * 5 + 'C' + ' ' * 4 + ' ' * 5 + 'D' + ' ' * 4 + ' ' * 5 + 'E' + ' ' * 4 + ' ' * 5 + 'F' + ' ' * 4 + ' ' * 5 + 'G' + ' ' * 4 + ' ' * 5 + 'H' + ' ' * 4}")
+        self.assertEqual(ch.format_cols_line(self.gs.BOARD_COLS), f"{' ' * 20 + ' ' * 5 + 'A' + ' ' * 4 + ' ' * 5 + 'B' + ' ' * 4 + ' ' * 5 + 'C' + ' ' * 4 + ' ' * 5 + 'D' + ' ' * 4 + ' ' * 5 + 'E' + ' ' * 4 + ' ' * 5 + 'F' + ' ' * 4 + ' ' * 5 + 'G' + ' ' * 4 + ' ' * 5 + 'H' + ' ' * 4}")
 
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_select_piece_side(self, mock_input):
@@ -171,10 +171,10 @@ class TestGameStart(unittest.TestCase):
     @patch("checkers.display_stats", mock_function)
     @patch("time.sleep", mock_function)
     def test_display_game_over(self):
-        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2, False, "full"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2, False, "full"), f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 41}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (math.ceil((120-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
 
     def test_game_over(self):
-        self.assertEqual(ch.game_over("white", "Pat"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+        self.assertEqual(ch.game_over("white", "Pat"), f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 41}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (math.ceil((120-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
 
     def test_display_stats(self):
         self.assertEqual(ch.display_stats(["cpu", "cpu"], 1), ["cpu", "cpu"])

@@ -41,6 +41,9 @@ def go_to_leaderboard():
             display.cls()
             display_leaderboard_heading()
             display_leaderboard_ranks(sort_type)
+            print(" ")
+            print(" ")
+            print(" ")
             sort_type = ask_user_to_sort_ranks()
             if sort_type == "return":
                 viewing_leaderboard = False
