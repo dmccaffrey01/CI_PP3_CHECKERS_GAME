@@ -28,3 +28,15 @@ options.port = parseInt(process.env.PORT);
 var type = process.argv.indexOf('--release', 1) !== -1 || process.argv.indexOf('release', 1) !== -1 ? 'release' : 'debug';
 // require('total4/' + type)(options);
 require('total4').http('release', options);
+
+const express = require('express');
+const app = express();
+
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, function() {
+  console.log(`App listening on port ${port}`);
+});
