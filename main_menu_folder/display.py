@@ -28,7 +28,7 @@ def welcome():
     Display welcome screen
     """
     cls()
-    print("                            " + Fore.BLUE + "Welcome to:"}')
+    print("                            " + Fore.BLUE + "Welcome to:")
     print(" ")
     print("                            " + Fore.RED + Style.BRIGHT + "  ____  __   __  _____   ____  __   ___ _____  ______   _______ ")
     print("                            " + Fore.GREEN + Style.BRIGHT + " / __ \|  | |  ||  ___| / __ \|  | /  /|  ___|/   _  \ |  _____|")
