@@ -12,7 +12,7 @@
     <style>
         body {
             font-family: Arial;
-            background: linear-gradient(#CEE0DC, #B9CFD4, #AFAAB9);
+            background: linear-gradient(to bottom, #CEE0DC, #B9CFD4);
         }
 
         .main-content {
@@ -26,7 +26,7 @@
         footer {
             height: 75px;
             position: absolute;
-            bottom: -75px;
+            bottom: 0px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -46,10 +46,11 @@
 
         .footer-content li i {
             font-size: 1.8rem;
+            color: white;
         }
 
         .copyright {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
 
         /**
@@ -201,11 +202,10 @@
             text-transform: uppercase;
             margin: 10px;
             border-radius: 8px;
+            border: 1px solid white;
         }
 
         .button:hover {
-            outline: 1px solid white;
-            outline-offset: -1px;
             box-shadow: 0 0.4rem 1.4rem 0 white;
             transform: translateY(-0.1rem);
             transition: transform 0.15s;
