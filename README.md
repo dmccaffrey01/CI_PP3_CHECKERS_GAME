@@ -46,7 +46,7 @@ location and culture where it is played.
     - [User Requirements and Expectations](#user-requirements-and-expectations)
     - [User Manual](#user-manual)
   - [User Stories](#user-stories)
-    - [Users](#site-user)
+    - [Site User](#site-user)
     - [Site Owner](#site-owner)
   - [Technical Design](#technical-design)
     - [Flowchart](#flowchart)
@@ -248,7 +248,7 @@ When the user selects exit game in the main menu, the program displays a goodbye
 ### Site User
 
 1. I want a nice and easily navigated main menu
-2. I want to be able to choose to play agains the computer or player, or have 2 computers play against eachother
+2. I want to be able to choose to play against the computer or player, or have 2 computers play against eachother
 3. I want to be able to log in to the game
 4. I want to be able to register if I have never played before
 5. I want to personalise the game by entering my name
@@ -284,12 +284,13 @@ The following flowchart summarises the structure and logic of the application.
 
 ### Frameworks & Tool
 - [Font Awesome](https://fontawesome.com/) - icons from Font Awesome were used in the footer below the program terminal
-- [Drawio](https://github.com/jgraph/drawio-desktop/releases/tag/v20.8.16)
+- [Drawio](https://github.com/jgraph/drawio-desktop/releases/tag/v20.8.16) was used to draw a program flowchart
 - [GitHub](https://github.com/) was used as a remote repository to store project code
 - [Google Cloud Platform](https://cloud.google.com/cloud-console/) was used to manage access and permissions to the Google Services such as Google auth, sheets etc.
 - [Google Sheets](https://www.google.co.uk/sheets/about/) were used to store players details
 - [PEP8](http://pep8online.com/) was used to check my code against Python conventions
-- [GitPod](https://gitpod.io)
+- [GitPod](https://gitpod.io) was used as workspace to edit code
+- [Heroku](https://heroku.com) was used to host the website
 
 ### Libraries
 
@@ -308,4 +309,128 @@ The following flowchart summarises the structure and logic of the application.
 - [email_validator](https://pypi.org/project/email-validator/) - I used this library to validate the user email 
 - [gspread](https://docs.gspread.org/en/latest/) - I used gspread to add and change data in my Google spreadsheet and to interact with Google APIs
 - [google.oauth2.service_account](https://google-auth.readthedocs.io/en/master/) - I used this module to set up the authentication required for accessing the Google API and connecting my Service Account with the Credentials function. I created a creds.json file containing all the necessary details for the API to access my Google account.
+
+## Features
+
+### Main Menu
+- Provides the user with a welcome screen where they can easily navigate through the program
+- Acts as a hub where the user returns to multiple times when using the program
+- User Stories covered: 1
+
+![Main Menu](docs/main-menu-feature.png)
+
+### Choose Number of Players
+- Allows the user to choose how many players are going to play
+- Add a unique experience to whatever you choose
+- Add variety to the game
+- User Stories covered: 2
+
+![Choose Number of Players](docs/num-players-feature.png)
+
+### Log In or Register
+- Allows the user to log in or register, so they can record their stats and rank higher on the leaderboard
+- Personalises the game as the game can now display your name and stats
+- Asks if user is registered, then their name, and email and then logs in or registers them
+- User Stories covered: 3, 4, 5, 15
+
+![Log In or Register](docs/login-register-feature.png)
+
+### Validate Email 
+- Checks if the email is valid and is registered
+- Displays error alert if the user typed in invalid input or the email was not registered
+- User Stories covered: 14, 16
+
+![Log In or Register](docs/login-register-feature.png)
+
+### CPU Diffiuclty
+- Allows the user to choose what level of difficulty they want the game to be
+- This adds variety and changes up the gameplay
+- It also makes it interesting to learn from as the computer calculates moves in advance
+- User Stories covered: 6
+
+![CPU Difficulty](docs/cpu-difficulty-feature.png)
+
+### Start Game
+- When the user has logged in successfully, the game starts
+- The board is displayed to the user and then the user can select a piece to move
+- User Stories Covered: 7
+
+![Start Game](docs/start-game-feature.png)
+
+### Select Piece
+- Allows the user to select what piece they would like to move from movable pieces
+- Displays the options the user has to choose from
+- User can input what piece to select
+
+![Select Piece](docs/select-piece-feature.png)
+
+### Select Move
+- Allows the user to select what move they would like from available moves
+- Displays the options the user has to choose from when they select a piece
+- Allows the user to return from selecting a move to select a new piece
+
+![Select Move](docs/select-move-feature.png)
+
+### Game Over
+- Displays a game over message when the game is finished
+- Congratulates the winner of the game
+
+![Game Over](docs/game-over-feature.png)
+
+### After Game Selection
+- Displays game stats and updates both players stats for leaderboard
+- Allows the user to select what to do next, if they want to play again, return to leaderboard or view leaderboard or quit game
+- User Stories Covered: 8
+
+![After Game Selection](docs/after-game-feature.png)
+
+### View Game Rules
+- Displays to the user information on how to play the game and what the rules of the game are
+- Allows the user to return to main menu again
+- User Stories Covered: 9
+
+![View Game Rules](docs/game-rules-feature.png)
+
+### View Leaderboard
+- Displays all users that have registered in a table, ranking them on a particular stat
+- Allows the user to check their wins, loses, and total games played
+- User Stories covered: 10
+
+![View Leaderboard](docs/leaderboard-feature.png)
+
+### Sort Leaderboard Ranks
+- Allows the user to choose how to sort the ranks of the leaderboard
+- They can sort it by wins, loses or total games
+- User Stories covered: 11
+
+![Sort Leaderboard Ranks](docs/leaderboard-feature.png)
+
+### Test Features
+- Allows the user to set up certain game states in order for user to test a certain functionality or feature of the game
+- The user can choose from 6 features to test
+- This creates a test game where a test board is set up
+- User Stories covered: 12
+
+![Test Features](docs/test-feature-feature.png)
+
+### Exit Game
+- Allows the user to exit the application
+- Displays a thank you message for the user then it exits the application
+- User Stories covered: 13, 17
+
+![Exit Game](docs/exit-feature.png)
+
+## Validation
+
+## Testing
+
+I first manually tested the user storeis
+Then I set up automated unit testing using the python unittest library and checked coverage on it to see what tests I was covering
+
+1. I want a nice and easily navigated main menu
+
+
+
+
+
 

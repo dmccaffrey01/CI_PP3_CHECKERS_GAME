@@ -90,7 +90,7 @@ class TestGameStart(unittest.TestCase):
     @patch("checkers.display_game_over", mock_function)
     @patch("builtins.input", lambda _: "1")
     def test_start_game_loop(self):
-        self.assertEqual(ch.start_game_loop(self.test_gs, 0, 1, self.player1, 1, 1, False), "game over")
+        self.assertEqual(ch.start_game_loop(self.test_gs, 0, 1, self.player1, 1, 1, False, "full"), "game over")
 
     def test_display_board(self):
         self.assertEqual(ch.display_board(self.gs), self.bs)
@@ -103,9 +103,9 @@ class TestGameStart(unittest.TestCase):
         row_index = 0
         self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 10 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
         i = 2
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index)}")
         r = "7"
-        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
+        self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
         i = 0
         self.assertEqual(ch.format_board_line(board_state, r, i, row_index), f"{Style.DIM + ' ' * 10 + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square() + ch.red_square(board_state, i, row_index) + ch.yellow_square()}")
 
@@ -171,7 +171,7 @@ class TestGameStart(unittest.TestCase):
     @patch("checkers.display_stats", mock_function)
     @patch("time.sleep", mock_function)
     def test_display_game_over(self):
-        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2, False), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
+        self.assertEqual(ch.display_game_over(self.gs, 1, 0, 0, self.player1, self.player2, 2, False, "full"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
 
     def test_game_over(self):
         self.assertEqual(ch.game_over("white", "Pat"), f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {'W H I T E'}\n{' ' * (5 + math.ceil((48-(33 + len('P A T')))/2))}C O N G R A T U L A T I O N S    {'P A T'}\n")
@@ -198,7 +198,7 @@ class TestGameStart(unittest.TestCase):
     @patch("checkers.after_game_selection", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_ask_whats_next(self, mock_input):
-        self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num"), 1)
+        self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num", "original_board", "test"), 1)
 
     def test_validate_whats_next_input(self):
         self.assertEqual(ch.validate_whats_next_input("1"), 1)
@@ -212,10 +212,10 @@ class TestGameStart(unittest.TestCase):
     @patch("main_menu.exit_game", mock_function)
     @patch("leaderboard.go_to_leaderboard", mock_function)
     def test_after_game_selection(self):
-        self.assertEqual(ch.after_game_selection(1, "player1", "player2", "num"), "start game")
-        self.assertEqual(ch.after_game_selection(2, "player1", "player2", "num"), "return to main menu")
-        self.assertEqual(ch.after_game_selection(3, "player1", "player2", "num"), "go to leaderboard")
-        self.assertEqual(ch.after_game_selection(4, "player1", "player2", "num"), "exit game")
+        self.assertEqual(ch.after_game_selection(1, "player1", "player2", "num", "original_board", "test"), "start game")
+        self.assertEqual(ch.after_game_selection(2, "player1", "player2", "num", "original_board", "test"), "return to main menu")
+        self.assertEqual(ch.after_game_selection(3, "player1", "player2", "num", "original_board", "test"), "go to leaderboard")
+        self.assertEqual(ch.after_game_selection(4, "player1", "player2", "num", "original_board", "test"), "exit game")
 
 if __name__ == "__main__":
     unittest.main()

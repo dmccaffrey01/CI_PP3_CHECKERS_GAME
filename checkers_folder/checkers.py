@@ -27,6 +27,7 @@ def start_game(player1, player2, num, board_state, test):
     """ 
     Start the checkers game
     """
+    original_board = board_state
     game_state = check_eng.GameState(board_state)
     
     p1 = 0 # If a human is playing, this will be 0, if an AI is playing this will be 1, 2, or 3, this represents AI difficulty
@@ -42,12 +43,12 @@ def start_game(player1, player2, num, board_state, test):
         p1 = player1
         p2 = player2
 
-    start_game_loop(game_state, p1, p2, player1, player2, num, test)
+    start_game_loop(game_state, p1, p2, player1, player2, num, test, original_board)
 
     return [p1, p2]
     
 
-def start_game_loop(game_state, p1, p2, player1, player2, num, test):
+def start_game_loop(game_state, p1, p2, player1, player2, num, test, original_board):
     """ 
     Starts the basic game loop
     Asks player to pick a piece to move from movable pieces
@@ -65,7 +66,7 @@ def start_game_loop(game_state, p1, p2, player1, player2, num, test):
         movable_pieces = game_state.get_movable_pieces(color)
         if not movable_pieces or moves >= 1000:
             game_over = True
-            display_game_over(game_state, moves, p1, p2, player1, player2, num, test)
+            display_game_over(game_state, moves, p1, p2, player1, player2, num, test, original_board)
             return "game over"
             
         else:
@@ -111,7 +112,7 @@ def display_board(game_state):
         for i in range(5):
             print(format_board_line(board_state, r, i, row_index))
             col_index = -1   
-    print(Style.DIM + Fore.BLUE + format_cols_line(cols))
+    print(Style.DIM + Fore.GREEN + format_cols_line(cols))
 
     return board_state
     
@@ -122,12 +123,12 @@ def format_board_line(board_state, r, i, row_index):
     """
     if int(r) % 2 == 0:
         if i == 2:
-            return f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index)}"
+            return f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index)}"
         else:
             return f"{Style.DIM + ' ' * 10 + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index)}"
     else:
         if i == 2:
-            return f"{Style.DIM + ' ' * 7 + Fore.BLUE + r + ' ' * 2 + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square()}"
+            return f"{Style.DIM + ' ' * 7 + Fore.GREEN + r + ' ' * 2 + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square()}"
         else:
             return f"{Style.DIM + ' ' * 10 + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square() + red_square(board_state, i, row_index) + yellow_square()}"
 
@@ -289,7 +290,7 @@ def format_available_moves(moves):
     
     return formatted_moves
 
-def display_game_over(game_state, moves, p1, p2, player1, player2, num, test):
+def display_game_over(game_state, moves, p1, p2, player1, player2, num, test, original_board):
     """
     Displays game over and winner
     Updates players wins, loses and games played
@@ -307,7 +308,7 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num, test):
     display_stats(stats, moves)
     time.sleep(2)
     display.new_line()
-    ask_whats_next(p1, p2, player1, player2, num)
+    ask_whats_next(p1, p2, player1, player2, num, original_board, test)
 
     return winning_message
 
@@ -399,7 +400,7 @@ def check_winner(game_state, moves, type, p1, p2, player1, player2):
                 message = "CPU"
     return message
 
-def ask_whats_next(p1, p2, player1, player2, num):
+def ask_whats_next(p1, p2, player1, player2, num, original_board, test):
     """ 
     Ask the user what to do next
     Their options are play again
@@ -414,7 +415,7 @@ def ask_whats_next(p1, p2, player1, player2, num):
     while True:
         option = validate_whats_next_input(option_selected)
         if option:
-            after_game_selection(option, player1, player2, num)
+            after_game_selection(option, player1, player2, num, original_board, test)
             return option
             break
         display.new_line()
@@ -438,12 +439,12 @@ def validate_whats_next_input(option):
     else:
         return False
 
-def after_game_selection(option, player1, player2, num):
+def after_game_selection(option, player1, player2, num, original_board, test):
     """ 
     Decide what the game does after game has been played
     """
     if option == 1:
-        start_game(player1, player2, num)
+        start_game(player1, player2, num, original_board, test)
         return "start game"
     elif option == 2:
         mm.raise_return_to_main_menu()

@@ -222,7 +222,7 @@ def go_to_feature_testing():
         display.welcome()
         print(Fore.YELLOW + "Choose what board scenario you would like to test:")
         print(Fore.YELLOW + "(Enter r to return to main menu)")
-        options = "1) Singe Jump\n2) Double jump\n3) Triple Jump\n4) Quintuple Jump\n5) King\n6) Jump To King\n"
+        options = "1) Single Jump\n2) Double jump\n3) Triple Jump\n4) Quintuple Jump\n5) King\n6) Jump To King\n"
         option_selected = input(options)
         display.new_line()
         while True:
