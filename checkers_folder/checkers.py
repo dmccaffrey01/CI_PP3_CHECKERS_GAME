@@ -318,7 +318,7 @@ def game_over(winner_color, winner_name):
     wn = " ".join(list(wn))
     for i in range(5):
         print(" ")
-    winning_message = f"{' ' * 25}G A M E\n{' ' * 25}O V E R\n{' ' * 11}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((48-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n"
+    winning_message = f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 36}T H E   W I N N E R   I S   {wc}\n{' ' * (5 + math.ceil((120-(33 + len(wn)))/2))}C O N G R A T U L A T I O N S    {wn}\n"
     display.typewriter(winning_message)
     return winning_message
 
