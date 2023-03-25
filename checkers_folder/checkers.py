@@ -1,16 +1,11 @@
-""" 
-This is the main file for the game. It will be responsible for handling user input
-and displaying the current game state 
-"""
 import colorama
 from colorama import Fore, Back, Style
 import time
 import os
 import sys
 import math
-# Get the parent path of the current script
-parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-# Add the parent path to the system path
+parent_path = os.path.abspath(os.path
+                              .join(os.path.dirname(__file__), os.pardir))
 sys.path.append(parent_path)
 sys.path.insert(0, 'main_menu_folder/')
 import leaderboard
@@ -22,6 +17,10 @@ import feature_testing as ft
 import smart_move_finder as smf
 import checkers_engine as check_eng
 
+"""
+This is the main file for the game. It will be responsible for handling user input
+and displaying the current game state 
+"""
 
 def start_game(player1, player2, num, board_state, test):
     """ 

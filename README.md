@@ -1,7 +1,7 @@
 # Checkers Game
 (Developer Dillon Mc Caffrey)
 
-![Am-I-Responsive image](docs/am-i-responsive-image.jpg)
+![Site Image](docs/site-image.png)
 
 [Live Site](https://ci-pp3-checkers-game.herokuapp.com/) is hosted on Heroku
 
@@ -280,7 +280,8 @@ The following flowchart summarises the structure and logic of the application.
 
 ### Languages
 
-- [Python](https://www.python.org/) programming language for the logic of the program
+- [Python](https://www.python.org/) was used for the programming of logic of the app
+- [Node.js](https://www.nodejs.org/) was also used in the deployment of the app
 
 ### Frameworks & Tool
 - [Font Awesome](https://fontawesome.com/) - icons from Font Awesome were used in the footer below the program terminal
@@ -288,7 +289,7 @@ The following flowchart summarises the structure and logic of the application.
 - [GitHub](https://github.com/) was used as a remote repository to store project code
 - [Google Cloud Platform](https://cloud.google.com/cloud-console/) was used to manage access and permissions to the Google Services such as Google auth, sheets etc.
 - [Google Sheets](https://www.google.co.uk/sheets/about/) were used to store players details
-- [PEP8](http://pep8online.com/) was used to check my code against Python conventions
+- [PEP8 Code Institute Linter](https://pep8ci.herokuapp.com/) was used to check my code against Python conventions
 - [GitPod](https://gitpod.io) was used as workspace to edit code
 - [Heroku](https://heroku.com) was used to host the website
 
@@ -421,6 +422,8 @@ The following flowchart summarises the structure and logic of the application.
 ![Exit Game](docs/exit-feature.png)
 
 ## Validation
+
+
 
 ## Testing
 
