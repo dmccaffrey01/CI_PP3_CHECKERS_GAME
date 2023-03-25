@@ -4,8 +4,9 @@ import colorama
 from colorama import Fore, Back, Style
 import sys
 
-#Initialize colorama
+# Initialize colorama
 colorama.init(autoreset=True)
+
 
 def cls():
     """
@@ -13,6 +14,7 @@ def cls():
     """
     os.system("cls" if os.name == "nt" else "clear")
     return "clear"
+
 
 def new_line():
     """
@@ -23,29 +25,46 @@ def new_line():
     print(" ")
     return "new line"
 
+
 def welcome():
     """
     Display welcome screen
     """
     cls()
-    print("                            " + Fore.BLUE + "Welcome to:")
+    print("                            " +
+          Fore.BLUE + "Welcome to:")
     print(" ")
-    print("                            " + Fore.RED + "  ____  __   __  _____   ____  __   ___ _____  ______   _______ ")
-    print("                            " + Fore.GREEN + " / __ \|  | |  ||  ___| / __ \|  | /  /|  ___|/   _  \ |  _____|")
-    print("                            " + Fore.RED + "| /  \/|  |_|  || |___ | /  \/|  |/  / | |___ |  |_| / | |_____ ")
-    print("                            " + Fore.GREEN + "| |    |   _   ||  ___|| |    |     |  |  ___||     |  |_____  |")
-    print("                            " + Fore.RED + "| \__/\|  | |  || |___ | \__/\|  |\  \ | |___ |  |\  \  _____| |")
-    print("                            " + Fore.GREEN + " \____/|__| |__||_____| \____/|__| \__\|_____||__| \__\|_______|")
+    print("                            " +
+          Fore.RED + r"  ____  __   __  _____   ____  __   ___ _____  " +
+          "______   _______ ")
+    print("                            " +
+          Fore.GREEN + r" / __ \|  | |  ||  ___| / __ \|  | /  /|  ___|" +
+          r"/   _  \ |  _____|")
+    print("                            " +
+          Fore.RED + r"| /  \/|  |_|  || |___ | /  \/|  |/  / | |___ |  " +
+          r"|_| / | |_____ ")
+    print("                            " +
+          Fore.GREEN + r"| |    |   _   ||  ___|| |    |     |  |  " +
+          r"___||     |  |_____  |")
+    print("                            " +
+          Fore.RED + r"| \__/\|  | |  || |___ | \__/\|  |\  \ | |___ |  " +
+          r"|\  \  _____| |")
+    print("                            " +
+          Fore.GREEN + r" \____/|__| |__||_____| \____/|__| \__\|_____||__| " +
+          r"\__\|_______|")
     print(" ")
     print(" ")
-    print("                            " + Fore.BLUE + "                                            for 1 and 2 players")
+    print("                            " +
+          Fore.BLUE + "                                            " +
+          "for 1 and 2 players")
     print(" ")
     print(" ")
     return "welcome"
 
+
 def typewriter(str):
     """
-    Typewriter to print message out in unique way 
+    Typewriter to print message out in unique way
     """
     for c in str:
         sys.stdout.write(c)

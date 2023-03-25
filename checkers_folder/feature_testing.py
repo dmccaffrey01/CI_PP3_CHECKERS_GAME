@@ -3,15 +3,14 @@ from colorama import Fore, Back, Style
 import os
 import time
 import sys
-# Get the parent path of the current script
-parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-# Add the parent path to the system path
+parent_path = os.path.abspath(os.path
+                                .join(os.path.dirname(__file__), os.pardir))
 sys.path.append(parent_path)
 sys.path.insert(0, 'main_menu_folder/')
 import main_menu as mm
 import display
 
-#Initialize colorama
+# Initialize colorama
 colorama.init(autoreset=True)
 
 board_states = {
@@ -58,7 +57,7 @@ board_states = {
             ["x", "_", "x", "w", "x", "_", "x", "_"],
             ["b", "x", "b", "x", "_", "x", "_", "x"]
         ],
-    
+
     "triple jump": [
             ["x", "_", "x", "_", "x", "_", "x", "_"],
             ["_", "x", "_", "x", "_", "x", "_", "x"],
@@ -136,83 +135,84 @@ board_states = {
             ["b", "x", "B", "x", "_", "x", "_", "x"]
         ],
 
-        "test board 4": [
-            ["x", "_", "x", "_", "x", "_", "x", "w"],
-            ["b", "x", "_", "x", "w", "x", "_", "x"],
-            ["x", "_", "x", "b", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"]
-        ],
+    "test board 4": [
+        ["x", "_", "x", "_", "x", "_", "x", "w"],
+        ["b", "x", "_", "x", "w", "x", "_", "x"],
+        ["x", "_", "x", "b", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"]
+    ],
 
-        "test_get_available_moves_black": [
-            ["x", "_", "x", "B", "x", "_", "x", "B"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "B"],
-            ["_", "x", "_", "x", "B", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["B", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["b", "x", "_", "x", "B", "x", "_", "x"]
-        ],
+    "test_get_available_moves_black": [
+        ["x", "_", "x", "B", "x", "_", "x", "B"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "B"],
+        ["_", "x", "_", "x", "B", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["B", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["b", "x", "_", "x", "B", "x", "_", "x"]
+    ],
 
-        "test_get_available_moves_white": [
-            ["x", "_", "x", "W", "x", "_", "x", "w"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "W"],
-            ["_", "x", "_", "x", "W", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["W", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["W", "x", "_", "x", "W", "x", "_", "x"]
-        ],
+    "test_get_available_moves_white": [
+        ["x", "_", "x", "W", "x", "_", "x", "w"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "W"],
+        ["_", "x", "_", "x", "W", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["W", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["W", "x", "_", "x", "W", "x", "_", "x"]
+    ],
 
-        "test_check_kings_jumps_black": [
-            ["x", "_", "x", "B", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "B", "x", "_"],
-            ["_", "x", "b", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "B", "x", "_", "x"]
-        ],
+    "test_check_kings_jumps_black": [
+        ["x", "_", "x", "B", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "B", "x", "_"],
+        ["_", "x", "b", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "B", "x", "_", "x"]
+    ],
 
-        "test_check_kings_jumps_white": [
-            ["x", "_", "x", "W", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "W", "x", "_"],
-            ["_", "x", "w", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "W", "x", "_", "x"]
-        ],
+    "test_check_kings_jumps_white": [
+        ["x", "_", "x", "W", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "W", "x", "_"],
+        ["_", "x", "w", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "W", "x", "_", "x"]
+    ],
 
-        "test_check_ipnk": [
-            ["x", "_", "x", "b", "x", "B", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "b", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "w", "x", "_", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "w", "x", "W", "x", "_", "x"]
-        ],
+    "test_check_ipnk": [
+        ["x", "_", "x", "b", "x", "B", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "b", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "w", "x", "_", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "w", "x", "W", "x", "_", "x"]
+    ],
 
-        "test_check_jump": [
-            ["x", "_", "x", "_", "x", "_", "x", "w"],
-            ["w", "x", "_", "x", "w", "x", "_", "x"],
-            ["x", "_", "x", "_", "x", "w", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "b", "x"],
-            ["x", "b", "x", "_", "x", "_", "x", "_"],
-            ["_", "x", "_", "x", "_", "x", "w", "x"],
-            ["x", "_", "x", "_", "x", "_", "x", "b"],
-            ["_", "x", "_", "x", "b", "x", "_", "x"]
-        ],
+    "test_check_jump": [
+        ["x", "_", "x", "_", "x", "_", "x", "w"],
+        ["w", "x", "_", "x", "w", "x", "_", "x"],
+        ["x", "_", "x", "_", "x", "w", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "b", "x"],
+        ["x", "b", "x", "_", "x", "_", "x", "_"],
+        ["_", "x", "_", "x", "_", "x", "w", "x"],
+        ["x", "_", "x", "_", "x", "_", "x", "b"],
+        ["_", "x", "_", "x", "b", "x", "_", "x"]
+    ],
 }
+
 
 def go_to_feature_testing():
     """
@@ -220,9 +220,11 @@ def go_to_feature_testing():
     """
     try:
         display.welcome()
-        print(Fore.YELLOW + "Choose what board scenario you would like to test:")
+        print(Fore.YELLOW + "Choose what board scenario you would like" +
+              "to test:")
         print(Fore.YELLOW + "(Enter r to return to main menu)")
-        options = "1) Single Jump\n2) Double jump\n3) Triple Jump\n4) Quintuple Jump\n5) King\n6) Jump To King\n"
+        options = "1) Single Jump\n2) Double jump\n3) Triple Jump\n" + \
+                  "4) Quintuple Jump\n5) King\n6) Jump To King\n"
         option_selected = input(options)
         display.new_line()
         while True:
@@ -234,16 +236,18 @@ def go_to_feature_testing():
                     set_up_board(validated_option)
                 return validated_option
             display.welcome()
-            print(Fore.YELLOW + "Please input (1, one) or (2, two) or (3, three) or (4, four) or (5, five) or (6, six):")
+            print(Fore.YELLOW + "Please input (1, one) or (2, two)" +
+                  "or (3, three) or (4, four) or (5, five) or (6, six):")
             option_selected = input(options)
             display.new_line()
-    except:
+    except Exception as e:
         return mm.return_to_main_menu()
+
 
 def validate_ask_feature_testing(option):
     """
     Validate the option, returns number or return if valid
-    And false if not valid 
+    And false if not valid
     """
     if option == "1" or option.lower() == "one":
         return "single jump"
@@ -262,6 +266,7 @@ def validate_ask_feature_testing(option):
     else:
         return False
 
+
 def set_up_board(option):
     """
     Sets up the board with correct option to test
@@ -272,5 +277,3 @@ def set_up_board(option):
     test_player_2 = mm.Player("test_two", "testtwo@gmail.com", 0, 0, 0)
     mm.start_checkers_game(test_player_1, test_player_2, 2, option, True)
     return "set_up_board"
-
-
