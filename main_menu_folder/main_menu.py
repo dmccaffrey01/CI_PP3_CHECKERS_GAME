@@ -203,12 +203,12 @@ class Player:
         """
         Displayer the players stats
         """
-        return f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.name + " + \
-            f"Fore.CYAN + '   Email: ' + Fore.WHITE + self.email + " + \
-            f"Fore.CYAN + '   Total Games: ' + " + \
-            f"Fore.WHITE + str(self.total_games) + " + \
-            f"Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.wins) + " + \
-            f"Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.loses)}"
+        return f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.name}" + \
+            f"{Fore.CYAN + '   Email: ' + Fore.WHITE + self.email}" + \
+            f"{Fore.CYAN + '   Total Games: '}" + \
+            f"{Fore.WHITE + str(self.total_games)}" + \
+            f"{Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.wins)}" + \
+            f"{Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.loses)}"
 
 
 def start_cpu_game(num):
