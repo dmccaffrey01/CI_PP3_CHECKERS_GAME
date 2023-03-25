@@ -96,8 +96,8 @@ def format_game_rule_line(line):
     if line == "nl":
         return game_rules_empty_line()
     else:
-        return f"{game_rules_start_of_line() + Fore.WHITE + line}" \
-               f"{+ ' ' * (100 - len(line)) + Fore.YELLOW + '|'}\n"
+        return f"{game_rules_start_of_line() + Fore.WHITE + line}" + \
+               f"{' ' * (100 - len(line)) + Fore.YELLOW + '|'}\n"
 
 
 def game_rules_top_and_bottom_line():
