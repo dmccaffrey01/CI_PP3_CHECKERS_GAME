@@ -382,7 +382,7 @@ The following flowchart summarises the structure and logic of the application.
 ![Log In or Register](docs/login-register-feature.png)
 
 ### Email Not Registered
-- If the user inputs that they have played and tries to log in instead of register but they type in an email that hasn't been registered an error message appears
+- If the user inputs that they have played and tries to log in instead of register but they type in an email that hasn't been registered an error message appears (eg. invalid@gmail.com)
 - The user is then asked if they would like to register a new account, where they will register the email inputed and there email will be added to the systeem
 - The other option is to retype the email where they will be asked to input email again and the same proccess of validation will occur
 - User Stories Covered: 18
@@ -390,7 +390,7 @@ The following flowchart summarises the structure and logic of the application.
 ![Email Not Registered](docs/email-not-registered-feature.png)
 
 ### Email Already Registered
-- If the users inputs that they have not played and tries to register an account that is already in the system an error message appears
+- If the users inputs that they have not played and tries to register an account that is already in the system an error message appears (eg. dil@gmail.com)
 - The user is asked if they would like to log in as that player or register a new email
 - If they choose to log in it logs them in as that email, if they choose to register new email they will be asked to input email again and the same process of validation will occur
 - User Stories Covered: 19
@@ -594,6 +594,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 </details>
 
 3. I want to be able to log in to the game
@@ -604,6 +605,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 </details>
 
@@ -615,6 +617,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 </details>
 
@@ -626,6 +629,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 </details>
 
@@ -638,6 +642,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 <img src="docs/cpu-difficulty-test.png">
 </details>
@@ -650,6 +655,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 <img src="docs/cpu-difficulty-test.png">
 <img src="docs/start-game-feature.png">
@@ -663,6 +669,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 <img src="docs/cpu-difficulty-test.png">
 <img src="docs/start-game-feature.png">
@@ -742,6 +749,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 </details>
 
@@ -753,6 +761,7 @@ Then I set up automated unit testing using the python unittest library and check
 
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
 <img src="docs/login-register-test.png">
 </details>
 
@@ -766,14 +775,69 @@ Then I set up automated unit testing using the python unittest library and check
 <img src="docs/main-menu-option-5-test.png">
 </details>
 
-17. I want to thank the user for playing the game
+18. I want the user to choose to register a new email or try entering email again if they are logging in and enter email that isn't on system
 
 | **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
 | ------------- | ----------------------------- | ---------------------------- | ----------------- |
-| Exit Game | Select option 5 | Users are presented with goodbye message and app exits | Works as expected |
+| Email Not Registered | Select option 1, select option 1 or 2, select option 1 to log in, enter a name, then enter an email that isn't registered | Users are presented with an error message then asked to choose to try entering email again or register the email entered into the system | Works as expected |
 
 <details><summary>Screenshot</summary>
-<img src="docs/main-menu-option-5-test.png">
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
+<img src="docs/email-not-registered-test.png">
+</details>
+
+19. I want the user to choose to log in as entered email or try entering email again if they are registering a new email that is already on system
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Email Already Registered | Select option 1, select option 1 or 2, select option 2 to register, enter a name, then enter an email that is already registered(eg. dil@gmail.com) | Users are presented with an error message then asked to choose to try entering a new email or log in as the email entered  | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
+<img src="docs/email-already-registered-test.png">
+</details>
+
+20. I want the user to be able to return to the main menu when they are logging in or registering
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Return To Main Menu | Select option 1, select option 1 or 2, enter r to return to main menu | Users are presented with a message that they are returning to the main menu | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
+<img src="docs/return-to-main-menu-feature.png">
+</details>
+
+21. I want the user to be able to select a piece to move from their movable pieces on the board
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Select Piece | Select option 1, select option 1 or 2, select option 1 or 2 to register or log in, register or log in by entering name and email, select option to choose a piece to move | Users are presented with options to choose piece | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
+<img src="docs/return-to-main-menu-feature.png">
+<img src="docs/login-register-test.png">
+<img src="docs/select-piece-feature.png">
+</details>
+
+22. I want the user to be able to select a move from the available moves of the piece they selected
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Select Move | Select option 1, select option 1 or 2, select option 1 or 2 to register or log in, register or log in by entering name and email, select option to choose a piece to move, select a move you want the piece to move to | Users are presented with options to choose piece and then options to choose a move | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/num-players-test.png">
+<img src="docs/return-to-main-menu-feature.png">
+<img src="docs/login-register-test.png">
+<img src="docs/select-piece-feature.png">
+<img src="docs/select-move-feature.png">
 </details>
 
 </details>
