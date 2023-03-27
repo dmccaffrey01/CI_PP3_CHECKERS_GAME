@@ -71,7 +71,7 @@ def start_game_loop(game_state, p1, p2, player1, player2, num, test,
             or (color == "white" and not p2)
 
         movable_pieces = game_state.get_movable_pieces(color)
-        if not movable_pieces or moves >= 150:
+        if not movable_pieces or moves >= 120:
             game_over = True
             display_game_over(game_state, moves, p1, p2, player1, player2,
                               num, test, original_board)
@@ -448,7 +448,7 @@ def check_winner(game_state, moves, type, p1, p2, player1, player2):
     """
     Checks who the winner is and formats a string to return
     """
-    if moves >= 150:
+    if moves >= 120:
         message = "DRAW"
     elif smf.score_the_pieces_on_board(game_state.board) > 0:
         if type == "color":
