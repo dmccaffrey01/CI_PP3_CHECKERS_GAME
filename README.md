@@ -834,7 +834,7 @@ Then I set up automated unit testing using the python unittest library and check
 <details><summary>Screenshot</summary>
 <img src="docs/main-menu-option-1-test.png">
 <img src="docs/num-players-test.png">
-<img src="docs/return-to-main-menu-feature.png">
+<img src="docs/return-to-menu-feature.png">
 <img src="docs/login-register-test.png">
 <img src="docs/select-piece-feature.png">
 <img src="docs/select-move-feature.png">
