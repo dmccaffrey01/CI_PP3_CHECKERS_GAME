@@ -267,6 +267,11 @@ When the user selects exit game in the main menu, the program displays a goodbye
 15. I want to store the user data so I can use it in the programme
 16. I want the user to receive feedback if they enter invalid input
 17. I want to thank the user for playing the game
+18. I want the user to choose to register a new email or try entering email again if they are logging in and enter email that isn't on system
+19. I want the user to choose to log in as entered email or try entering email again if they are registering a new email that is already on system
+20. I want the user to be able to return to the main menu when they are logging in or registering
+21. I want the user to be able to select a piece to move from their movable pieces on the board
+22. I want the user to be able to select a move from the available moves of the piece they selected
 
 ## Technical Design
 
@@ -307,11 +312,17 @@ The following flowchart summarises the structure and logic of the application.
 
 #### Third Party Libraries
 - [colorama](https://pypi.org/project/colorama/) - I used this library to add color to the terminal and enhance user experience.
-- [email_validator](https://pypi.org/project/email-validator/) - I used this library to validate the user email 
+- [email_validator](https://pypi.org/project/email-validator/) - I used this library to validate the user email to check if the email exists
 - [gspread](https://docs.gspread.org/en/latest/) - I used gspread to add and change data in my Google spreadsheet and to interact with Google APIs
 - [google.oauth2.service_account](https://google-auth.readthedocs.io/en/master/) - I used this module to set up the authentication required for accessing the Google API and connecting my Service Account with the Credentials function. I created a creds.json file containing all the necessary details for the API to access my Google account.
 
 ## Features
+
+### Validate Input
+- Throughout the entire program there are functions that validate the input entered to make sure the input is an option
+- Every choice the user has the input is validated and if the user enters invalid input the user is asked to input correct valid input
+
+![Invalid Input](docs/invalid-name-feature.png)
 
 ### Main Menu
 - Provides the user with a welcome screen where they can easily navigate through the program
@@ -319,6 +330,12 @@ The following flowchart summarises the structure and logic of the application.
 - User Stories covered: 1
 
 ![Main Menu](docs/main-menu-feature.png)
+
+### Return To Main Menu
+- If the user enters "r" at any point when they are registering, they will be returned back to the main menu
+- User Stories Covered: 20
+
+![Return to Main Menu](docs/return-to-menu-feature.png)
 
 ### Choose Number of Players
 - Allows the user to choose how many players are going to play
@@ -336,12 +353,49 @@ The following flowchart summarises the structure and logic of the application.
 
 ![Log In or Register](docs/login-register-feature.png)
 
+### Ask Registered
+- Asks if user if they have played before, this allows them either to log in or register a new account
+- If answered yes they log in
+- If answered no they register a new account
+
+![Ask Registered](docs/login-register-feature.png)
+
+### Ask Name
+- Asks the user to input their name
+- Name has to be valid, meaning it has to be in the alpha(a-z, A-Z) characters no numbers and of length (1-12) no longer
+- An error message is displayed to user if not valid and asked to type again
+
+![Invalid Name](docs/invalid-name-feature.png)
+
+### Ask Email
+- Asks the user to input their email
+- Email has to be valid, meaning it has to be in the form of valid email eg(name@gmail.com)
+- An erro message is displayed to user if not valid and asked to type again
+
+![Invalid Email](docs/invalid-email-feature.png)
+
 ### Validate Email 
 - Checks if the email is valid and is registered
 - Displays error alert if the user typed in invalid input or the email was not registered
 - User Stories covered: 14, 16
 
 ![Log In or Register](docs/login-register-feature.png)
+
+### Email Not Registered
+- If the user inputs that they have played and tries to log in instead of register but they type in an email that hasn't been registered an error message appears
+- The user is then asked if they would like to register a new account, where they will register the email inputed and there email will be added to the systeem
+- The other option is to retype the email where they will be asked to input email again and the same proccess of validation will occur
+- User Stories Covered: 18
+
+![Email Not Registered](docs/email-not-registered-feature.png)
+
+### Email Already Registered
+- If the users inputs that they have not played and tries to register an account that is already in the system an error message appears
+- The user is asked if they would like to log in as that player or register a new email
+- If they choose to log in it logs them in as that email, if they choose to register new email they will be asked to input email again and the same process of validation will occur
+- User Stories Covered: 19
+
+![Email Already Registered](docs/email-already-registered-feature.png)
 
 ### CPU Diffiuclty
 - Allows the user to choose what level of difficulty they want the game to be
@@ -362,13 +416,15 @@ The following flowchart summarises the structure and logic of the application.
 - Allows the user to select what piece they would like to move from movable pieces
 - Displays the options the user has to choose from
 - User can input what piece to select
+- User Stories Covered: 21
 
 ![Select Piece](docs/select-piece-feature.png)
 
 ### Select Move
 - Allows the user to select what move they would like from available moves
 - Displays the options the user has to choose from when they select a piece
-- Allows the user to return from selecting a move to select a new piece
+- Allows the user to return from selecting a move to select a new piece by entering "r"
+- User Stories Covered: 22
 
 ![Select Move](docs/select-move-feature.png)
 
@@ -710,6 +766,16 @@ Then I set up automated unit testing using the python unittest library and check
 <img src="docs/main-menu-option-5-test.png">
 </details>
 
+17. I want to thank the user for playing the game
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Exit Game | Select option 5 | Users are presented with goodbye message and app exits | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-5-test.png">
+</details>
+
 </details>
 
 ### Automated Unit Testing
@@ -718,10 +784,13 @@ Then I set up automated unit testing using the python unittest library and check
 
 - I wrote unit tests for all python files using the unittest library
 - All unit test files are in the folder test
+- I used mock functions and classes to help out and run all tests
 - I then used coverage library to run the tests and check how much of my code was being tested
+- When you coverage run, there is a total of 161 tests
 - I achieved 99% report, the 1% is the test files but all other files are 100%, meaning my code is 100% tested
 
 <details><summary>See coverage details</summary>
+<img src="docs/unittests.png">
 <img src="docs/coverage-run-report.png">
 </details>
 
@@ -736,6 +805,59 @@ Then I set up automated unit testing using the python unittest library and check
 
 ## Deployment
 This application has been deployed from GitHub to Heroku. A guide to deploying to Heroku can be found [here](https://devcenter.heroku.com/articles/github-integration)
+Here are the steps to deployment
+- Login or create an account at [Heroku](https://dashboard.heroku.com/)
+
+<img src="docs/deployment-1.png">
+
+- Click on New > Create new app in the top right of the screen.
+
+<img src="docs/deployment-2.png">
+
+- Add an app name and select location, then click 'create app'.
+
+<img src="docs/deployment-3.png">
+
+- Under the deploy tab of the next page, select connect to GitHub.
+
+- Log in to your GitHub account when prompted.
+
+<img src="docs/deployment-4.png">
+
+- Select the repository that you want to be connected to the Heroku app.
+
+<img src="docs/deployment-5.png">
+
+- Click on the settings tab.
+
+<img src="docs/deployment-6.png">
+
+- Scroll down to the config vars section, and add 2 config vars:
+    * The first key is CREDS and the value here is the creds.json file that was generated for the google sheets API to work properly.
+    * The second key is PORT and the Value is 8000
+  
+
+<img src="docs/deployment-7.png">
+
+- Once you have set up the config vars, scroll down to buildpacks (still under the settings tab)
+
+- Add the Python and Node.js buildpacks to your app and make sure that when they are displayed, they appear in the order:
+    * Python
+    * Node.JS
+  
+
+<img src="docs/deployment-8.png">
+
+- Navigate back to the settings tab.
+
+- Select automatic deploys to allow Heroku to build the site with new changes each time changes are pushed to GitHub.
+
+<img src="docs/deployment-9.png">
+
+- In the 'manual deploy' section beneath this, make sure the branch selected is 'main' and click deploy branch.
+
+<img src="docs/deployment-10.png">
+
 
 ### Forking the GitHub Repository
 1. Go to the GitHub repository
