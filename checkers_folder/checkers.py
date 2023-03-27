@@ -71,7 +71,7 @@ def start_game_loop(game_state, p1, p2, player1, player2, num, test,
             or (color == "white" and not p2)
 
         movable_pieces = game_state.get_movable_pieces(color)
-        if not movable_pieces or moves >= 1000:
+        if not movable_pieces or moves >= 200:
             game_over = True
             display_game_over(game_state, moves, p1, p2, player1, player2,
                               num, test, original_board)
