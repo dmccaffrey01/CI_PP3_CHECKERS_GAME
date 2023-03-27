@@ -38,6 +38,14 @@ class TestSmartMoveFinder(unittest.TestCase):
                 self.gs, self.black_available_moves, 1),
             self.black_available_moves[0])
 
+    @patch("smart_move_finder.find_move_nega_max_alpha_beta", mock_random_move)
+    @patch("random.randint", mock_random_move)
+    def test_find_best_move_2(self):
+        self.assertEqual(
+            smf.find_best_move(
+                self.gs, self.black_available_moves, 1),
+            self.black_available_moves[0])
+
     @patch("random.randint", mock_random_move)
     def test_find_random_move(self):
         self.assertEqual(

@@ -18,6 +18,8 @@ def find_best_move(game_state, available_moves, ai_difficulty):
                                       search_depth, -60, 60,
                                       1 if game_state.black_to_move else -1,
                                       game_state.color_go)
+        if next_move == None:
+            find_random_move(game_state, available_moves)
     return next_move
 
 
