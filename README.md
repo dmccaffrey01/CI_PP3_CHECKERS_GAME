@@ -403,7 +403,7 @@ The following flowchart summarises the structure and logic of the application.
 - There is 3 levels of AI: Beginner, Novice and Expert
 - The Beginner makes random moves from all available moves for that color
 - The Novice uses a min max algorithm(found in smart move finder) to make a smart move, it does this by looking 2 moves in advance and selecting the move that has the highest score based on the opponent also making the best move it has
-- The Expert uses the same algorithm as the Novice but instead of looking 2 moves in advance it looks 4 moves in advance. It does this by using recursion.
+- The Expert uses the same algorithm as the Novice but instead of looking 2 moves in advance it looks 4 moves in advance. It does this by using recursion, finding the highest score and uses alpha beta pruning to remove branches that already have a low score to make the code a bit faster
 - User Stories covered: 6
 
 ![CPU Difficulty](docs/cpu-difficulty-feature.png)
