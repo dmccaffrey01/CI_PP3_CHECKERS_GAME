@@ -423,14 +423,351 @@ The following flowchart summarises the structure and logic of the application.
 
 ## Validation
 
+[CI PEP8 Validation Service](https://pep8ci.herokuapp.com/#) was used to check the code for PEP8 requirements. All the code passes with no errors and 1 warning across all files
+The 1 warning is "E402 module level import not at top of file", this is because I used sys.path to access files in folders. I know how to get rid of this warning, and I will explain in Bugs but I would prefer not to.
 
+<details>
+<summary>Validation for run.py</summary>
+<img src="docs/run-validation.png">
+</details>
+
+<details>
+<summary>Validation for display.py</summary>
+<img src="docs/display-validation.png">
+</details>
+
+<details>
+<summary>Validation for game_rules.py</summary>
+<img src="docs/game-rules-validation.png">
+</details>
+
+<details>
+<summary>Validation for leaderboard.py</summary>
+<img src="docs/leaderboard-validation.png">
+</details>
+
+<details>
+<summary>Validation for main_menu.py</summary>
+<img src="docs/main-menu-validation.png">
+</details>
+
+<details>
+<summary>Validation for checkers_engine.py</summary>
+<img src="docs/checkers-engine-validation.png">
+</details>
+
+<details>
+<summary>Validation for checkers.py</summary>
+<img src="docs/checkers-validation.png">
+</details>
+
+<details>
+<summary>Validation for feature_testing.py</summary>
+<img src="docs/ft-validation.png">
+</details>
+
+<details>
+<summary>Validation for smart_move_finder.py</summary>
+<img src="docs/smf-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_checkers_engine.py</summary>
+<img src="docs/test-check-eng-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_checkers.py</summary>
+<img src="docs/test-check-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_display.py</summary>
+<img src="docs/test-display-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_feature_testing.py</summary>
+<img src="docs/test-ft-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_game_rules.py</summary>
+<img src="docs/test-gr-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_leaderboard.py</summary>
+<img src="docs/test-leaderboard-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_main_menu.py</summary>
+<img src="docs/test-main-menu-validation.png">
+</details>
+
+<details>
+<summary>Validation for test_smart_move_finder.py</summary>
+<img src="docs/test-smf-validation.png">
+</details>
 
 ## Testing
 
 I first manually tested the user storeis
 Then I set up automated unit testing using the python unittest library and checked coverage on it to see what tests I was covering
 
+### Manual Testing
+<details>
+<summary>See testing of user stories</summary>
+
 1. I want a nice and easily navigated main menu
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Main menu | Start App | Users are presented with main menu | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-feature.png">
+</details>
+
+2. I want to be able to choose to play against the computer
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Choose Number of Players | Selection option 1 | Users are presented with option to choose the number of players and play against the computer | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+</details>
+
+3. I want to be able to log in to the game
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Log In or Register | Selection option 1, then option 1 or 2 | Users are presented with option to choose to log in or register, they can enter their name and email | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+4. I want to ber able to register if I have never played before
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Log In or Register | Selection option 1, then option 1 or 2 | Users are presented with option to choose to log in or register, they can enter their name and email | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+5. I want to personalise the game by entering my name
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Log In or Register | Selection option 1, then option 1 or 2 | Users are presented with option to choose to log in or register, they can enter their name and email | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+6. I want to change the level of difficulty of the computer
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| CPU Difficulty | Selection option 1, then option 1 or 2, Enter in log in details | Users are presented with option to choose to the level of difficulty of Computer with 3 options | Works as expected |
+| CPU Difficulty | Selection option 1, then option 3 | Users are presented with option to choose to the level of difficulty of Computer with 3 options | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+<img src="docs/cpu-difficulty-test.png">
+</details>
+
+7. I want the board to be displayed in a nice and easy to understand way
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Start Game | Selection option 1, then option 1 or 2, Enter in log in details | Users are presented with game board and their pieces | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+<img src="docs/cpu-difficulty-test.png">
+<img src="docs/start-game-feature.png">
+</details>
+
+8. I want to have options like replay the game, or return to the main menu after I have finished the game
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| After Game Selection | Selection option 1, then option 1 or 2, Enter in log in details, play game of checkers | Users are presented with option to play game, return to main menu, view leaderboard or exit app | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+<img src="docs/cpu-difficulty-test.png">
+<img src="docs/start-game-feature.png">
+<img src="docs/select-move-test.png">
+<img src="docs/select-piece-test.png">
+<img src="docs/after-game-selection.png">
+</details>
+
+9. I want to view the game rules and receive information on how to play
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| View Game Rules | Select option 2 | Users are presented with game rules and option to return to main menu | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-2-test.png">
+</details>
+
+10. I want my stats to be displayed in a leaderboard
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| View Leaderboard | Select option 3 | Users are presented with leaderboard of all players registered | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-3-test.png">
+</details>
+
+11. I want to sort the leaderboard in different ways
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| View Leaderboard | Select option 3 | Users are presented with leaderboard of all players registered and the option to sort the ranks depending on option selected | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-3-test.png">
+<img src="docs/leaderboard-test.png">
+</details>
+
+12. I want to be able to test certain game features
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Test Features | Select option 4 | Users are presented with options to choose a test scenario to test game features | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-4-test.png">
+<img src="docs/test-feature-test.png">
+</details>
+
+13. I want to be able to easily exit the programme from the main menu
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Exit Game | Select option 5 | Users are presented with goodbye message and app exits | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-5-test.png">
+</details>
+
+14. I want the user to enter valid emails when registering or logging in
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Validate Email | Select option 1, Select option 1 or 2, Enter name then email | Users are presented with loggin in message or error message if email invalid | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+15. I want to store the user data so I can use it in the programme
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Log In or Register | Select option 1, Select option 1 or 2, Enter name then email | Users are presented with loggin in message or error message if email invalid, Name and stats are then recorded and displayed | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+16. I want the user to receive feedback if they enter invalid input
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Validate Email | Select option 1, Select option 1 or 2, Enter name then email | Users are presented with loggin in message or error message if email invalid | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-1-test.png">
+<img src="docs/login-register-test.png">
+</details>
+
+17. I want to thank the user for playing the game
+
+| **Feature**   | **Action**                    | **Expected Result**          | **Actual Result** |
+| ------------- | ----------------------------- | ---------------------------- | ----------------- |
+| Exit Game | Select option 5 | Users are presented with goodbye message and app exits | Works as expected |
+
+<details><summary>Screenshot</summary>
+<img src="docs/main-menu-option-5-test.png">
+</details>
+
+</details>
+
+### Automated Unit Testing
+
+<details><summary>See unit testing</summary>
+
+- I wrote unit tests for all python files using the unittest library
+- All unit test files are in the folder test
+- I then used coverage library to run the tests and check how much of my code was being tested
+- I achieved 99% report, the 1% is the test files but all other files are 100%, meaning my code is 100% tested
+
+<details><summary>See coverage details</summary>
+<img src="docs/coverage-run-report.png">
+</details>
+
+## Bugs
+
+| **Bug** | **Fix** |
+| ------- | ------- |
+| When passing code through the pep8 Linter, a "E402 module level import not at top of file" warning comes up | This is caused because I am importing a file from a different folder, I am using sys.path to get the path and redirect it to the folder. To fix this I need to create a setup.py file and install my files into the app, but I would prefer not to do this and instead have them imported the way I do. I could also use ".." and "from" when importing but this caused an error when importing in unit testing so I would also prefer not to do that.
+| When playing the game, if the player has a lot of options either from pieces or moves, the output of choosing the option can cause the terminal to scroll down. Sometimes when the terminal scrolls down and when you scroll back up the board can become messed up and stay at the top. | This doesn't happen often but a fix could be to reduce the size of the board or alternitavely have the options of pieces to move be displayed on the same line instead of one below another. |
+
+</details>
+
+## Deployment
+This application has been deployed from GitHub to Heroku. A guide to deploying to Heroku can be found [here](https://devcenter.heroku.com/articles/github-integration)
+
+### Forking the GitHub Repository
+1. Go to the GitHub repository
+2. Click on Fork button in top right corner
+3. You will then have a copy of the repository in your own GitHub account.
+   
+### Making a Local Clone
+1. Go to the GitHub repository 
+2. Locate the Code button above the list of files and click it
+3. Highlight the "HTTPS" button to clone with HTTPS and copy the link
+4. Open Git Bash
+5. Change the current working directory to the one where you want the cloned directory
+6. Type git clone and paste the URL from the clipboard ($ git clone <span>https://</span>github.com/YOUR-USERNAME/YOUR-REPOSITORY)
+7. Press Enter to create your local clone
+
+## Credits
+
+- [Code Institue](https://learn.codeinstitute.net/dashboard) Love Sandwiches Walkthrough for the google spreadsheet API and credentials
+- [Stackoverflow](https://stackoverflow.com/) for help with python bugs
+- [Eddie Sharick](https://www.youtube.com/@eddiesharick6649) for help on AI smart move algorithm
+
+## Acknowledgements
+
+I would like to thank and acknowledge the following people who helped me along the way in completting this project:
+
+Code Institute - for giving me guideance and support throughout the project
+
+Mo Shami - for being the mentor to guide me through the project and give essential feedback
+
+Amy Connolly - for peer reviewing and giving feedback on the website
+
+Gary Mc Caffrey - for peer reviewing and giving feedback on the project
 
 
 
