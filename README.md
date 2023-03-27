@@ -400,7 +400,10 @@ The following flowchart summarises the structure and logic of the application.
 ### CPU Diffiuclty
 - Allows the user to choose what level of difficulty they want the game to be
 - This adds variety and changes up the gameplay
-- It also makes it interesting to learn from as the computer calculates moves in advance
+- There is 3 levels of AI: Beginner, Novice and Expert
+- The Beginner makes random moves from all available moves for that color
+- The Novice uses a min max algorithm(found in smart move finder) to make a smart move, it does this by looking 2 moves in advance and selecting the move that has the highest score based on the opponent also making the best move it has
+- The Expert uses the same algorithm as the Novice but instead of looking 2 moves in advance it looks 4 moves in advance. It does this by using recursion.
 - User Stories covered: 6
 
 ![CPU Difficulty](docs/cpu-difficulty-feature.png)
