@@ -195,10 +195,10 @@ def leaderboard_data_line(row, i):
     """
     Returns an f string of correct data put in for row of leaderboard
     """
-    rank = format_leaderboard_rank_and_wins_and_name(str(i), "rank")
-    name = format_leaderboard_rank_and_wins_and_name(row[0], "name")
+    rank = format_leaderboard_rank_wins_name(str(i), "rank")
+    name = format_leaderboard_rank_wins_name(row[0], "name")
     games = format_leaderboard_games_and_loses(row[2])
-    wins = format_leaderboard_rank_and_wins_and_name(row[3], "wins")
+    wins = format_leaderboard_rank_wins_name(row[3], "wins")
     loses = format_leaderboard_games_and_loses(row[4])
     return f"{' ' * 16 + Fore.YELLOW + '|' + Fore.YELLOW + '|' + rank}" + \
            f"{Fore.YELLOW + '|' + name + Fore.YELLOW + '|' + games}" + \
@@ -206,7 +206,7 @@ def leaderboard_data_line(row, i):
            f"{Fore.YELLOW + '|' + Fore.YELLOW + '|'}\n"
 
 
-def format_leaderboard_rank_and_wins_and_name(str, type):
+def format_leaderboard_rank_wins_name(str, type):
     """
     Correctly formats rank or wins to place in leaderboard
     """

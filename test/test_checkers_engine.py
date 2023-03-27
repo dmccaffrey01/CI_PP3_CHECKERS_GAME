@@ -310,7 +310,7 @@ class TestGameStateJumps(unittest.TestCase):
                 "Left"), ["Left", "Left-King"])
         self.assertEqual(
             self.test_game_state_1.get_direction(
-                ), ["Right", "Right-King"])
+                "Right"), ["Right", "Right-King"])
 
     def test_get_jump(self):
         self.assertEqual(

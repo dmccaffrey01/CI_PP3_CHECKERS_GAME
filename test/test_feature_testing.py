@@ -5,9 +5,8 @@ import sys
 import io
 import colorama
 from colorama import Fore, Back, Style
-# Get the parent path of the current script
-parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-# Add the parent path to the system path
+parent_path = os.path.abspath(os.path
+                                .join(os.path.dirname(__file__), os.pardir))
 sys.path.append(parent_path)
 sys.path.insert(0, 'main_menu_folder/')
 import main_menu as mm
@@ -15,15 +14,17 @@ sys.path.remove("main_menu_folder/")
 sys.path.insert(0, 'checkers_folder/')
 import feature_testing as ft
 
+
 def mock_function(*args, **kwargs):
     """
-    Mocks a function with any arguments 
+    Mocks a function with any arguments
     """
     return True
 
+
 class TestFeatureTesting(unittest.TestCase):
     """
-    Testing of the leaderboard sort ranks 
+    Testing of the leaderboard sort ranks
     """
     def setUp(self):
         # Disable print output
@@ -48,7 +49,8 @@ class TestFeatureTesting(unittest.TestCase):
         self.assertEqual(ft.validate_ask_feature_testing("1"), "single jump")
         self.assertEqual(ft.validate_ask_feature_testing("2"), "double jump")
         self.assertEqual(ft.validate_ask_feature_testing("3"), "triple jump")
-        self.assertEqual(ft.validate_ask_feature_testing("4"), "quintuple jump")
+        self.assertEqual(
+            ft.validate_ask_feature_testing("4"), "quintuple jump")
         self.assertEqual(ft.validate_ask_feature_testing("5"), "king")
         self.assertEqual(ft.validate_ask_feature_testing("6"), "jump to king")
         self.assertEqual(ft.validate_ask_feature_testing("r"), "return")

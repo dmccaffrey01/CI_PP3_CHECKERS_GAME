@@ -138,7 +138,7 @@ class TestGameStart(unittest.TestCase):
                 board_state, r, i, row_index),
             f"{Style.DIM + ' ' * 17 + Fore.GREEN + r + ' ' * 2}" +
             f"{ch.red_square(board_state, i, row_index)}" +
-            f"{ch.yellow_square() + ch.red_square(board_state, i, row_index)" +
+            f"{ch.yellow_square() + ch.red_square(board_state, i, row_index)}" +
             f"{ch.yellow_square()}" +
             f"{ch.red_square(board_state, i, row_index)}" +
             f"{ch.yellow_square()}" +
@@ -269,7 +269,7 @@ class TestGameStart(unittest.TestCase):
             f"{' ' * 56}G A M E\n{' ' * 56}O V E R\n{' ' * 41}" +
             f"T H E   W I N N E R   I S   {'W H I T E'}\n" +
             f"{' ' * (math.ceil((120-(33 + len('P A T')))/2))}" +
-            f"{C O N G R A T U L A T I O N S    {'P A T'}\n")
+            f"C O N G R A T U L A T I O N S    {'P A T'}\n")
 
     def test_game_over(self):
         self.assertEqual(
@@ -306,22 +306,56 @@ class TestGameStart(unittest.TestCase):
              f"{Fore.WHITE + str(self.player2.wins)}" +
              f"{Fore.CYAN + '   Loses: '}" +
              f"{Fore.WHITE + str(self.player2.loses)}"])
-        self.assertEqual(ch.update_player_stats("Black", 0, 1, self.player1, 1, False), [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name + Fore.CYAN + '   Email: ' + Fore.WHITE + self.player1.email + Fore.CYAN + '   Total Games: ' + Fore.WHITE + str(self.player1.total_games) + Fore.CYAN + '   Wins: ' + Fore.WHITE + str(self.player1.wins) + Fore.CYAN + '   Loses: ' + Fore.WHITE + str(self.player1.loses)}", "cpu"])
-        self.assertEqual(ch.update_player_stats("Black", 1, 1, 1, 1, False), ["cpu", "cpu"])
+        self.assertEqual(
+            ch.update_player_stats(
+                "Black", 0, 1, self.player1, 1, False),
+            [f"{Fore.CYAN + 'Name: ' + Fore.WHITE + self.player1.name}" +
+             f"{Fore.CYAN + '   Email: '}" +
+             f"{Fore.WHITE + self.player1.email}" +
+             f"{Fore.CYAN + '   Total Games: '}" +
+             f"{Fore.WHITE + str(self.player1.total_games)}" +
+             f"{Fore.CYAN + '   Wins: '}" +
+             f"{Fore.WHITE + str(self.player1.wins)}" +
+             f"{Fore.CYAN + '   Loses: '}" +
+             f"{Fore.WHITE + str(self.player1.loses)}", "cpu"])
+        self.assertEqual(
+            ch.update_player_stats("Black", 1, 1, 1, 1, False), ["cpu", "cpu"])
 
     def test_check_winner(self):
-        self.assertEqual(ch.check_winner(self.gs, 1000, "type", "p1", "p2", "player1", "player2"), "Draw")
-        self.assertEqual(ch.check_winner(self.gs, 1, "color", "p1", "p2", "player1", "player2"), "White")
-        self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 0, "player1", self.player2), "Pat")
-        self.assertEqual(ch.check_winner(self.gs, 1, "name", "p1", 1, "player1", self.player2), "CPU")
-        self.assertEqual(ch.check_winner(self.test_gs, 1, "color", "p1", "p2", "player1", "player2"), "Black")
-        self.assertEqual(ch.check_winner(self.test_gs, 1, "name", 0, "p2", self.player1, "player2"), "John")
-        self.assertEqual(ch.check_winner(self.test_gs, 1, "name", 1, "p2", self.player1, "player2"), "CPU")
+        self.assertEqual(
+            ch.check_winner(
+                self.gs, 1000, "type", "p1", "p2", "player1", "player2"),
+            "Draw")
+        self.assertEqual(
+            ch.check_winner(
+                self.gs, 1, "color", "p1", "p2", "player1", "player2"),
+            "White")
+        self.assertEqual(
+            ch.check_winner(
+                self.gs, 1, "name", "p1", 0, "player1", self.player2), "Pat")
+        self.assertEqual(
+            ch.check_winner(
+                self.gs, 1, "name", "p1", 1, "player1", self.player2), "CPU")
+        self.assertEqual(
+            ch.check_winner(
+                self.test_gs, 1, "color", "p1", "p2", "player1", "player2"),
+            "Black")
+        self.assertEqual(
+            ch.check_winner(
+                self.test_gs, 1, "name", 0, "p2", self.player1, "player2"),
+            "John")
+        self.assertEqual(
+            ch.check_winner(
+                self.test_gs, 1, "name", 1, "p2", self.player1, "player2"),
+            "CPU")
 
     @patch("checkers.after_game_selection", mock_function)
     @patch("builtins.input", side_effect=["wrong", "1"])
     def test_ask_whats_next(self, mock_input):
-        self.assertEqual(ch.ask_whats_next("p1", "p2", "player1", "player2", "num", "original_board", "test"), 1)
+        self.assertEqual(
+            ch.ask_whats_next(
+                "p1", "p2", "player1", "player2", "num",
+                "original_board", "test"), 1)
 
     def test_validate_whats_next_input(self):
         self.assertEqual(ch.validate_whats_next_input("1"), 1)
@@ -335,10 +369,22 @@ class TestGameStart(unittest.TestCase):
     @patch("main_menu.exit_game", mock_function)
     @patch("leaderboard.go_to_leaderboard", mock_function)
     def test_after_game_selection(self):
-        self.assertEqual(ch.after_game_selection(1, "player1", "player2", "num", "original_board", "test"), "start game")
-        self.assertEqual(ch.after_game_selection(2, "player1", "player2", "num", "original_board", "test"), "return to main menu")
-        self.assertEqual(ch.after_game_selection(3, "player1", "player2", "num", "original_board", "test"), "go to leaderboard")
-        self.assertEqual(ch.after_game_selection(4, "player1", "player2", "num", "original_board", "test"), "exit game")
+        self.assertEqual(
+            ch.after_game_selection(
+                1, "player1", "player2", "num", "original_board", "test"),
+            "start game")
+        self.assertEqual(
+            ch.after_game_selection(
+                2, "player1", "player2", "num", "original_board", "test"),
+            "return to main menu")
+        self.assertEqual(
+            ch.after_game_selection(
+                3, "player1", "player2", "num", "original_board", "test"),
+            "go to leaderboard")
+        self.assertEqual(
+            ch.after_game_selection(
+                4, "player1", "player2", "num", "original_board", "test"),
+            "exit game")
 
 
 if __name__ == "__main__":

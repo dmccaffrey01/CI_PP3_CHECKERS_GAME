@@ -3,9 +3,8 @@ from unittest.mock import patch
 import os
 import sys
 import io
-# Get the parent path of the current script
-parent_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-# Add the parent path to the system path
+parent_path = os.path.abspath(os.path
+                                .join(os.path.dirname(__file__), os.pardir))
 sys.path.append(parent_path)
 sys.path.insert(0, 'main_menu_folder/')
 import display
@@ -13,7 +12,7 @@ import display
 
 class TestDisplay(unittest.TestCase):
     """
-    Testing of the display functions 
+    Testing of the display functions
     """
     def setUp(self):
         # Disable print output
@@ -32,16 +31,9 @@ class TestDisplay(unittest.TestCase):
 
     def test_welcome(self):
         self.assertEqual(display.welcome(), "welcome")
-    
+
     def test_typewriter(self):
-        self.assertEqual(display.typewriter("test"), "typewriter") 
-
-
-# Enable print output
-sys.stdout = sys.__stdout__ 
-
-
-    
+        self.assertEqual(display.typewriter("test"), "typewriter")
 
 
 if __name__ == "__main__":
