@@ -361,10 +361,10 @@ def display_game_over(game_state, moves, p1, p2, player1, player2, num, test,
 
     display.cls()
     winning_message = game_over(winner_color, winner_name)
-    time.sleep(3)
+    time.sleep(2)
     display.cls()
     display_stats(stats, moves)
-    time.sleep(2)
+    time.sleep(1)
     ask_whats_next(p1, p2, player1, player2, num, original_board, test)
 
     return winning_message
